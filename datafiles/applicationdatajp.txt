@@ -1,0 +1,67 @@
+{
+   "ApplicantInfo":{
+      "applicantname":"John Petersen",
+      "entries":[
+         {
+            "description":"Trekronervej 9A",
+            "icon":"fa fa-home fa-fw  icon_vertical_center",
+            "type":""
+         },
+         {
+            "description":"8410 Rønde",
+            "icon":"fa fa-home fa-fw  icon_vertical_center",
+            "type":""
+         },
+         {
+            "description":"johnpetersen1959@gmail.com",
+            "icon":"fa fa-envelope fa-fw  icon_vertical_center",
+            "type":"email"
+         },
+         {
+            "description":"28933014",
+            "icon":"fa fa-phone fa-fw icon_vertical_center",
+            "type":""
+         }
+      ]
+   },
+   "EmployerInfo":{
+      "name":"CarBuddii",
+      "AddressLine1":"Rosensgade 2",
+      "AddressLine2":"",
+      "zipcode":"2300",
+      "city":"København S",
+      "attention":"Att.Dorte Kollerup",
+      "jobtitle":"Ansøgning til stillingen som Systemudvikler"
+   },
+   "ApplicateJobTitle":"Ansøgning til stillingen som Full Stack Developer",
+   "ApplicationDate":"Rønde, den 7. juli 2024",
+   "ApplicantContent":{
+      "headline":" Ja tak. Regn mig ind",
+      "paragraphs":[
+         {
+            "bodyparagraph":"\n     i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen\n    i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen\n  \n    "
+         },
+         {
+            "bodyparagraph":"\n     i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen\n    i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen\n  \n    "
+         },
+         {
+            "bodyparagraph":"\n       i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen\n    i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen\n  \n    "
+         },
+         {
+            "bodyparagraph":"\n      i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen\n    i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen\n  \n    "
+         },
+         {
+            "bodyparagraph":"\n   i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen\n    i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen  i den elektroniske overførsel til Erhvervsstyrelsen\n    "
+         },
+         {
+            "bodyparagraph":"\n Jeg håber, vi kan arrangere et møde bla. bla.\n    "
+         },
+         {
+            "bodyparagraph":"\n Med venlig hilsen,\n    "
+         },
+         {
+            "bodyparagraph":"\n John Petersen,\n    "
+         }
+      ]
+   }
+}
