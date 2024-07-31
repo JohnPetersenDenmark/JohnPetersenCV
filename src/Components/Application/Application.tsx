@@ -1,0 +1,53 @@
+
+import ApplicantInfo from './ApplicantInfo';
+import Customerinfo from './Customerinfo';
+import ApplicationDate from './ApplicationDate';
+import ApplicationJobTitle from './ApplicationJobTitle';
+import ApplicationContent from './ApplicationContent';
+import Applicationheadline from './Applicationheadline';
+
+import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
+
+
+
+function Application() {
+
+    if (currentApplicationData === null) {
+        return (<></>);
+    }
+    return (      
+                <div className="application_content_grid">
+                    <div className="item1"><p className="itemRight">
+                        <ApplicantInfo /></p>
+                    </div>
+                    <div className='itemX'></div>
+                    <div className='itemX'></div>
+                    <div className='itemX'></div>
+                    <div className="item2"><p className="itemLeft">
+                        <Customerinfo />
+                    </p></div>
+                    <div className='itemX'></div>
+                    <div className='itemX'></div>
+                    <div className="item3"><p className="itemLeft jobtitle">
+                        <ApplicationJobTitle />
+                    </p></div>
+                    <div className="item4"><p className="itemRight">
+                        <ApplicationDate />
+                    </p></div>
+                    <div className='itemX'></div>
+                    <div className='itemX'></div>
+                    <div className="item5"><p className="itemLeft application_content_headline">
+                        <Applicationheadline />
+                    </p></div>
+                    <div className='itemX'></div>
+                    <div className='itemX'></div>
+                    <div className="item6"><p className="itemLeft">
+                        <ApplicationContent />
+                    </p></div>
+                    <div className='itemX'></div>
+                </div>                      
+    );
+
+}
+
+export default Application;
