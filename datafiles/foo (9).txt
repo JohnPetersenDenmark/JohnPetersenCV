@@ -1,1 +1,0 @@
-{"sectionName":"Kompetencer","entries":[{"description":"Systemudvikling","stars":5},{"description":"Udviklingsprincipper","stars":5},{"description":"Systemarkitektur","stars":4},{"description":"Analyse af kundebehov","stars":5},{"description":"DevOps","stars":4}]}
