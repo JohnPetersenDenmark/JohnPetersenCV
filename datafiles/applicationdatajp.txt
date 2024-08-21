@@ -3,7 +3,7 @@
       "applicantname":"John Petersen",
       "entries":[
          {
-            "description":"Trekronervej 9A",
+            "description":"Et sted i Danmark",
             "icon":"fa fa-home fa-fw  icon_vertical_center",
             "type":""
          },
