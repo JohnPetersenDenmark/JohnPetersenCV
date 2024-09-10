@@ -4,12 +4,12 @@ import   {currentApplicationData}  from '../../GlobalData/GlobalApplicationData'
 
 function ApplicantInfo() {
 
- 
+  let x = currentApplicationData
  
   return (
     <div  className = 'Applicaion_info_alignment'>
-      <p className="section_title">
-        {currentApplicationData.ApplicantInfo.applicantname}
+      <p className="section_title"  id={currentApplicationData.ApplicantInfo.thisClassName}>
+        {currentApplicationData.ApplicantInfo.sectionName}
       </p>
       {currentApplicationData.ApplicantInfo.entries.map((contactInfoEntry) => ( 
         <div>

@@ -1,5 +1,5 @@
 
-import { CopyCVDataToNew, currenrCVData , setCurrentCVData_v2} from '../../GlobalData/GlobalCVData';
+import { CopyCVDataToNew, currenrCVData, setCurrentCVData_v2 } from '../../GlobalData/GlobalCVData';
 import { useState } from 'react';
 import { CVData, ContactInfo, Sparetime, Skills, WorkingExperience, Languages, Educations, Motivation, Profile, ContactInfoEntry } from '../../Classes/ClassesCVData';
 import { useNavigate } from 'react-router-dom';
@@ -20,8 +20,7 @@ function EditCV() {
 
     const OnChangeSectionTitleContent = (targetField: any) => {
 
-        let ff = targetField.value;
-        let xx = targetField.name
+
         let tmpCopyCVdata = CopyCVDataToNew(CVDataCopy);
 
         let cv_section;
@@ -99,66 +98,64 @@ function EditCV() {
     }
 
     return (
-        <div className='app_content'>
-            <div className='app_content_content'>
-                <form>
-                    <label>Afsnit </label>
-                    {CVDataCopy ? <SelectSection /> : ""}
-                    <p>
-                        {currentSectionData.sectionName ?
-                            Object.entries(currentSectionData).map((elementValue) => (
-                                elementValue[0] === 'sectionName' ?
-                                    <input type="text"
-                                        name={elementValue[0]}
-                                        value={elementValue[1]}
-                                        onChange={(e) => OnChangeSectionTitleContent(e.target)}>
-                                    </input>
-                                    : ""
-                            ))
+        // <div className='app_content'>
+        //     <div className='app_content_content'>
+        <form>
+            <label>Afsnit </label>
+            {CVDataCopy ? <SelectSection /> : ""}
+            <p>
+                {currentSectionData.sectionName ?
+                    Object.entries(currentSectionData).map((elementValue) => (
+                        elementValue[0] === 'sectionName' ?
+                            <input type="text"
+                                name={elementValue[0]}
+                                value={elementValue[1]}
+                                onChange={(e) => OnChangeSectionTitleContent(e.target)}>
+                            </input>
                             : ""
-                        }
-                    </p>
+                    ))
+                    : ""
+                }
+            </p>
 
-                    {currentSectionData.entries ? (currentSectionData.entries).map((entry, entryIndex) => (
-                        <p>  
-                            <p>
-                                {/* {entryIndex !== 0 ? Object.entries(entry).map((elementValue) => ( */}
-                                {entry ? Object.entries(entry).map((elementValue) => (
-                                    elementValue[0] !== 'labels' &&   elementValue[0] !== 'sectionEntryInput' ?
-                                        <div className='inputandlabeldiv'>
-                                            <div className='labeldiv'>
-                                                <label>
-                                                    {entry.labels[elementValue[0]]}
-                                                </label>
-                                            </div>
-                                            <div className='inputdiv'>
-                                                {entry.sectionEntryInput && entry.sectionEntryInput[elementValue[0]].type === 'input'
-                                                 ?
-                                                    <input className='inputfield' type="text"
-                                                        name={elementValue[0]}
-                                                        value={elementValue[1]}
-                                                        onChange={(e) => OnChangeEntry(e.target, entryIndex)}>
-                                                    </input>
-                                                    :
-                                                     <textarea
-                                                        name={elementValue[0]}
-                                                        value={elementValue[1]}
-                                                        onChange={(e) => OnChangeEntry(e.target, entryIndex)}
-                                                    >
-                                                    </textarea>
-                                                }
-                                            </div>
-                                        </div> : ""
-                                )) : ""}
-                            </p>
-                        </p>
+            {currentSectionData.entries ? (currentSectionData.entries).map((entry, entryIndex) => (
+                <>
+                    {entry ? Object.entries(entry).map((elementValue) => (
+                        elementValue[0] !== 'labels' && elementValue[0] !== 'sectionEntryInput' ?
+                            <div className='inputandlabeldiv'>
+                                <div className='labeldiv'>
+                                    <label>
+                                        {entry.labels[elementValue[0]]}
+                                    </label>
+                                </div>
+                                <div className='inputdiv'>
+                                    {entry.sectionEntryInput && entry.sectionEntryInput[elementValue[0]].type === 'input'
+                                        ?
+                                        <input className='inputfield' type="text"
+                                            name={elementValue[0]}
+                                            value={elementValue[1]}
+                                            onChange={(e) => OnChangeEntry(e.target, entryIndex)}>
+                                        </input>
+                                        :
+                                        <textarea
+                                            name={elementValue[0]}
+                                            value={elementValue[1]}
+                                            onChange={(e) => OnChangeEntry(e.target, entryIndex)}
+                                        >
+                                        </textarea>
+                                    }
+                                </div>
+                            </div> : ""
                     )) : ""}
-                    <p>
-                        <button type="submit" onClick={handleSubmit}>Gem</button>
-                    </p>
-                </form>
-            </div>
-        </div>
+
+                </>
+            )) : ""}
+            <p>
+                <button type="submit" onClick={handleSubmit}>Gem</button>
+            </p>
+        </form>
+        //     </div>
+        // </div>
     );
 }
 export default EditCV

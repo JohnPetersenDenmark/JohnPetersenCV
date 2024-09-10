@@ -1,4 +1,22 @@
+
+import { SectionEntryLabels, SectionEntryInput } from './ClassesCVData'
+
 export class EmployerInfo {
+
+    thisClassName: string
+    sectionName: string
+    sectionNameLabel: string
+    entries: EmployerInfoEntry[];
+
+    public constructor(thisClassName: string, sectionName: string,entries: EmployerInfoEntry[], sectionNameLabel: string) {
+        this.thisClassName = thisClassName
+        this.sectionName = sectionName
+        this.entries = entries     
+        this.sectionNameLabel = sectionNameLabel
+    }  
+}
+
+export class EmployerInfoEntry {
     name: string
     AddressLine1: string
     AddressLine2: string
@@ -6,8 +24,16 @@ export class EmployerInfo {
     city: string
     attention: string
     jobtitle: string
+    sortorder: number
+    labels: SectionEntryLabels;
+    sectionEntryInput: SectionEntryInput
 
-    public constructor(name: string, AddressLine1: string, AddressLine2: string, zipcode: string, city: string, attention: string, jobtitle: string) {
+
+    public constructor(name: string, AddressLine1: string,
+        AddressLine2: string, zipcode: string,
+        city: string, attention: string, jobtitle: string,
+        sortorder: number, labels: SectionEntryLabels, sectionEntryInput: SectionEntryInput
+    ) {
         this.name = name;
         this.AddressLine1 = AddressLine1;
         this.AddressLine2 = AddressLine2;
@@ -15,72 +41,196 @@ export class EmployerInfo {
         this.city = city;
         this.attention = attention;
         this.jobtitle = jobtitle
+        this.sortorder = sortorder
+        this.labels = labels;
+        this.sectionEntryInput = sectionEntryInput
     }
 }
+
 
 
 export class ApplicantInfoEntry {
     description: string
     icon: string
     type: string
+    sortorder: number
+    labels: SectionEntryLabels;
+    sectionEntryInput: SectionEntryInput
 
-    public constructor(description: string, icon: string, type: string) {
+    public constructor(description: string, icon: string, type: string, sortorder: number, labels: SectionEntryLabels, sectionEntryInput: SectionEntryInput) {
         this.description = description;
         this.icon = icon
         this.type = type
+        this.sortorder = sortorder
+        this.labels = labels;
+        this.sectionEntryInput = sectionEntryInput
     }
+}
+export interface IApplicantInfo {
+    thisClassName: string
+    sectionName: string
+    sectionNameLabel: string
+    applicantname: string
+    entries: ApplicantInfoEntry[];
 }
 
 export class ApplicantInfo {
+    thisClassName: string
+    sectionName: string
+    sectionNameLabel: string
     applicantname: string
     entries: ApplicantInfoEntry[];
-    public constructor(applicantname: string, entries: ApplicantInfoEntry[]) {
+
+
+    public constructor(applicantname: string, entries: ApplicantInfoEntry[], thisClassName: string, sectionName: string, sectionNameLabel: string) {
         this.applicantname = applicantname;
         this.entries = entries;
+        this.sectionNameLabel = sectionNameLabel
+        this.sectionName = sectionName
+        this.thisClassName = thisClassName
     }
 }
 
 
 export class ApplicantContent {
-    headline: string
-    paragraphs : ApplicantContentEntry[];
-    public constructor(headline: string,  paragraphs : ApplicantContentEntry[] ) {
-        this.headline = headline;
-        this.paragraphs  = paragraphs;
+    thisClassName: string
+    sectionName: string
+    sectionNameLabel: string
+    entries: ApplicantContentEntry[];
+    public constructor( entries: ApplicantContentEntry[], sectionName: string,  thisClassName: string,  sectionNameLabel: string) {
+       
+        this.entries = entries;
+        this.sectionName = sectionName
+        this.thisClassName = thisClassName
+        this.sectionNameLabel = sectionNameLabel
     }
 }
 
 export class ApplicantContentEntry {
-    bodyparagraph  : string;
-    public constructor(bodyparagraph  : string ) {
-        this.bodyparagraph = bodyparagraph;       
+    bodyparagraph: string;
+    sortorder: number
+    labels: SectionEntryLabels;
+    sectionEntryInput: SectionEntryInput
+    public constructor(bodyparagraph: string, sortorder: number, labels: SectionEntryLabels, sectionEntryInput: SectionEntryInput) {
+        this.bodyparagraph = bodyparagraph;
+        this.sortorder = sortorder
+        this.labels = labels
+        this.sectionEntryInput = sectionEntryInput
+    }
+}
+
+export class ApplicantContentHeadline {
+    thisClassName: string
+    sectionName: string
+    sectionNameLabel: string
+    entries: ApplicantContentHeadlineEntry[];
+    public constructor( entries: ApplicantContentHeadlineEntry[], sectionName: string,  thisClassName: string,  sectionNameLabel: string) {      
+        this.entries = entries
+        this.sectionName = sectionName
+        this.thisClassName = thisClassName
+        this.sectionNameLabel = sectionNameLabel
+    }
+}
+
+export class ApplicantContentHeadlineEntry {
+   text : string
+    sortorder: number
+    labels: SectionEntryLabels;
+    sectionEntryInput: SectionEntryInput
+
+    public constructor(  text : string, sortorder: number, labels: SectionEntryLabels, sectionEntryInput: SectionEntryInput) {      
+        this.sortorder = sortorder
+        this.labels = labels
+        this.sectionEntryInput = sectionEntryInput
+        this.text = text 
+      
+    }
+}
+
+export class ApplicationDate {
+    thisClassName: string
+    sectionName: string
+    sectionNameLabel: string
+    headline: string
+    entries: ApplicationDateEntry[];
+
+    public constructor(headline: string, entries: ApplicationDateEntry[], sectionName: string,  thisClassName: string,  sectionNameLabel: string) {
+        this.headline = headline;
+        this.entries = entries;
+        this.sectionName = sectionName
+        this.thisClassName = thisClassName
+        this. sectionNameLabel = sectionNameLabel
+    }
+}
+
+export class ApplicationDateEntry {
+    date: string;
+    sortorder: number
+    labels: SectionEntryLabels;
+    sectionEntryInput: SectionEntryInput
+
+    public constructor(date: string, sortorder: number, labels: SectionEntryLabels, sectionEntryInput: SectionEntryInput) {
+        this.date = date;
+        this.sortorder = sortorder
+        this.labels = labels
+        this.sectionEntryInput = sectionEntryInput
+    }
+}
+
+export class ApplicationJobTitle {
+    thisClassName: string
+    sectionName: string
+    sectionNameLabel: string
+    headline: string
+    entries: ApplicationJobTitleEntry[];
+
+    public constructor(headline: string, entries: ApplicationJobTitleEntry[], sectionName: string,  thisClassName: string, sectionNameLabel: string) {
+        this.headline = headline;
+        this.entries = entries;
+        this.sectionName = sectionName
+        this.thisClassName = thisClassName
+        this.sectionNameLabel = sectionNameLabel
+    }
+}
+
+export class ApplicationJobTitleEntry {
+    jobtitle: string;
+    sortorder: number
+    labels: SectionEntryLabels;
+    sectionEntryInput: SectionEntryInput
+
+    public constructor(jobtitle: string, sortorder: number, labels: SectionEntryLabels, sectionEntryInput: SectionEntryInput) {
+        this.jobtitle = jobtitle;
+        this.sortorder = sortorder
+        this.labels = labels
+        this.sectionEntryInput = sectionEntryInput
     }
 }
 
 export class ApplicationData {
-    ApplicantInfo : ApplicantInfo;
-    EmployerInfo : EmployerInfo;
-    ApplicateJobTitle : string;
-    ApplicationDate : string; 
-    ApplicantContent  : ApplicantContent;
-   
-   
+    ApplicantInfo: ApplicantInfo;
+    EmployerInfo: EmployerInfo;
+    ApplicationJobTitle: ApplicationJobTitle;
+    ApplicationDate: ApplicationDate;
+    ApplicantContent: ApplicantContent;
+    ApplicantContentHeadline: ApplicantContentHeadline
+
+
 
     public constructor(
-        ApplicantInfo : ApplicantInfo, 
-        EmployerInfo : EmployerInfo,
-        ApplicateJobTitle : string,
-        ApplicationDate : string,
-        ApplicantContent  : ApplicantContent,                  
-    ) 
-    
-    {
-        this.ApplicantInfo = ApplicantInfo; 
+        ApplicantInfo: ApplicantInfo,
+        EmployerInfo: EmployerInfo,
+        ApplicationJobTitle: ApplicationJobTitle, 
+        ApplicationDate: ApplicationDate,
+        ApplicantContent: ApplicantContent,
+        ApplicantContentHeadline: ApplicantContentHeadline,
+    ) {
+        this.ApplicantInfo = ApplicantInfo;
         this.EmployerInfo = EmployerInfo;
-        this.ApplicateJobTitle = ApplicateJobTitle
+        this.ApplicationJobTitle = ApplicationJobTitle
         this.ApplicationDate = ApplicationDate;
-        this.ApplicantContent = ApplicantContent;                          
+        this.ApplicantContent = ApplicantContent;
+        this.ApplicantContentHeadline = ApplicantContentHeadline
     }
-  } 
-
+}
 

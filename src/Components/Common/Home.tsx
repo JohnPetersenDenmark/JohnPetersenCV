@@ -12,6 +12,7 @@ import { CVData } from '../../Classes/ClassesCVData';
 
 import { useSearchParams } from 'react-router-dom';
 
+
 import { ApplicationData } from '../../Classes/ClassesApplicationData';
 
 var _ = require('lodash');
@@ -19,7 +20,8 @@ var _ = require('lodash');
 
 function Home(props: any) {
 
-    let [updateCVCounter, setCVUpdateCounter] = useState(0);
+    //let tmp = reloadDataFromFile;
+    let [updateCVCounter, setUpdateCVCounter] = useState(0);
     let [updateApplicationCounter, setApplicationUpdateCounter] = useState(0);
 
     let convertflag = props.convert_to_pdf
@@ -37,21 +39,60 @@ function Home(props: any) {
         let tmp = currenrCVData;
 
         if (!(_.isEqual(currenrCVData, oldcurrenrCVData))) {
-            setCVUpdateCounter(updateCVCounter + 1)
+            setUpdateCVCounter(updateCVCounter + 1)
         }
 
     }
 
     function setNewApplicationData(newApplicationData: any) {
-        if (newApplicationData === null) {
 
-        }
+        // if (! reloadDataFromFile)
+        // {
+        //     return;
+        // }
+        let tmp = currentApplicationData
+        let oldCurrentApplicationDataStr = JSON.stringify(currentApplicationData);
 
-        let oldCurrentApplicationData = currentApplicationData;
-        setCurrentApplicationData(newApplicationData);
-        let tmp = currentApplicationData;
-        if (!(_.isEqual(currentApplicationData, oldCurrentApplicationData))) {
+        let mergedApplicationData = { ...newApplicationData, ...currentApplicationData }
+        deepCopyApplicationData(newApplicationData, mergedApplicationData)
+        let newCurrentApplicationDataStr = JSON.stringify(mergedApplicationData);
+
+        if (!(_.isEqual(oldCurrentApplicationDataStr, newCurrentApplicationDataStr))) {
+
+            setCurrentApplicationData(mergedApplicationData);
             setApplicationUpdateCounter(updateApplicationCounter + 1)
+        }
+    }
+
+
+    function deepCopyApplicationData(source: ApplicationData, destination: ApplicationData) {
+
+
+        for (let [key, value] of Object.entries(source)) {
+            for (let [key1, value1] of Object.entries(destination)) {
+                if (key === key1) {
+                    if (value.entries) {
+                        for (let i = 0; i < value.entries.length; i++) {
+                            let bb = value.entries[i]
+                            //  for (let x = 0; x < value1.entries.length; x++) {
+
+                            let cc = value1.entries[i]
+                            for (let [key2, value2] of Object.entries(bb)) {
+                                for (let [key3, value3] of Object.entries(cc)) {
+                                    if (key2 === key3) {
+                                        //value3 = value2;
+                                        value1.entries[i][key3] = value2
+                                    }
+                                }
+                            }
+                            // }
+                        }
+                    }
+                    else {
+                        value1 = value
+                    }
+                }
+            }
         }
     }
 
@@ -60,13 +101,27 @@ function Home(props: any) {
 
             <div className='app_content_content'>
 
-                {showCV ? <><OpenCVdataFile
-                    SetCVdata={(newCVData: CVData) => {
-                        setNewCVData(newCVData)
-                    }
-                    }
-                >
-                </OpenCVdataFile>  <div className='app_content_content'> <CV /> </div></> : ""}
+                {showCV ?
+                    <><OpenCVdataFile
+                        SetCVdata={(newCVData: CVData) => {
+                            setNewCVData(newCVData)
+                        }
+                        }
+                    >
+                    </OpenCVdataFile>
+                        <div className='app_content_content'> <CV /> </div></>
+                    : ""}
+
+                {/* {showApplication && reloadDataFromFile ?
+                    <><OpenApplicationdataFile
+                        SetApplicationdata={(newApplicationData: ApplicationData) => {
+                            setNewApplicationData(newApplicationData)
+                        }
+                        }
+                    >
+                    </OpenApplicationdataFile>
+                        <Application /></>
+                    : <Application />} */}
 
                 {showApplication ?
                     <><OpenApplicationdataFile
@@ -75,16 +130,20 @@ function Home(props: any) {
                         }
                         }
                     >
-                    </OpenApplicationdataFile>   <Application /></> : ""}
+                    </OpenApplicationdataFile>
+                        <Application /></>
+                    : ""}
+
             </div>
 
             {convertflag ?
-              
+
                 <div className='app_download_buttons'>
                     {showCV ? <ConvertCVToPdf /> : ""}
+                    {/* {showApplication && reloadDataFromFile ? <ConvertApplicationToPdf /> : ""} */}
                     {showApplication ? <ConvertApplicationToPdf /> : ""}
                 </div>
-                  : "" 
+                : ""
             }
         </div>
     );

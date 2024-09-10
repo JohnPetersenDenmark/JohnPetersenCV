@@ -24,7 +24,11 @@ function SaveCVDataToFile() {
 
   return (
       <>        
-          <button className='download_button' onClick={download_cv_as_json}> Hent CV datafil </button>           
+       <p className='section_title'>
+            Download aktuelt CV til din PC
+            </p>      
+          <button className='admin_buttons' onClick={download_cv_as_json}> Hent</button>  
+            
       </>
   );
 

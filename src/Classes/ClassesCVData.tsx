@@ -18,6 +18,7 @@ export type SectionEntryInput = {
 
 
 export class Profile {
+    thisClassName : string
     sectionName: string
     sectionNameLabel: string
     entries: ProfileEntry[];
@@ -27,6 +28,7 @@ export class Profile {
         this.sectionName = sectionName;
         this.entries = entries;
         this.sectionNameLabel =  sectionNameLabel;
+        this.thisClassName = 'Profile'
     }
 }
 
@@ -34,14 +36,17 @@ export class ProfileEntry {
     description: string
     labels : SectionEntryLabels
     sectionEntryInput : SectionEntryInput
-    public constructor(description: string,   labels : SectionEntryLabels, sectionEntryInput : SectionEntryInput) {
+    sortorder : number;
+    public constructor(description: string,   labels : SectionEntryLabels, sectionEntryInput : SectionEntryInput,  sortorder : number) {
         this.description = description;
         this.labels =   labels 
         this.sectionEntryInput = sectionEntryInput
+        this.sortorder = sortorder
     }
 }
 
 export class Motivation {
+    thisClassName : string
     sectionName: string   
     sectionNameLabel: string
     entries: MotivationEntry[];
@@ -50,6 +55,7 @@ export class Motivation {
         this.sectionName = sectionName;        
         this.entries = entries;
         this.sectionNameLabel = sectionNameLabel
+        this.thisClassName = 'Motivation'
     }
 }
 
@@ -57,10 +63,12 @@ export class MotivationEntry {
     description: string
     labels : SectionEntryLabels
     sectionEntryInput : SectionEntryInput
-    public constructor(description: string, labels : SectionEntryLabels,  sectionEntryInput : SectionEntryInput) {
+    sortorder : number;
+    public constructor(description: string, labels : SectionEntryLabels,  sectionEntryInput : SectionEntryInput,  sortorder : number) {
         this.description = description;
         this.labels = labels;
         this.sectionEntryInput = sectionEntryInput
+        this.sortorder = sortorder
     }
 }
 
@@ -72,17 +80,20 @@ export class ContactInfoEntry {
     type: string
     labels : SectionEntryLabels
     sectionEntryInput : SectionEntryInput
+    sortorder : number;
 
-    public constructor(description: string, icon: string, type: string,  labels : SectionEntryLabels, sectionEntryInput : SectionEntryInput) {
+    public constructor(description: string, icon: string, type: string,  labels : SectionEntryLabels, sectionEntryInput : SectionEntryInput,  sortorder : number) {
         this.description = description;
         this.icon = icon
         this.type = type
         this.labels = labels
         this.sectionEntryInput = sectionEntryInput
-    }
+        this.sortorder = sortorder
+}
 }
 
 export class ContactInfo {
+    thisClassName : string
     sectionName: string
     sectionNameLabel: string
     entries: ContactInfoEntry[];
@@ -90,6 +101,7 @@ export class ContactInfo {
         this.sectionName = sectionName;
         this.entries = entries;
         this.sectionNameLabel = sectionNameLabel;
+        this.thisClassName = 'ContactInfo'
     }
 }
 
@@ -97,7 +109,7 @@ export class ContactInfo {
 
 export class WorkingExperienceEntry {
 
-    title: string
+    title: string 
     fromdate: string
     todate: string
     usedskills: string[]
@@ -106,10 +118,11 @@ export class WorkingExperienceEntry {
     icon: string
     labels : SectionEntryLabels
     sectionEntryInput : SectionEntryInput
+    sortorder : number;
 
 
     public constructor(title: string, fromdate: string, todate: string, usedskills: string[], 
-        descriptions: string[], achievements: string[], icon: string,   labels : SectionEntryLabels,  sectionEntryInput : SectionEntryInput) {
+        descriptions: string[], achievements: string[], icon: string,   labels : SectionEntryLabels,  sectionEntryInput : SectionEntryInput,  sortorder : number) {
         this.title = title
         this.fromdate = fromdate
         this.todate = todate
@@ -119,10 +132,12 @@ export class WorkingExperienceEntry {
         this.icon = icon
         this.labels  = labels
         this.sectionEntryInput = sectionEntryInput
+        this.sortorder = sortorder
     }
 }
 
 export class WorkingExperience {
+    thisClassName : string
     sectionName: string
     sectionNameLabel: string
     achivementstitle: string
@@ -133,25 +148,29 @@ export class WorkingExperience {
         this.achivementstitle = achivementstitle
         this.entries = entries
         this.sectionNameLabel = sectionNameLabel
+        this.thisClassName = 'WorkingExperience'
     }
 }
 
 export class SkillEntry {
-    description: string
-    stars: number
-    labels : SectionEntryLabels
-    sectionEntryInput : SectionEntryInput
+    description: string;
+    stars: number;
+    labels : SectionEntryLabels;
+    sectionEntryInput : SectionEntryInput;
+    sortorder : number;
 
-    public constructor(description: string, stars: number, labels : SectionEntryLabels,  sectionEntryInput : SectionEntryInput) {
+   public constructor(description: string, stars: number, labels : SectionEntryLabels,  sectionEntryInput : SectionEntryInput,  sortorder : number) {
 
         this.description = description;
         this.stars = stars;
         this.labels = labels;
-        this.sectionEntryInput = sectionEntryInput
+       this.sectionEntryInput = sectionEntryInput
+       this.sortorder = sortorder;
     }
 }
- 
+  
 export class Skills {
+    thisClassName : string 
     sectionName: string
     sectionNameLabel: string
     entries: SkillEntry[]
@@ -161,10 +180,12 @@ export class Skills {
         this.sectionName = sectionName;
         this.entries = entries;
         this.sectionNameLabel = sectionNameLabel
+        this.thisClassName = 'Skills'
     }
 }
 
 export class Educations {
+    thisClassName : string
     sectionName: string
     sectionNameLabel: string
     entries : EducationEntry[]
@@ -174,6 +195,7 @@ export class Educations {
         this.sectionName = sectionName;
         this.entries = entries;
         this.sectionNameLabel = sectionNameLabel
+         this.thisClassName = 'Educations'
     }
 }
  
@@ -183,14 +205,16 @@ export class EducationEntry {
     location: string 
     labels : SectionEntryLabels
     sectionEntryInput : SectionEntryInput
+    sortorder : number;
 
-    public constructor(title: string, todate: string, location: string,   labels : SectionEntryLabels,   sectionEntryInput : SectionEntryInput) {
+    public constructor(title: string, todate: string, location: string,   labels : SectionEntryLabels,   sectionEntryInput : SectionEntryInput,  sortorder : number) {
 
         this.title = title;
         this.todate = todate;
         this.location = location
         this.labels = labels
         this.sectionEntryInput = sectionEntryInput
+        this. sortorder = sortorder
     }
 } 
 
@@ -199,18 +223,21 @@ export class LanguageEntry {
     level: string
     labels : SectionEntryLabels
     sectionEntryInput : SectionEntryInput
+    sortorder : number;
     
-    public constructor(language: string, level: string, labels : SectionEntryLabels, sectionEntryInput : SectionEntryInput) {
+    public constructor(language: string, level: string, labels : SectionEntryLabels, sectionEntryInput : SectionEntryInput,  sortorder : number) {
 
         this.language = language;
         this.level = level;
         this.labels =  labels
         this.sectionEntryInput = sectionEntryInput
+        this.sortorder = sortorder
       
     }
 }
 
 export class Languages {
+    thisClassName : string
     sectionName: string
     entries : LanguageEntry[]
     sectionNameLabel: string
@@ -219,11 +246,13 @@ export class Languages {
 
         this.sectionName = sectionName;
         this.entries = entries;
-        this. sectionNameLabel = sectionNameLabel
+        this.sectionNameLabel = sectionNameLabel
+        this.thisClassName = 'Languages'
     }
 }
 
 export class Sparetime {
+    thisClassName : string
     sectionName: string
     sectionNameLabel: string
     entries : SparetimeEntry[]
@@ -231,7 +260,8 @@ export class Sparetime {
     public constructor(sectionName: string,  entries : SparetimeEntry[], sectionNameLabel: string) {
         this.sectionName = sectionName;
         this.entries = entries;
-        this.sectionNameLabel = sectionNameLabel              
+        this.sectionNameLabel = sectionNameLabel   
+        this.thisClassName = 'Sparetime'           
     }
 }
 
@@ -240,12 +270,14 @@ export class SparetimeEntry {
     interest: string
     labels : SectionEntryLabels
     sectionEntryInput : SectionEntryInput
+    sortorder : number
 
-    public constructor(interest: string, labels : SectionEntryLabels,  sectionEntryInput : SectionEntryInput ) {
+    public constructor(interest: string, labels : SectionEntryLabels,  sectionEntryInput : SectionEntryInput,  sortorder : number ) {
 
         this.interest = interest; 
         this.labels = labels 
         this.sectionEntryInput = sectionEntryInput     
+        this.sortorder = sortorder
     }
 }
 

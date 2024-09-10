@@ -27,14 +27,18 @@ function Skills() {
          htmlStarString += '</div>'
     }
 
-    htmlStarString += '<hr class="section_ruler">';
+    htmlStarString += '<hr class="section_ruler">';   
     tsxStarString = parse(htmlStarString);
 
+    let tmp = currenrCVData.Skills.thisClassName;
+    let x = tmp;
+
     return (
-        <div>
-            <p className="section_title">{currenrCVData.Skills.sectionName}</p>
+        <>                               
+            <p className="section_title" id={currenrCVData.Skills.thisClassName}>{currenrCVData.Skills.sectionName}</p> 
+
             {tsxStarString}
-        </div>
+        </>
     );
 }
 

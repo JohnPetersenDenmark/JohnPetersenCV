@@ -41,9 +41,9 @@ function CV() {
             <Languages />
             <Sparetime />
           </div>
-        </div>       
+        </div>         
       
-         
+          
 
 
   );

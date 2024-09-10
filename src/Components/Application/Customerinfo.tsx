@@ -4,29 +4,46 @@ import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
 
 function CustomerInfo() {
 
-
+let x = currentApplicationData
 
   return (
+
+    // <div className='Applicaion_info_alignment'>
     <div>
-      <p className='customer_paragraph'>
-        {currentApplicationData.EmployerInfo.name}
+      <p className="section_title" id={currentApplicationData.EmployerInfo.thisClassName}>
+        {/* {currentApplicationData.EmployerInfo.sectionName} */}
       </p>
-      <p className='customer_paragraph'>
-        {currentApplicationData.EmployerInfo.AddressLine1}
-      </p>
-      <p className='customer_paragraph'>
-        {currentApplicationData.EmployerInfo.AddressLine2}
-      </p>
-      <p className='customer_paragraph'>
-        {currentApplicationData.EmployerInfo.zipcode} {currentApplicationData.EmployerInfo.city}
-      </p>
-      <p className='customer_paragraph'>
-        {currentApplicationData.EmployerInfo.attention}
-      </p>
+      {currentApplicationData.EmployerInfo.entries.map((EmployerEntry) => (
+        <>
+
+          <p>
+            {EmployerEntry.name}
+          </p>
+          <p>
+            {EmployerEntry.AddressLine1}
+          </p>
+          <p>
+            {EmployerEntry.AddressLine2}
+          </p>
+          <p>
+            {EmployerEntry.zipcode}  {EmployerEntry.city}
+          </p>
+          <p>
+            {EmployerEntry.attention}
+          </p>
+          <p>
+            {EmployerEntry.city}
+          </p>
+
+        </>
+
+      ))}
+
+
+     </div>
 
 
 
-    </div>
   );
 }
 

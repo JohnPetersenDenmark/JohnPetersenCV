@@ -1,23 +1,27 @@
-import   {currenrCVData}  from '../../GlobalData/GlobalCVData';
+import { currenrCVData } from '../../GlobalData/GlobalCVData';
 
-function Education() {
+function Languages() {
 
 
     return (
-        <div>
-            <p className="section_title">{currenrCVData.Languages.sectionName}</p>
+        <>         
 
-            {currenrCVData.Languages.entries.map((languageEntry) => (
+                <p className="section_title" id={currenrCVData.Languages.thisClassName}>
+             
+                    {currenrCVData.Languages.sectionName}
+                    </p>
 
-                <div className="language_entries_indent">
-                    <p className='language_entry_title'>{languageEntry.language}</p>
-                 
-                    <p className="language_entry_indent">{languageEntry.level}</p>                  
-                </div>
-            ))}
-            <hr className="section_ruler"></hr>
-        </div>
+                {currenrCVData.Languages.entries.map((languageEntry, index) => (
+
+                    <div  key={index} className="language_entries_indent">
+                        <p className='language_entry_title'>{languageEntry.language}</p>
+
+                        <p className="language_entry_indent">{languageEntry.level}</p>
+                    </div>
+                ))}
+                <hr className="section_ruler"></hr>
+        </>
     );
 }
 
-export default Education;
+export default Languages;

@@ -6,8 +6,18 @@ function ApplicationDate() {
 
 
     return (
-        <div>            
-                {currentApplicationData.ApplicationDate}
+        <div>
+            <p className="section_title" id={currentApplicationData.ApplicationDate.thisClassName}>
+                {/* {currentApplicationData.ApplicationDate.headline} */} 
+            </p>
+
+            {currentApplicationData.ApplicationDate.entries.map((entry) => (
+
+
+                <p className='application_content_paragraphs'> {entry.date} </p>
+
+            ))}
+
         </div>
     );
 }

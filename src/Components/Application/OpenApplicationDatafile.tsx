@@ -16,6 +16,7 @@ function OpenApplicationDatafile(props: any) {
 
     if (applAction !== null && applAction === 'openapplication' && application_filename !== null) {
         
+        try {
         const response = fetch(url);
 
         response.then(value => {
@@ -29,6 +30,10 @@ function OpenApplicationDatafile(props: any) {
                 props.SetApplicationdata(file_data);               
             })
         })
+    } catch (error) {
+        // TypeError: Failed to fetch
+        console.log('There was an error', error);
+      }
     }
     // else {
     //     if (convertType !== null && convertType !== 'application') {
