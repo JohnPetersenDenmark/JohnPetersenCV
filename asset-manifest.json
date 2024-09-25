@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/JohnPetersenCV/static/css/main.54a8110d.css",
-    "main.js": "/JohnPetersenCV/static/js/main.0b65ea2b.js",
+    "main.css": "/JohnPetersenCV/static/css/main.44a44c95.css",
+    "main.js": "/JohnPetersenCV/static/js/main.7ba70a3c.js",
     "static/js/453.5b5e6595.chunk.js": "/JohnPetersenCV/static/js/453.5b5e6595.chunk.js",
     "static/media/background.jpg": "/JohnPetersenCV/static/media/background.8034670303a1224b800f.jpg",
     "index.html": "/JohnPetersenCV/index.html",
-    "main.54a8110d.css.map": "/JohnPetersenCV/static/css/main.54a8110d.css.map",
-    "main.0b65ea2b.js.map": "/JohnPetersenCV/static/js/main.0b65ea2b.js.map",
+    "main.44a44c95.css.map": "/JohnPetersenCV/static/css/main.44a44c95.css.map",
+    "main.7ba70a3c.js.map": "/JohnPetersenCV/static/js/main.7ba70a3c.js.map",
     "453.5b5e6595.chunk.js.map": "/JohnPetersenCV/static/js/453.5b5e6595.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.54a8110d.css",
-    "static/js/main.0b65ea2b.js"
+    "static/css/main.44a44c95.css",
+    "static/js/main.7ba70a3c.js"
   ]
 }
