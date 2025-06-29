@@ -1,5 +1,3 @@
-import ReactDOM from 'react-dom'
-import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
 import { UploadAsFileToGitHub, GetSHAFromGitHub } from '../../Utilities/UploadToGitHub'
 import { useState } from 'react';
 import PromptYesNo from '../Common/PromptYesNo'

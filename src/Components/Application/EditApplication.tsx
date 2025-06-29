@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
+
 import Application from './Application'
 import UploadApplicationdataToGithub from './UploadApplicationdataToGithub'
 import { EmployerInfo, ApplicantInfo, ApplicantContent, ApplicationDate, ApplicationJobTitle, ApplicantContentHeadline } from '../../Classes/ClassesApplicationData';
@@ -73,7 +75,7 @@ function EditApplication() {
         console.log('Clicked!');
     };
 
-    const OnChangeSectionTitleContent = (targetField: any) => {
+    const OnChangeSectionTitleContent = (targetField: any) => { 
 
         let error_message = "";
 
@@ -137,24 +139,8 @@ function EditApplication() {
     }
 
 
-    // const handleSubmit = (updateYesNo : boolean) => {     
-    const handleSave = () => {
-        // e.preventDefault();     
-
-
-        let newApplicationdata = CopyApplicationDataToNew(applicationDataCopy);
-
-        setNewCurrentApplicationData(newApplicationdata)
-        setApplicationDataCopy(newApplicationdata);
-        setCurrentApplicationData(newApplicationdata)
-        // resetReloadDataFromFileFlag();
-        // if (updateYesNo)   
-        // {
-        //     setReRender(reRender +1) 
-        // }              
-    }
-
-    const handleSaveTemp = (yesNoString: boolean) => {
+   
+    const handleSave = (yesNoString: boolean) => {
         if (yesNoString) {
             let newApplicationdata = CopyApplicationDataToNew(applicationDataCopy);
 
@@ -256,7 +242,7 @@ function EditApplication() {
                             <UploadApplicationdataToGithub applicationData={applicationDataCopy}
 
                                 SetupdateFlag={(updateYesNo: boolean) => {
-                                    handleSaveTemp(updateYesNo)
+                                    handleSave(updateYesNo)
                                 }
                                 }
                             /> : ""}

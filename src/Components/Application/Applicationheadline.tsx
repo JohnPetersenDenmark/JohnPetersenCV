@@ -4,7 +4,9 @@ import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
 
 function Applicationheadline() {
 
-
+    if (currentApplicationData === null) {
+        return (<></>);
+    }
 
     return (
         <div>

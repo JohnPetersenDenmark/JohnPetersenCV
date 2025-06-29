@@ -88,7 +88,7 @@ defaultcontactinfoentries.push(defaultcontactinfoentry);
 
 defaultcontactinfoentry = {} as ContactInfoEntry;
 defaultcontactinfoentry.description = 'johnpetersen1959@gmail.com'
-defaultcontactinfoentry.description = 'noget'
+
 defaultcontactinfoentry.icon = 'fa fa-envelope fa-fw  icon_vertical_center'
 defaultcontactinfoentry.type = 'email'
 defaultcontactinfoentry.sortorder = 2;
@@ -470,19 +470,19 @@ let currenrCVData = new CVData(
 export { currenrCVData }
 
 
-export function setCurrentCVData(json: CVData) {
-    currenrCVData = new CVData(
-        json.ContactInfo,
-        json.Profile,
-        json.Motivation,
-        json.WorkingExperience,
-        json.Skills,
-        json.Educations,
-        json.Languages,
-        json.Sparetime
-    )
+// export function setCurrentCVData(json: CVData) {
+//     currenrCVData = new CVData(
+//         json.ContactInfo,
+//         json.Profile,
+//         json.Motivation,
+//         json.WorkingExperience,
+//         json.Skills,
+//         json.Educations,
+//         json.Languages,
+//         json.Sparetime
+//     )
 
-}
+// }
 
 // export function CopyCVDataToNew(CVdataCopyFrom: CVData): CVData {
 
@@ -563,6 +563,39 @@ export function CopyCVDataToNew(CVdataCopyFrom: CVData): CVData {
     )
 
     return (copyOfCurrentCVData);
+}
+
+export function setNewCurrentCVData(CVdatanew: any) {
+
+    let tmpCVData: CVData = new CVData(
+
+        { ...CVdatanew.ContactInfo },
+        { ...CVdatanew.Profile },
+        { ...CVdatanew.Motivation },
+        { ...CVdatanew.WorkingExperience },
+        { ...CVdatanew.Skills },
+        { ...CVdatanew.Educations },
+        { ...CVdatanew.Languages },
+        { ...CVdatanew.Sparetime },
+    )
+    currenrCVData = tmpCVData;
+    
+}
+
+export function setCurrentCVData(CVdatanew: any) {
+
+    // let tmpApplicationData: ApplicationData = new ApplicationData(
+
+    //     { ...applicationdatanew.ApplicantInfo },
+    //     { ...applicationdatanew.EmployerInfo },
+    //     { ...applicationdatanew.ApplicationJobTitle },
+    //     { ...applicationdatanew.ApplicationDate },
+    //     { ...applicationdatanew.ApplicantContent },
+    //     { ...applicationdatanew.ApplicantContentHeadline }
+    // )
+    // currentApplicationData = tmpApplicationData;
+
+    currenrCVData = CVdatanew;
 }
 
 export function setCurrentCVData_v2(cvdatanew: CVData) {

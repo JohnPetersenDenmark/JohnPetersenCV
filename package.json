@@ -1,12 +1,12 @@
 {
   "name": "john-cv-app",
   "version": "0.1.0",
-   "homepage": "https://JohnPetersenDenmark.github.io/JohnPetersenCV",
+  "homepage": "https://dotnetdev.dk",
   "private": true,
   "dependencies": {
     "-": "^0.0.1",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
-    "@fortawesome/free-brands-svg-icons": "^6.5.2", 
+    "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@testing-library/jest-dom": "^5.17.0",
@@ -27,6 +27,7 @@
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-draft-wysiwyg": "^1.15.0",
     "react-loader-spinner": "^6.1.6",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",

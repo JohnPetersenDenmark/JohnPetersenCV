@@ -6,6 +6,13 @@ function CustomerInfo() {
 
 let x = currentApplicationData
 
+if (currentApplicationData === null) {
+  return (<></>);
+}
+if (!currentApplicationData ) {
+  return (<></>);
+}
+
   return (
 
     // <div className='Applicaion_info_alignment'>
@@ -31,9 +38,7 @@ let x = currentApplicationData
           <p>
             {EmployerEntry.attention}
           </p>
-          <p>
-            {EmployerEntry.city}
-          </p>
+         
 
         </>
 

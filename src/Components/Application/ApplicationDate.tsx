@@ -4,6 +4,12 @@ import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
 
 function ApplicationDate() {
 
+    let tmp = currentApplicationData;
+    let x = tmp;
+
+    if (currentApplicationData === null) {
+        return (<></>);
+    }
 
     return (
         <div>

@@ -70,7 +70,7 @@ a:active {
 
 .cv_content {
   display: grid;
-  grid-template-columns: 260px 700px;
+  grid-template-columns: 280px 680px;
   grid-auto-rows: minmax(150px, auto);
   max-width: 960px;
   margin: 0px auto;
@@ -367,11 +367,12 @@ a:active {
 
 .application_content_paragraphs {
   margin-bottom: 30px;
+  font-size: 17px;
 }
 
 .jobtitle {
   font-style: italic;
-  margin-top: 15px;
+  line-height: 1.5;
 }
 
 .application_content_headline {

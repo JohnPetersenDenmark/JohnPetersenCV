@@ -7,7 +7,7 @@ import ConvertApplicationToPdf from '../../Components/Application/ConvertApplica
 
 import { useState } from 'react';
 import { currenrCVData, setCurrentCVData_v2 } from '../../GlobalData/GlobalCVData';
-import { setCurrentApplicationData, currentApplicationData } from '../../GlobalData/GlobalApplicationData';
+import { setCurrentApplicationData, currentApplicationData, defaultApplicationData } from '../../GlobalData/GlobalApplicationData';
 import { CVData } from '../../Classes/ClassesCVData';
 
 import { useSearchParams } from 'react-router-dom';
@@ -46,14 +46,28 @@ function Home(props: any) {
 
     function setNewApplicationData(newApplicationData: any) {
 
-        // if (! reloadDataFromFile)
-        // {
-        //     return;
-        // }
+        if (newApplicationData === null)
+        {
+            if ( currentApplicationData !== null)
+            {
+                setCurrentApplicationData(null);
+                 setApplicationUpdateCounter(updateApplicationCounter + 1)
+            }
+          
+            return("");
+        }
+
         let tmp = currentApplicationData
         let oldCurrentApplicationDataStr = JSON.stringify(currentApplicationData);
+        let mergedApplicationData = null;
 
-        let mergedApplicationData = { ...newApplicationData, ...currentApplicationData }
+        if ( currentApplicationData === null) {
+             mergedApplicationData = { ...newApplicationData, ...defaultApplicationData }          
+        }
+        else{
+             mergedApplicationData = { ...newApplicationData, ...currentApplicationData }
+        }
+       
         deepCopyApplicationData(newApplicationData, mergedApplicationData)
         let newCurrentApplicationDataStr = JSON.stringify(mergedApplicationData);
 

@@ -5,6 +5,9 @@ import   {currentApplicationData}  from '../../GlobalData/GlobalApplicationData'
 function ApplicantInfo() {
 
   let x = currentApplicationData
+  if (currentApplicationData === null) {
+    return (<></>);
+}
  
   return (
     <div  className = 'Applicaion_info_alignment'>
