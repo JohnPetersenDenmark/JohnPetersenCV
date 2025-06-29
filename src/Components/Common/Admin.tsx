@@ -12,7 +12,7 @@ import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
 
 
 
-function DownloadDataFiles() {
+function DownloadDataFiles()   {
 
     return (
         <div className='app_content'>
