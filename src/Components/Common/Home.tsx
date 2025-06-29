@@ -12,6 +12,8 @@ import { CVData } from '../../Classes/ClassesCVData';
 
 import { useSearchParams } from 'react-router-dom';
 
+// import { useSearchParams } from 'react-router-dom';
+
 
 import { ApplicationData } from '../../Classes/ClassesApplicationData';
 
