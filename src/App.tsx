@@ -26,7 +26,7 @@ function App() {
       <Routes>
         <Route path={base_url} element={<Home convert_to_pdf={true} />} />
         <Route path={base_url + "noconverttopdf"} element={<Home convert_to_pdf={false} />} />  
-        <Route path={base_url + "admin"} element={<Admin/>} />  
+        <Route path={base_url + "admin"} element={<Admin />} />  
         <Route path={base_url + "edit"} element={<Edit/>} />       
         <Route path={base_url + "editcv"} element={<EditCVWithCV/>} />  
          <Route path={base_url + "editapp"} element={<EditApplication/>} />   
