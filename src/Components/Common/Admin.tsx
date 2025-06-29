@@ -19,7 +19,7 @@ function DownloadDataFiles()   {
             <div className='app_content_content'>
                 <div className='admin_content'>
                     <div className='admin_content_right'>                      
-                            <SaveApplicationDataToFile />                                         
+                            <SaveApplicationDataToFile   />                                         
                             <SaveCVDataToFile />                     
                             <UploadCVdataToGithub />                                               
                             <UploadApplicationdataToGithub applicationData={currentApplicationData} />                                        
