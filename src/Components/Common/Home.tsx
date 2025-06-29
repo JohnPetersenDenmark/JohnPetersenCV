@@ -17,7 +17,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import { ApplicationData } from '../../Classes/ClassesApplicationData';
 
-var _ = require('lodash' );
+var _ = require('lodash'  );
 
 
 function Home(props: any) {
