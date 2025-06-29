@@ -9,7 +9,7 @@ import EditApplication from './Components/Application/EditApplication'
 import { Routes, Route, useLocation } from 'react-router-dom';
 
 
-var _ = require('lodash');
+var _ = require('lodash' );
 
  
 function App() {
