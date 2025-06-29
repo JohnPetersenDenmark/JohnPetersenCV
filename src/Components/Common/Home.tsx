@@ -10,7 +10,7 @@ import { currenrCVData, setCurrentCVData_v2 } from '../../GlobalData/GlobalCVDat
 import { setCurrentApplicationData, currentApplicationData, defaultApplicationData } from '../../GlobalData/GlobalApplicationData';
 import { CVData } from '../../Classes/ClassesCVData';
 
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom' ;
 
 // import { useSearchParams } from 'react-router-dom';
 
