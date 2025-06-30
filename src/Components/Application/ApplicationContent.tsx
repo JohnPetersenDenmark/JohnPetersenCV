@@ -5,7 +5,7 @@ import parse from 'html-react-parser';
 
 function ApplicationContent() {
 
-    if (currentApplicationData === null) {
+    if (currentApplicationData === null ) {
         return (<></>);
     }
 
