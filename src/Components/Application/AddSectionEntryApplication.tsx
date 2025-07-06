@@ -14,7 +14,7 @@ function AddSectionEntryApplication(props: any) {
 
     let currentSectionData = (props.currentSectionData) as ApplicantInfo | EmployerInfo | ApplicantContent 
     let selectedSectionClassName = props.selectedSectionClassName
-    let action = props.action
+    let action = props.action 
 
     let newEntry: any;
 
