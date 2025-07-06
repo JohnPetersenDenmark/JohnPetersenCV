@@ -12,7 +12,7 @@ async function UploadAsFileToGitHub(binaryContent: string, uploadAsFilename: str
 
  //let jptokenFull = jpTokenFirstPart + jpTokenSecondPart;
   
- let jptokenFull = "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";  
+ let jptokenFull = "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";  
  
   let requestbody = {
     "message": "Upload via github API",
@@ -53,7 +53,7 @@ async function GetSHAFromGitHub(fileName: string) {
 
  //let jptokenFull = jpTokenFirstPart + jpTokenSecondPart;
 
- let jptokenFull = "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";  
+ let jptokenFull = "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";  
  
   try {
     // const response = await fetch('https://api.github.com/repos/JohnPetersenDenmark/JohnPetersenCV/contents/datafiles/' + fileName, {
