@@ -127,7 +127,7 @@ function EditApplication() {
             // @ts-ignore  
             sectionSelectedEntry[target.name] = tmpArray
         }
-        else {
+        else { 
             // @ts-ignore  
             sectionSelectedEntry[target.name] = target.value
         }
@@ -164,6 +164,19 @@ function EditApplication() {
         setAction('edit')
     }
 
+function updateSectionInApplication(sectionData: any , index : number) {
+      
+       // let tmpCopyApplicationdata = CopyApplicationDataToNew(applicationDataCopy);
+         // @ts-ignore      
+       // tmpCopyApplicationdata[currentSectionData.thisClassName] = currentSectionData;
+       // setApplicationDataCopy(tmpCopyApplicationdata);
+      //  setCurrentApplicationData (tmpCopyApplicationdata);
+
+       let newApplicationdata = CopyApplicationDataToNew(applicationDataCopy);
+      setNewCurrentApplicationData(newApplicationdata)
+            setApplicationDataCopy(newApplicationdata);
+            setCurrentApplicationData(newApplicationdata)
+    }
 
     const handleDeleteEntry = (e: any, entryIndex: number) => {
         //  e.preventDefault();
@@ -329,6 +342,10 @@ function EditApplication() {
                                                 )) : ""}
                                                 <button type="button" onClick={(e) => handleDeleteEntry(e.target, entryIndex)}>
                                                     Slet
+                                                </button>
+
+                                                 <button type="button" onClick={(e) => updateSectionInApplication(e.target, entryIndex)}>
+                                                    Opdater
                                                 </button>
                                             </article>
                                         </section>

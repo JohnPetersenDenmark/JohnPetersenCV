@@ -59,7 +59,7 @@ function OpenApplicationDatafile(props: any) {
     // }
 
     return (
-        <>j</>
+        <></>
     );
 
 }

@@ -88,6 +88,16 @@ function EditCVWithCV() {
 
     }
 
+    function updateSectionInCV(sectionData: any , index : number) {
+          
+        
+           let newCVdata = CopyCVDataToNew(CVDataCopy);
+          setNewCurrentCVData(newCVdata)
+
+                 setCopyOfCVData(newCVdata);
+                setNewCurrentCVData(newCVdata) 
+        }
+
     const OnChangeEntry = (target: any, entryIndex: number) => {
         let tmpCopyCVdata = CopyCVDataToNew(CVDataCopy);
 
@@ -306,6 +316,9 @@ function EditCVWithCV() {
                                                 )) : ""}
                                                 <button type="button" onClick={(e) => handleDeleteEntry(e.target, entryIndex)}>
                                                     Slet
+                                                </button>
+                                                  <button type="button" onClick={(e) => updateSectionInCV(e.target, entryIndex)}>
+                                                    Opdater
                                                 </button>
                                             </article>
                                         </section>

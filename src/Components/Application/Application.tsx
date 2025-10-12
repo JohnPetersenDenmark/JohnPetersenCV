@@ -16,7 +16,8 @@ function Application() {
         return (<></>);
     }
     return (      
-                <div className="application_content_grid">
+                 <div className="application_content_grid">
+                <>
                     <div className="item1"><p className="itemRight">
                         <ApplicantInfo /></p>
                     </div>
@@ -45,7 +46,8 @@ function Application() {
                         <ApplicationContent />
                     </p></div>
                     <div className='itemX'></div>
-                </div>                      
+                    </>
+                 </div>                      
     );
 
 }

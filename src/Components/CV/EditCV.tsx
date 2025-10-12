@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import Select from 'react-select'
 
 
+
 function EditCV() {
 
     const [currentSectionData, setCurrentSectionData] = useState({} as Skills | Educations | ContactInfo | Sparetime | WorkingExperience | Languages | Motivation | Profile)
@@ -98,6 +99,8 @@ function EditCV() {
     }
 
     return (
+
+        
         // <div className='app_content'>
         //     <div className='app_content_content'>
         <form>
@@ -117,6 +120,8 @@ function EditCV() {
                     : ""
                 }
             </p>
+
+           
 
             {currentSectionData.entries ? (currentSectionData.entries).map((entry, entryIndex) => (
                 <>
@@ -153,6 +158,8 @@ function EditCV() {
             <p>
                 <button type="submit" onClick={handleSubmit}>Gem</button>
             </p>
+
+    
         </form>
         //     </div>
         // </div>
