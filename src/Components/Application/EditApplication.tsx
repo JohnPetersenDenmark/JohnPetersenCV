@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 import Application from './Application'
-import UploadApplicationdataToGithub from './UploadApplicationdataToGithub'
+// import UploadApplicationdataToGithub from './UploadApplicationdataToGithub'
 import { EmployerInfo, ApplicantInfo, ApplicantContent, ApplicationDate, ApplicationJobTitle, ApplicantContentHeadline } from '../../Classes/ClassesApplicationData';
 import { ApplicantInfoEntry, ApplicantContentEntry, ApplicationDateEntry, EmployerInfoEntry, ApplicationJobTitleEntry, ApplicantContentHeadlineEntry } from '../../Classes/ClassesApplicationData';
 import { sortSectionEntries } from '../../Utilities/Misc'
@@ -256,18 +256,7 @@ function updateSectionInApplication(sectionData: any , index : number) {
 
         <div>
             <div className='edit_content'>
-                <div className='edit_content_save'>                    
-                        {currentSectionData.entries && canBeSaved ?
-                            <UploadApplicationdataToGithub applicationData={applicationDataCopy}
-
-                                SetupdateFlag={(updateYesNo: boolean) => {
-                                    handleSave(updateYesNo)
-                                }
-                                }
-                            /> : ""}
-                   
-                        <button className='download_button' type="button" onClick={handleGoBack}>Tilbage</button>                  
-                </div>
+               
                 <div className='edit_content_content'>
 
 

@@ -6,7 +6,7 @@ import UploadFileToGitHub from './UploadFileToGitHub'
 
 import UploadCVdataToGithub from '../CV/UploadCVdataToGithub'
 
-import UploadApplicationdataToGithub from '../Application/UploadApplicationdataToGithub'
+// import UploadApplicationdataToGithub from '../Application/UploadApplicationdataToGithub'
 import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
 import GetApplicationFileLocal from '../Application/GetApplicationFileLocal'
 

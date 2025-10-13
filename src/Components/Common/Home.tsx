@@ -1,9 +1,9 @@
 import CV from '../../Components/CV/CV'
 import Application from '../../Components/Application/Application'
 import OpenCVdataFile from '../../Components/CV/OpenCVDatafile'
-import OpenApplicationdataFile from '../../Components/Application/OpenApplicationDatafile'
+// import OpenApplicationdataFile from '../../Components/Application/OpenApplicationDatafile'
 import ConvertCVToPdf from '../../Components/CV/ConvertCVToPdf'
-import ConvertApplicationToPdf from '../../Components/Application/ConvertApplicationToPdf';
+// import ConvertApplicationToPdf from '../../Components/Application/ConvertApplicationToPdf';
 
 
 import { useState } from 'react';
@@ -47,72 +47,7 @@ function Home(props: any) {
 
     }
 
-    /*
-    function setNewApplicationData(newApplicationData: any) {
-
-        if (newApplicationData === null)
-        {
-            if ( currentApplicationData !== null)
-            {
-                setCurrentApplicationData(null);
-                 setApplicationUpdateCounter(updateApplicationCounter + 1)
-            }
-          
-            return("");
-        }
-
-        let tmp = currentApplicationData
-        let oldCurrentApplicationDataStr = JSON.stringify(currentApplicationData);
-        let mergedApplicationData = null;
-
-        if ( currentApplicationData === null) {
-             mergedApplicationData = { ...newApplicationData, ...defaultApplicationData }          
-        }
-        else{
-             mergedApplicationData = { ...newApplicationData, ...currentApplicationData }
-        }
-       
-        deepCopyApplicationData(newApplicationData, mergedApplicationData)
-        let newCurrentApplicationDataStr = JSON.stringify(mergedApplicationData);
-
-        if (!(_.isEqual(oldCurrentApplicationDataStr, newCurrentApplicationDataStr))) {
-
-            setCurrentApplicationData(mergedApplicationData);
-            setApplicationUpdateCounter(updateApplicationCounter + 1)
-        }
-    }
-
-
-    function deepCopyApplicationData(source: ApplicationData, destination: ApplicationData) {
-
-
-        for (let [key, value] of Object.entries(source)) {
-            for (let [key1, value1] of Object.entries(destination)) {
-                if (key === key1) {
-                    if (value.entries) {
-                        for (let i = 0; i < value.entries.length; i++) {
-                            let bb = value.entries[i]
-                            //  for (let x = 0; x < value1.entries.length; x++) {
-
-                            let cc = value1.entries[i]
-                            for (let [key2, value2] of Object.entries(bb)) {
-                                for (let [key3, value3] of Object.entries(cc)) {
-                                    if (key2 === key3) {
-                                        //value3 = value2;
-                                        value1.entries[i][key3] = value2
-                                    }
-                                }
-                            }
-                            // }
-                        }
-                    }
-                    else {
-                        value1 = value
-                    }
-                }
-            }
-        }
-    } */
+    
 
     return (
         <div className='app_content'>
@@ -145,7 +80,7 @@ function Home(props: any) {
                 <div className='app_download_buttons'>
                     {showCV ? <ConvertCVToPdf /> : ""}
                     {/* {showApplication && reloadDataFromFile ? <ConvertApplicationToPdf /> : ""} */}
-                    {showApplication ? <ConvertApplicationToPdf /> : ""}
+                    {/* {showApplication ? <ConvertApplicationToPdf /> : ""} */}
                 </div>
                 : ""
             }
