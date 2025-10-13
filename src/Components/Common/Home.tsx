@@ -5,6 +5,7 @@ import OpenApplicationdataFile from '../../Components/Application/OpenApplicatio
 import ConvertCVToPdf from '../../Components/CV/ConvertCVToPdf'
 import ConvertApplicationToPdf from '../../Components/Application/ConvertApplicationToPdf';
 
+
 import { useState } from 'react';
 import { currenrCVData, setCurrentCVData_v2 } from '../../GlobalData/GlobalCVData';
 import { setCurrentApplicationData, currentApplicationData, defaultApplicationData } from '../../GlobalData/GlobalApplicationData';
@@ -35,7 +36,7 @@ function Home(props: any) {
 
 
 
-    function setNewCVData(newCVData: CVData) {
+     function setNewCVData(newCVData: CVData) {
         let oldcurrenrCVData = currenrCVData;
         setCurrentCVData_v2(newCVData);
         let tmp = currenrCVData;
@@ -46,6 +47,7 @@ function Home(props: any) {
 
     }
 
+    /*
     function setNewApplicationData(newApplicationData: any) {
 
         if (newApplicationData === null)
@@ -110,7 +112,7 @@ function Home(props: any) {
                 }
             }
         }
-    }
+    } */
 
     return (
         <div className='app_content'>
@@ -128,26 +130,12 @@ function Home(props: any) {
                         <div className='app_content_content'> <CV /> </div></>
                     : ""}
 
-                {/* {showApplication && reloadDataFromFile ?
-                    <><OpenApplicationdataFile
-                        SetApplicationdata={(newApplicationData: ApplicationData) => {
-                            setNewApplicationData(newApplicationData)
-                        }
-                        }
-                    >
-                    </OpenApplicationdataFile>
-                        <Application /></>
-                    : <Application />} */}
+             
 
                 {showApplication ?
-                    <><OpenApplicationdataFile
-                        SetApplicationdata={(newApplicationData: ApplicationData) => {
-                            setNewApplicationData(newApplicationData)
-                        }
-                        }
-                    >
-                    </OpenApplicationdataFile>
-                        <Application /></>
+                    <>                  
+                        <Application />
+                        </>
                     : ""}
 
             </div>

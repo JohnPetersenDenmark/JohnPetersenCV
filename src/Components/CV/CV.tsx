@@ -6,7 +6,7 @@ import Education from './Education';
 import Languages from './Languages';
 import WorkingHistory from './WorkingHistory';
 import Sparetime from './Sparetime';
-import ApplicationPDF from '../Application/ApplicationPDF';
+
 import { currenrCVData } from '../../GlobalData/GlobalCVData';
 
 
@@ -29,7 +29,7 @@ function CV() {
           <div>
                     <p>
  
-  <ApplicationPDF />
+
 
 
             </p>

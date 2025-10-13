@@ -1,5 +1,11 @@
 import React, { useRef } from "react";
 import Application from "./Application";
+import ApplicantInfo from './ApplicantInfo';
+import Customerinfo from './Customerinfo';
+import ApplicationDate from './ApplicationDate';
+import ApplicationJobTitle from './ApplicationJobTitle';
+import ApplicationContent from './ApplicationContent';
+import Applicationheadline from './Applicationheadline';
 
 declare global {
   interface Window {
@@ -45,19 +51,7 @@ const ApplicationPDF: React.FC = () => {
  const htmlToConvert = `
 <html>
   <head>
-    ${styles}
-    <style>
-      body { margin:0; padding:0; }
-      .application_content_grid {
-        display: grid !important;
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 10px !important;
-        text-align: left !important;
-      }
-      .item1, .item2, .item3, .item4, .item5, .item6 {
-        display: block !important;
-      }
-    </style>
+    ${styles}  
   </head>
   <body>
     ${updatedHtmlContent}
@@ -85,9 +79,36 @@ const ApplicationPDF: React.FC = () => {
         </button>
       </div>
 
-      <div ref={appRef} className="application_content_grid">
-        <Application />
-      </div>
+<div ref={appRef} className="application_content_grid">
+                    <div className="item1">
+                        <ApplicantInfo />
+                    </div>
+                    <div className='itemX'></div>
+                    <div className='itemX'></div>
+                    <div className='itemX'></div>
+                    <div className="item2">
+                        <Customerinfo />
+                   </div>
+                    <div className='itemX'></div>
+                    <div className='itemX'></div>
+                    <div className="item3">
+                        <ApplicationJobTitle />
+                    </div>
+                     <div className='itemX'></div>
+                    <div className='itemX'></div>
+                    <div className="item4">
+                        <ApplicationDate />
+                    </div>
+                    <div className='itemX'></div>
+                    <div className='itemX'></div>
+                   <div className='itemX'></div>
+                    
+                    <div className="item5">
+                        <ApplicationContent />
+                    </div>
+                    <div className='itemX'></div>
+                    <div className='itemX'></div>
+                    </div>
     </div>
   );
 };

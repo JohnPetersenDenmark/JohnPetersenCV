@@ -15,6 +15,10 @@ function Application() {
     if (currentApplicationData === null) {
         return (<></>);
     }
+
+    let x = currentApplicationData;
+    let y = x;
+    
     return (      
                  <div className="application_content_grid">
                 <>
@@ -35,14 +39,10 @@ function Application() {
                     <div className="item4"><p className="itemRight">
                         <ApplicationDate />
                     </p></div>
+                    
                     <div className='itemX'></div>
                     <div className='itemX'></div>
-                    <div className="item5"><p className="itemLeft application_content_headline">
-                        <Applicationheadline />
-                    </p></div>
-                    <div className='itemX'></div>
-                    <div className='itemX'></div>
-                    <div className="item6"><p className="itemLeft">
+                    <div className="item5"><p className="itemLeft">
                         <ApplicationContent />
                     </p></div>
                     <div className='itemX'></div>

@@ -1,4 +1,4 @@
-import { copyOfCurrentApplicationData, CopyApplicationDataToNew, setNewCurrentApplicationData, setCurrentApplicationData } from '../../GlobalData/GlobalApplicationData';
+import { copyOfCurrentApplicationData, CopyApplicationDataToNew, setNewCurrentApplicationData, currentApplicationData, setCurrentApplicationData } from '../../GlobalData/GlobalApplicationData';
 
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -16,7 +16,13 @@ import AddApplicationSectionEntry from './AddSectionEntryApplication'
 
 function EditApplication() {
 
-    let [applicationDataCopy, setApplicationDataCopy] = useState(copyOfCurrentApplicationData)
+    let current = currentApplicationData;
+    let copy = copyOfCurrentApplicationData;
+
+    let x = current;
+    let y = copy;
+
+    let [applicationDataCopy, setApplicationDataCopy] = useState(currentApplicationData)
 
 
     const [currentSectionData, setCurrentSectionData] = useState({} as ApplicantInfo | EmployerInfo | ApplicantContent | ApplicationDate | ApplicationJobTitle | ApplicantContentHeadline)

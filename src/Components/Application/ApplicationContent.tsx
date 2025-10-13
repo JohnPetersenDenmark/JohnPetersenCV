@@ -5,10 +5,9 @@ import parse from 'html-react-parser';
 
 function ApplicationContent() {
 
-    if (currentApplicationData === null ) {
-        return (<></>);
+  if (!currentApplicationData?.ApplicantContent) {
+      return null; // safe guard
     }
-
     let tmp = currentApplicationData;
     let x = tmp;
     return (

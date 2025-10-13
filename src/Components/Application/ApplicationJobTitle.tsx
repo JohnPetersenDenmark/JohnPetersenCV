@@ -5,8 +5,8 @@ import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
 function ApplicationJobTitle() {
 
 
-    if (currentApplicationData === null) {
-        return (<></>);
+  if (!currentApplicationData?.ApplicationJobTitle) {
+      return null; // safe guard
     }
     
     return (

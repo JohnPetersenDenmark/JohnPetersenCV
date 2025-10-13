@@ -4,11 +4,8 @@ import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
 
 function ApplicationDate() {
 
-    let tmp = currentApplicationData;
-    let x =  tmp;
-
-    if (currentApplicationData === null) {
-        return (<></>);
+    if (!currentApplicationData?.ApplicationDate) {
+      return null; // safe guard
     }
 
     return (

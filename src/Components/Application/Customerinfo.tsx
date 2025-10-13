@@ -6,12 +6,9 @@ function CustomerInfo() {
 
 let x = currentApplicationData
 
-if (currentApplicationData === null) {
-  return (<></>);
-}
-if (!currentApplicationData ) {
-  return (<></>);
-}
+if (!currentApplicationData?.EmployerInfo) {
+    return null; // safe guard
+  }
 
   return (
 

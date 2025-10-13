@@ -8,6 +8,7 @@ import UploadCVdataToGithub from '../CV/UploadCVdataToGithub'
 
 import UploadApplicationdataToGithub from '../Application/UploadApplicationdataToGithub'
 import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
+import GetApplicationFileLocal from '../Application/GetApplicationFileLocal'
 
 
 
@@ -19,11 +20,12 @@ function DownloadDataFiles()   {
             <div className='app_content_content'>
                 <div className='admin_content'>
                     <div className='admin_content_right'>                      
-                            <SaveApplicationDataToFile    />                                         
-                            <SaveCVDataToFile />                     
+                            <SaveApplicationDataToFile    />         
+                            <GetApplicationFileLocal />                                
+                           {/*  <SaveCVDataToFile />                     
                             <UploadCVdataToGithub />                                               
                             <UploadApplicationdataToGithub applicationData={currentApplicationData} />                                        
-                            <UploadFileToGitHub />                      
+                            <UploadFileToGitHub />      */}                 
                     </div>
                 </div>
             </div>

@@ -317,6 +317,7 @@ export function setNewCurrentApplicationData(applicationdatanew: any) {
 
 
 
+
 export function CopyApplicationDataToNew(applicationdataCopyFrom: ApplicationData): ApplicationData {
 
     let applicantInfo;
@@ -361,7 +362,7 @@ export function CopyApplicationDataToNew(applicationdataCopyFrom: ApplicationDat
     }
  
 
-    let copyOfCurrentApplicationData: ApplicationData = new ApplicationData(
+     copyOfCurrentApplicationData = new ApplicationData(
         applicantInfo,
         employerInfo,
         JobTitle,
