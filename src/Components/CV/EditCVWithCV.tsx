@@ -6,10 +6,10 @@ import { ContactInfo, Sparetime, Skills, WorkingExperience, Languages, Education
 import { ContactInfoEntry, EducationEntry, LanguageEntry, MotivationEntry, ProfileEntry, SkillEntry, SparetimeEntry, WorkingExperienceEntry } from "../../Classes/ClassesCVData";
 
 import AddCVSectionEntry from './AddCVSectionEntry'
-import { sortSectionEntries } from '../../Utilities/Misc'
+import { sortSectionEntries } from '../../Utilities/Misc' 
 
 import CV from './CV'
-import UploadCVdataToGithub from '../CV/UploadCVdataToGithub'
+
 
 function EditCVWithCV() {
 
@@ -227,14 +227,7 @@ function EditCVWithCV() {
         <div>
             <div className='edit_content'>
                 <div className='edit_content_save'>
-                    {currentSectionData.entries && canBeSaved ?
-                        <UploadCVdataToGithub CVdata={CVDataCopy}
-
-                            SetupdateFlag={(updateYesNo: boolean) => {
-                                handleSave(updateYesNo)
-                            }
-                            }
-                        /> : ""}
+                    
 
                     <button className='download_button' type="button" onClick={handleGoBack}>Tilbage</button>
                 </div>

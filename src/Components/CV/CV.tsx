@@ -11,53 +11,39 @@ import { currenrCVData } from '../../GlobalData/GlobalCVData';
 
 
 
- 
+
 
 
 function CV() {
 
-
   if (currenrCVData === null) {
     return (<></>);
   }
- 
+
   return (
-    
-      
 
-        <div className="cv_content">
-          <div>
-                    <p>
- 
+    <div className="cv_content">
+      <div>
 
-
-
-            </p>
-          </div>
-          <div className="cv_header_contact_info">
-            <ContactInfo />
-          </div>
-          <div className="cv_header">
-            <Motivation />
-          </div>
-          <div className="cv_right">
-            <Profile />
-            <WorkingHistory />
-          </div>
-          <div className="cv_left">
-            <Skills />
-            <Education />
-            <Languages />
-            <Sparetime />
-          </div>
-        </div>         
-      
-          
-
-
+      </div>
+      <div className="cv_header_contact_info">
+        <ContactInfo />
+      </div>
+      <div className="cv_header">
+        <Motivation />
+      </div>
+      <div className="cv_right">
+        <Profile />
+        <WorkingHistory />
+      </div>
+      <div className="cv_left">
+        <Skills />
+        <Education />
+        <Languages />
+        <Sparetime />
+      </div>
+    </div>
   );
-
-
 }
 
 export default CV;

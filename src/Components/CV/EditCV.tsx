@@ -34,7 +34,7 @@ function EditCV() {
 
     }
 
-    const OnChangeEntry = (target: any, entryIndex: number) => {
+    const OnChangeEntry = (target: any, entryIndex: number) => { 
         let x = target.value;
         let y = target.name
 
