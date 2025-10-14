@@ -78,8 +78,8 @@ const CVPdf: React.FC = () => {
                     Download PDF
                 </button>
             </div>
-
-            <div ref={appRef} className="application_content_grid">
+           
+                <div  ref={appRef} className="cv_content">
                 <div className="cv_header_contact_info">
                     <ContactInfo />
                 </div>

@@ -23,9 +23,7 @@ function CV() {
   return (
 
     <div className="cv_content">
-      <div>
-
-      </div>
+     
       <div className="cv_header_contact_info">
         <ContactInfo />
       </div>
