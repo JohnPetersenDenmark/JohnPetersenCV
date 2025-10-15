@@ -1,7 +1,9 @@
 
-import { currenrCVData } from '../../GlobalData/GlobalCVData';
+import { useCVData } from '../../GlobalData/GlobalCVDataContext';
 
 function ContactInfo() {
+
+const { currenrCVData, setCurrentCVData } = useCVData();
 
   return (
     <>

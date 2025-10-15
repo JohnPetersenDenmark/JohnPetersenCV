@@ -1,6 +1,8 @@
-import { currenrCVData } from '../../GlobalData/GlobalCVData';
+import { useCVData } from '../../GlobalData/GlobalCVDataContext';
 
 function WorkingHistory() {
+
+const { currenrCVData, setCurrentCVData } = useCVData();
 
   let tmp = currenrCVData;
   return (

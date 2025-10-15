@@ -1,9 +1,11 @@
 
 
-import { currenrCVData } from '../../GlobalData/GlobalCVData';
+import { useCVData } from '../../GlobalData/GlobalCVDataContext';
 
 
 function Profile() {
+
+const { currenrCVData, setCurrentCVData } = useCVData();
 
   return (
     <>         

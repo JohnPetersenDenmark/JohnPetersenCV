@@ -1,7 +1,8 @@
-import   {currenrCVData}  from '../../GlobalData/GlobalCVData';
+import { useCVData } from '../../GlobalData/GlobalCVDataContext';
 
 function Education() {
 
+    const { currenrCVData, setCurrentCVData } = useCVData();
 
     return (
         <>                               

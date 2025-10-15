@@ -1,8 +1,10 @@
 
-import { currenrCVData } from '../../GlobalData/GlobalCVData';
+import { useCVData } from '../../GlobalData/GlobalCVDataContext';
 
 
 function SaveCVDataToFile() {
+
+const { currenrCVData, setCurrentCVData } = useCVData();
 
     let x = currenrCVData;
   

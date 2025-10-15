@@ -1,11 +1,13 @@
-// import   {currenrCVData}  from './GlobalCVData';
+
 
 
 import { CVData } from '../../Classes/ClassesCVData';
-import   { currenrCVData}  from '../../GlobalData/GlobalCVData';
+import { useCVData } from '../../GlobalData/GlobalCVDataContext';
 import {useState, useContext} from 'react';
 
 function Sparetime() {
+
+const { currenrCVData, setCurrentCVData } = useCVData();
 
     return (
         <>             
