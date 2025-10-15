@@ -6,7 +6,6 @@ import ApplicationJobTitle from './ApplicationJobTitle';
 import ApplicationContent from './ApplicationContent';
 import Applicationheadline from './Applicationheadline';
 
-import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
 
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 

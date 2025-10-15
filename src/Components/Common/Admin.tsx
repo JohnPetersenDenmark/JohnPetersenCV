@@ -6,7 +6,7 @@ import SaveCVDataToFile from '../CV/SaveCVDataToFile'
 
 
 // import UploadApplicationdataToGithub from '../Application/UploadApplicationdataToGithub'
-import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
+
 import GetApplicationFileLocal from '../Application/GetApplicationFileLocal'
 import GetCVFileLocal from '../CV/GetCVFileLocal';
 

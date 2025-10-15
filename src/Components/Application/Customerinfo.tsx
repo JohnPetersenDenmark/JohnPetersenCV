@@ -1,4 +1,4 @@
-//import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
+
 
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 
