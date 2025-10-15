@@ -7,7 +7,7 @@ import Languages from './Languages';
 import WorkingHistory from './WorkingHistory';
 import Sparetime from './Sparetime';
 
-import { currenrCVData } from '../../GlobalData/GlobalCVData';
+import { useCVData } from '../../GlobalData/GlobalCVDataContext';
 
 
 
@@ -16,6 +16,8 @@ import { currenrCVData } from '../../GlobalData/GlobalCVData';
 
 function CV() {
 
+  const { currenrCVData, setCurrentCVData } = useCVData();
+  
   if (currenrCVData === null) {
     return (<></>);
   }

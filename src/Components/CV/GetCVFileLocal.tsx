@@ -1,12 +1,12 @@
 
 import { useState } from 'react';
-import { setCurrentCVData } from '../../GlobalData/GlobalCVData';
+import { useCVData } from '../../GlobalData/GlobalCVDataContext';
 
 
 function GetCVFileLocal(props: any) {
 
     const [fileContent, setFileContent] = useState("");
-
+const { currenrCVData, setCurrentCVData } = useCVData();
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;

@@ -186,7 +186,7 @@ function EditApplication() {
         let newApplicationdata = CopyApplicationDataToNew(currentApplicationData);
         setNewCurrentApplicationData(newApplicationdata)
         setCurrentApplicationData(newApplicationdata);
-        setCurrentApplicationData(newApplicationdata)
+       
     }
 
     const handleDeleteEntry = (e: any, entryIndex: number) => {

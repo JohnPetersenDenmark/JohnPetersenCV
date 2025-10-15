@@ -8,6 +8,7 @@ import EditApplication from './Components/Application/EditApplication';
 import ApplicationPDF from './Components/Application/ApplicationPDF';
 import CVPdf from './Components/CV/CVPdf';
 import { ApplicationDataProvider } from './GlobalData/GlobalApplicationDataContext';
+import { CVDataProvider } from './GlobalData/GlobalCVDataContext';
 
 const _ = require('lodash');
 
@@ -17,6 +18,7 @@ function App() {
 
   return (
     <ApplicationDataProvider>
+      <CVDataProvider>
       <div className="App bg">
         <Routes location={location}>
           <Route path={base_url} element={<Home convert_to_pdf={true} />} />
@@ -29,6 +31,7 @@ function App() {
           <Route path={`${base_url}cvpdf`} element={<CVPdf />} />
         </Routes>
       </div>
+        </CVDataProvider>
     </ApplicationDataProvider>
   );
 }

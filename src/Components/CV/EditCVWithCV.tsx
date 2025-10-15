@@ -1,18 +1,22 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CopyCVDataToNew, currenrCVData, setNewCurrentCVData, setCurrentCVData } from '../../GlobalData/GlobalCVData';
+import { CopyCVDataToNew, setNewCurrentCVData, } from '../../GlobalData/GlobalCVData';
+
+import { useCVData } from '../../GlobalData/GlobalCVDataContext';
+
 import { ContactInfo, Sparetime, Skills, WorkingExperience, Languages, Educations, Motivation, Profile } from '../../Classes/ClassesCVData';
 import { ContactInfoEntry, EducationEntry, LanguageEntry, MotivationEntry, ProfileEntry, SkillEntry, SparetimeEntry, WorkingExperienceEntry } from "../../Classes/ClassesCVData";
 
 import AddCVSectionEntry from './AddCVSectionEntry'
-import { sortSectionEntries } from '../../Utilities/Misc' 
+import { sortSectionEntries } from '../../Utilities/Misc'
 
 import CV from './CV'
 
 
 function EditCVWithCV() {
 
+    const { currenrCVData, setCurrentCVData } = useCVData();
     let [CVDataCopy, setCopyOfCVData] = useState(currenrCVData)
     let [currentSectionData, setCurrentSectionData] = useState({} as Skills | Educations | ContactInfo | Sparetime | WorkingExperience | Languages | Motivation | Profile)
     const [selectedSectionClassName, setSelectedSectionClassName] = useState('')
@@ -24,6 +28,8 @@ function EditCVWithCV() {
     let [action, setAction] = useState('edit')
     let [canBeSaved, setCanBeSaved] = useState(true)
     const navigate = useNavigate();
+
+
 
     useEffect(() => {
         const elements = Array.from(document.getElementsByClassName("section_title"));
@@ -39,7 +45,7 @@ function EditCVWithCV() {
 
         setSelectedSectionClassName(section_name);
 
-        let tmpCopyCVdata = CopyCVDataToNew(CVDataCopy);
+        let tmpCopyCVdata = CopyCVDataToNew(currenrCVData);
 
         let cv_section;
         // @ts-ignore   
@@ -63,7 +69,7 @@ function EditCVWithCV() {
         // }
         // else {
         //     setCanBeSaved(true);
-            
+
         // }
 
         setCanBeSaved(true);
@@ -74,7 +80,7 @@ function EditCVWithCV() {
             element.classList.add("title_clickable");
         })
 
-        let tmpCopyCVdata = CopyCVDataToNew(CVDataCopy);
+        let tmpCopyCVdata = CopyCVDataToNew(currenrCVData);
 
         let cv_section;
         // @ts-ignore   
@@ -88,18 +94,20 @@ function EditCVWithCV() {
 
     }
 
-    function updateSectionInCV(sectionData: any , index : number) {
-          
-        
-           let newCVdata = CopyCVDataToNew(CVDataCopy);
-          setNewCurrentCVData(newCVdata)
+    function updateSectionInCV(sectionData: any, index: number) {
 
-                 setCopyOfCVData(newCVdata);
-                setNewCurrentCVData(newCVdata) 
-        }
+
+        let newCVdata = CopyCVDataToNew(currenrCVData);
+        // @ts-ignore     
+        newCVdata[currentSectionData.thisClassName] = currentSectionData;
+       // setNewCurrentCVData(newCVdata)
+
+        setCopyOfCVData(newCVdata);
+        setCurrentCVData(newCVdata)
+    }
 
     const OnChangeEntry = (target: any, entryIndex: number) => {
-        let tmpCopyCVdata = CopyCVDataToNew(CVDataCopy);
+        let tmpCopyCVdata = CopyCVDataToNew(currenrCVData);
 
         let cv_section;
         // @ts-ignore   
@@ -125,6 +133,7 @@ function EditCVWithCV() {
         // @ts-ignore   
         cv_section.entries[entryIndex] = sectionSelectedEntry;
         setCopyOfCVData(tmpCopyCVdata)
+        setCurrentCVData(tmpCopyCVdata)
     }
 
     // const navigate = useNavigate();
@@ -132,10 +141,10 @@ function EditCVWithCV() {
     const handleSave = (yesNoString: boolean) => {
         if (yesNoString) {
 
-            let newCVdata = CopyCVDataToNew(CVDataCopy);
+            let newCVdata = CopyCVDataToNew(currenrCVData);
             setNewCurrentCVData(newCVdata);
             setCopyOfCVData(newCVdata);
-            setCurrentCVData(newCVdata);          
+            setCurrentCVData(newCVdata);
         }
     }
 
@@ -157,7 +166,7 @@ function EditCVWithCV() {
     const handleDeleteEntry = (e: any, entryIndex: number) => {
         //  e.preventDefault();
 
-        let tmpCopyCVdata = CopyCVDataToNew(CVDataCopy);
+        let tmpCopyCVdata = CopyCVDataToNew(currenrCVData);
 
         let cv_section;
         // @ts-ignore   
@@ -227,7 +236,7 @@ function EditCVWithCV() {
         <div>
             <div className='edit_content'>
                 <div className='edit_content_save'>
-                    
+
 
                     <button className='download_button' type="button" onClick={handleGoBack}>Tilbage</button>
                 </div>
@@ -310,7 +319,7 @@ function EditCVWithCV() {
                                                 <button type="button" onClick={(e) => handleDeleteEntry(e.target, entryIndex)}>
                                                     Slet
                                                 </button>
-                                                  <button type="button" onClick={(e) => updateSectionInCV(e.target, entryIndex)}>
+                                                <button type="button" onClick={(e) => updateSectionInCV(e.target, entryIndex)}>
                                                     Opdater
                                                 </button>
                                             </article>
