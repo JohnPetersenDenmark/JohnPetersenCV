@@ -17,9 +17,9 @@ import CV from './CV'
 function EditCVWithCV() {
 
     const { currenrCVData, setCurrentCVData } = useCVData();
-    let [CVDataCopy, setCopyOfCVData] = useState(currenrCVData)
-    let [currentSectionData, setCurrentSectionData] = useState({} as Skills | Educations | ContactInfo | Sparetime | WorkingExperience | Languages | Motivation | Profile)
-    const [selectedSectionClassName, setSelectedSectionClassName] = useState('')
+
+    let [currentSectionData, setCurrentSectionData] = useState({} as Skills | Educations | ContactInfo | Sparetime | WorkingExperience | Languages | Motivation | Profile) ;
+       const [selectedSectionClassName, setSelectedSectionClassName] = useState('')
     const [rerenderForce, setRerenderForce] = useState(0)
 
     const [fromDraggedEntry, setFromDraggedEntry] = useState({} as SkillEntry | MotivationEntry | WorkingExperienceEntry | ContactInfoEntry | LanguageEntry | SparetimeEntry | ProfileEntry | EducationEntry)
@@ -45,15 +45,11 @@ function EditCVWithCV() {
 
         setSelectedSectionClassName(section_name);
 
-        let tmpCopyCVdata = CopyCVDataToNew(currenrCVData);
-
+      
         let cv_section;
         // @ts-ignore   
-        cv_section = tmpCopyCVdata[section_name];
-
-        setCurrentSectionData(cv_section)
-
-        setDragableEntries(cv_section.entries)
+        cv_section = currenrCVData[section_name];
+         setCurrentSectionData(cv_section)
 
         console.log('Clicked!');
     };
@@ -89,7 +85,7 @@ function EditCVWithCV() {
         // @ts-ignore   
         cv_section[targetField.name] = targetField.value;
         setCurrentSectionData(cv_section)
-        setCopyOfCVData(tmpCopyCVdata);
+        setCurrentCVData(tmpCopyCVdata);
 
 
     }
@@ -102,7 +98,7 @@ function EditCVWithCV() {
         newCVdata[currentSectionData.thisClassName] = currentSectionData;
        // setNewCurrentCVData(newCVdata)
 
-        setCopyOfCVData(newCVdata);
+       
         setCurrentCVData(newCVdata)
     }
 
@@ -132,7 +128,8 @@ function EditCVWithCV() {
 
         // @ts-ignore   
         cv_section.entries[entryIndex] = sectionSelectedEntry;
-        setCopyOfCVData(tmpCopyCVdata)
+        setCurrentSectionData(cv_section)
+      
         setCurrentCVData(tmpCopyCVdata)
     }
 
@@ -142,8 +139,8 @@ function EditCVWithCV() {
         if (yesNoString) {
 
             let newCVdata = CopyCVDataToNew(currenrCVData);
-            setNewCurrentCVData(newCVdata);
-            setCopyOfCVData(newCVdata);
+          //  setNewCurrentCVData(newCVdata);
+            
             setCurrentCVData(newCVdata);
         }
     }
@@ -174,7 +171,7 @@ function EditCVWithCV() {
 
         cv_section.entries.splice(entryIndex, 1)
 
-        setCopyOfCVData(tmpCopyCVdata)
+        setCurrentCVData(tmpCopyCVdata)
     }
 
     const handleDragStart: (entry: SkillEntry | MotivationEntry | WorkingExperienceEntry | ContactInfoEntry | LanguageEntry | SparetimeEntry | ProfileEntry | EducationEntry) => React.DragEventHandler<HTMLDivElement> = (entry) => (e) => {
