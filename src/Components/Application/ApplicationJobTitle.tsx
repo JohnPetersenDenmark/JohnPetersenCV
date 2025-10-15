@@ -1,9 +1,10 @@
-import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
+//import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
 
-
+import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 
 function ApplicationJobTitle() {
 
+ const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
   if (!currentApplicationData?.ApplicationJobTitle) {
       return null; // safe guard

@@ -1,8 +1,11 @@
-import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
+//import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
 
+import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 
 
 function Applicationheadline() {
+
+    const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
     if (currentApplicationData === null) {
         return (<></>);

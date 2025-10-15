@@ -1,10 +1,13 @@
-import { copyOfCurrentApplicationData, CopyApplicationDataToNew, setNewCurrentApplicationData, currentApplicationData, setCurrentApplicationData } from '../../GlobalData/GlobalApplicationData';
+import { copyOfCurrentApplicationData, CopyApplicationDataToNew, setNewCurrentApplicationData } from '../../GlobalData/GlobalApplicationData';
 
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 
+import SaveApplicationDataToFile from '../Application/SaveApplicationDataToFile'
+import GetApplicationFileLocal from '../Application/GetApplicationFileLocal'
 
 import Application from './Application'
 // import UploadApplicationdataToGithub from './UploadApplicationdataToGithub'
@@ -16,13 +19,15 @@ import AddApplicationSectionEntry from './AddSectionEntryApplication'
 
 function EditApplication() {
 
-    let current = currentApplicationData;
+    /* let current = currentApplicationData;
     let copy = copyOfCurrentApplicationData;
 
-    let x = current;
-    let y = copy;
+    let x = current; 
+    let y = copy; */
 
-    let [applicationDataCopy, setApplicationDataCopy] = useState(currentApplicationData)
+   const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
+    
+   
 
 
     const [currentSectionData, setCurrentSectionData] = useState({} as ApplicantInfo | EmployerInfo | ApplicantContent | ApplicationDate | ApplicationJobTitle | ApplicantContentHeadline)
@@ -55,7 +60,7 @@ function EditApplication() {
             let sectionClassName = element.id
 
             // @ts-ignore   
-            let sectionValue = copyOfCurrentApplicationData[sectionClassName].sectionName
+            let sectionValue = currentApplicationData[sectionClassName].sectionName
             element.innerHTML = sectionValue
             element.addEventListener('click', handleClick);
             element.classList.add("title_clickable");
@@ -68,7 +73,7 @@ function EditApplication() {
 
         setSelectedSectionClassName(section_name);
 
-        let tmpCopyApplicationdata = CopyApplicationDataToNew(applicationDataCopy);
+        let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
 
         let application_section;
         // @ts-ignore   
@@ -81,7 +86,7 @@ function EditApplication() {
         console.log('Clicked!');
     };
 
-    const OnChangeSectionTitleContent = (targetField: any) => { 
+    const OnChangeSectionTitleContent = (targetField: any) => {
 
         let error_message = "";
 
@@ -99,7 +104,7 @@ function EditApplication() {
             element.classList.add("title_clickable");
         })
 
-        let tmpCopyApplicationdata = CopyApplicationDataToNew(applicationDataCopy);
+        let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
 
         let application_section;
         // @ts-ignore   
@@ -109,14 +114,14 @@ function EditApplication() {
 
         // @ts-ignore   
         application_section[targetField.name] = targetField.value;
-        setApplicationDataCopy(tmpCopyApplicationdata);
+        setCurrentApplicationData(tmpCopyApplicationdata);
 
 
     }
 
     const OnChangeEntry = (target: EventTarget & (HTMLInputElement | HTMLTextAreaElement), entryIndex: number) => {
 
-        let tmpCopyApplicationdata = CopyApplicationDataToNew(applicationDataCopy);
+        let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
 
         let application_section;
         // @ts-ignore   
@@ -133,7 +138,7 @@ function EditApplication() {
             // @ts-ignore  
             sectionSelectedEntry[target.name] = tmpArray
         }
-        else { 
+        else {
             // @ts-ignore  
             sectionSelectedEntry[target.name] = target.value
         }
@@ -141,17 +146,17 @@ function EditApplication() {
         // @ts-ignore   
         application_section.entries[entryIndex] = sectionSelectedEntry;
         setCurrentSectionData(application_section);
-        setApplicationDataCopy(tmpCopyApplicationdata);
+        setCurrentApplicationData(tmpCopyApplicationdata);
     }
 
 
-   
+
     const handleSave = (yesNoString: boolean) => {
         if (yesNoString) {
-            let newApplicationdata = CopyApplicationDataToNew(applicationDataCopy);
+            let newApplicationdata = CopyApplicationDataToNew(currentApplicationData);
 
             setNewCurrentApplicationData(newApplicationdata)
-            setApplicationDataCopy(newApplicationdata);
+            setCurrentApplicationData(newApplicationdata);
             setCurrentApplicationData(newApplicationdata)
             // resetReloadDataFromFileFlag();
         }
@@ -170,24 +175,24 @@ function EditApplication() {
         setAction('edit')
     }
 
-function updateSectionInApplication(sectionData: any , index : number) {
-      
-       // let tmpCopyApplicationdata = CopyApplicationDataToNew(applicationDataCopy);
-         // @ts-ignore      
-       // tmpCopyApplicationdata[currentSectionData.thisClassName] = currentSectionData;
-       // setApplicationDataCopy(tmpCopyApplicationdata);
-      //  setCurrentApplicationData (tmpCopyApplicationdata);
+    function updateSectionInApplication(sectionData: any, index: number) {
 
-       let newApplicationdata = CopyApplicationDataToNew(applicationDataCopy);
-      setNewCurrentApplicationData(newApplicationdata)
-            setApplicationDataCopy(newApplicationdata);
-            setCurrentApplicationData(newApplicationdata)
+        // let tmpCopyApplicationdata = CopyApplicationDataToNew(applicationDataCopy);
+        // @ts-ignore      
+        // tmpCopyApplicationdata[currentSectionData.thisClassName] = currentSectionData;
+        // setApplicationDataCopy(tmpCopyApplicationdata);
+        //  setCurrentApplicationData (tmpCopyApplicationdata);
+
+        let newApplicationdata = CopyApplicationDataToNew(currentApplicationData);
+        setNewCurrentApplicationData(newApplicationdata)
+        setCurrentApplicationData(newApplicationdata);
+        setCurrentApplicationData(newApplicationdata)
     }
 
     const handleDeleteEntry = (e: any, entryIndex: number) => {
         //  e.preventDefault();
 
-        let tmpCopyApplicationdata = CopyApplicationDataToNew(applicationDataCopy);
+        let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
 
         let application_section;
         // @ts-ignore   
@@ -195,7 +200,7 @@ function updateSectionInApplication(sectionData: any , index : number) {
 
         application_section.entries.splice(entryIndex, 1)
 
-        setApplicationDataCopy(tmpCopyApplicationdata);
+        setCurrentApplicationData(tmpCopyApplicationdata);
     }
 
 
@@ -251,16 +256,29 @@ function updateSectionInApplication(sectionData: any , index : number) {
         currentSectionData.entries = sortedEntryList;
     }
 
+    if ( currentApplicationData === null)
+    {
+        return(<></>);
+    }
 
     return (
 
         <div>
             <div className='edit_content'>
-               
+
                 <div className='edit_content_content'>
 
 
+                    <SaveApplicationDataToFile />
 
+                    <p>
+                        Vælg ansøgning
+                    </p>
+                    <GetApplicationFileLocal />
+
+
+
+                    
 
                     {action === 'edit' ?
                         <form className='edit_form'>
@@ -339,7 +357,7 @@ function updateSectionInApplication(sectionData: any , index : number) {
                                                     Slet
                                                 </button>
 
-                                                 <button type="button" onClick={(e) => updateSectionInApplication(e.target, entryIndex)}>
+                                                <button type="button" onClick={(e) => updateSectionInApplication(e.target, entryIndex)}>
                                                     Opdater
                                                 </button>
                                             </article>

@@ -1,10 +1,10 @@
-import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
+//import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
 
-
+import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 
 function CustomerInfo() {
 
-let x = currentApplicationData
+  const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
 if (!currentApplicationData?.EmployerInfo) {
     return null; // safe guard

@@ -1,13 +1,22 @@
-import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
+import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 
 
 function SaveApplicationDataToFile() {
 
-    let Application_as_json_string = JSON.stringify(currentApplicationData);
+     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
+     
+    if (currentApplicationData === null )
+    {
+        return (<></>);
+    }
+
+    let tmp = currentApplicationData;
+    let Application_as_json_string = JSON.stringify(tmp);
+
 
     const blob = new Blob([Application_as_json_string], { type: "application/json" });
 
-    function download_applivation_as_json() {
+    function download_application_as_json() {
         let application_json_fileName = "applicationjson.txt"
         const downloadLink = document.createElement("a");
 
@@ -21,11 +30,11 @@ function SaveApplicationDataToFile() {
 
     return (
         <>
-            <p className='section_title'>
+            <p >
                 Download aktuel ansøgning til din PC
             </p>
             <div className='admin_content_buttons'>
-            <button className='admin_buttons' onClick={download_applivation_as_json}> Hent</button>
+            <button className='admin_buttons' onClick={download_application_as_json}> Hent</button>
             </div>
 
         </>

@@ -1,10 +1,11 @@
-import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
+import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 import parse from 'html-react-parser';
 
 
 
 function ApplicationContent() {
 
+     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
   if (!currentApplicationData?.ApplicantContent) {
       return null; // safe guard
     }

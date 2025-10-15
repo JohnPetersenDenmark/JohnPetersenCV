@@ -1,9 +1,11 @@
-import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
+import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 
 
 
 function ApplicationDate() {
 
+    const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
+    
     if (!currentApplicationData?.ApplicationDate) {
       return null; // safe guard
     }

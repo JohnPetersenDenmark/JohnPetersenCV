@@ -1,11 +1,11 @@
 
 import { useState } from 'react';
-import { setCurrentApplicationData, CopyApplicationDataToNew, defaultApplicationData } from '../../GlobalData/GlobalApplicationData';
-
+import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 
 function GetApplicationFileLocal(props: any) {
 
     const [fileContent, setFileContent] = useState("");
+     const { setCurrentApplicationData } = useApplicationData();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -18,7 +18,7 @@ function GetApplicationFileLocal(props: any) {
         try {
           const jsonData = JSON.parse(text); // 👈 Parse the JSON
           setFileContent(jsonData);
-          setCurrentApplicationData(jsonData); // 👈 Pass object, not string
+           setCurrentApplicationData(jsonData);
       
         } catch (error) {
           console.error('Invalid JSON file:', error);

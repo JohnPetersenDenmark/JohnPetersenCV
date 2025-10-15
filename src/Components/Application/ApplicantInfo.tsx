@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
+import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 
 const ApplicantInfo: React.FC = () => {
+
+ const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
  if (!currentApplicationData?.ApplicantInfo) {
     return null; // safe guard

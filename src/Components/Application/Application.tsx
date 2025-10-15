@@ -8,9 +8,11 @@ import Applicationheadline from './Applicationheadline';
 
 import { currentApplicationData } from '../../GlobalData/GlobalApplicationData';
 
-
+import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 
 function Application() {
+
+const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
     if (currentApplicationData === null) {
         return (<></>);
