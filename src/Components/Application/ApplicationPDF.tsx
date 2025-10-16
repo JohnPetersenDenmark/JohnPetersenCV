@@ -48,7 +48,7 @@ const ApplicationPDF: React.FC = () => {
     const updatedHtmlContent = doc.body.outerHTML;
 
     // 4️⃣ Wrap in full HTML document
- const htmlToConvert = `
+    const htmlToConvert = `
 <html>
   <head>
     ${styles}  
@@ -72,45 +72,47 @@ const ApplicationPDF: React.FC = () => {
   };
 
   return (
-    <div className="pdf-export-container"> 
+    <div className="pdf-export-container">
       <div style={{ marginBottom: "1rem" }}>
         <button className="download_button" onClick={handleDownloadPDF}>
           Download PDF
         </button>
       </div>
 
-<div ref={appRef} className="application_content_grid">
-                    <div className="item1">
-                        <ApplicantInfo />
-                    </div>
-                    <div className='itemX'></div>
-                    <div className='itemX'></div>
-                    <div className='itemX'></div>
-                    <div className="item2">
-                        <Customerinfo />
-                   </div>
-                    <div className='itemX'></div>
-                    <div className='itemX'></div>
-                    <div className="item3">
-                        <ApplicationJobTitle />
-                    </div>
-                     <div className='itemX'></div>
-                    <div className='itemX'></div>
-                    <div className="item4">
-                        <ApplicationDate />
-                    </div>
-                    <div className='itemX'></div>
-                    <div className='itemX'></div>
-                   <div className='itemX'></div>
-                    
-                    <div className="item5">
-                        <ApplicationContent />
-                    </div>
-                    <div className='itemX'></div>
-                    <div className='itemX'></div>
-                    </div>
-    </div>
-  );
+      <div >
+        <div ref={appRef} className="application_content_grid" >
+          <div className="item1">
+            <ApplicantInfo />
+          </div>
+          <div className='itemX'></div>
+          <div className='itemX'></div>
+          <div className='itemX'></div>
+          <div className="item2">
+            <Customerinfo />
+          </div>
+          <div className='itemX'></div>
+          <div className='itemX'></div>
+          <div className="item3">
+            <ApplicationJobTitle />
+          </div>
+          <div className='itemX'></div>
+          <div className='itemX'></div>
+          <div className="item4">
+            <ApplicationDate />
+          </div>
+          <div className='itemX'></div>
+          <div className='itemX'></div>
+          <div className='itemX'></div>
+
+          <div className="item5">
+            <ApplicationContent />
+          </div>
+          <div className='itemX'></div>
+          <div className='itemX'></div>
+        </div>
+      </div>
+      </div>
+      );
 };
 
-export default ApplicationPDF;
+      export default ApplicationPDF;

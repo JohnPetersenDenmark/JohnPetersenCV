@@ -10,7 +10,8 @@ import { ContactInfoEntry, EducationEntry, LanguageEntry, MotivationEntry, Profi
 
 import AddCVSectionEntry from './AddCVSectionEntry'
 import { sortSectionEntries } from '../../Utilities/Misc'
-
+import GetCVFileLocal from './GetCVFileLocal';
+import SaveCVDataToFile from './SaveCVDataToFile';
 import CV from './CV'
 
 
@@ -54,6 +55,12 @@ function EditCVWithCV() {
         console.log('Clicked!');
     };
 
+
+ function goToPDFPage() {
+
+        navigate("/cvpdf");
+
+    }
 
     const OnChangeSectionTitleContent = (targetField: any) => {
 
@@ -239,6 +246,42 @@ function EditCVWithCV() {
                 </div>
 
                 <div className='edit_content_content'>
+                    <div style={{
+                           marginBottom : '20px'
+                        }}>
+                    <GetCVFileLocal />
+                    </div>
+                    <div style={{
+                           marginBottom : '20px'
+                        }}>
+                    <SaveCVDataToFile />
+                    </div>
+ <div style={{
+                           marginBottom : '20px'
+                        }}>
+                    <button
+                        style={{
+                            backgroundColor: "#00b8d7",  // Indigo blue
+                            color: "white",
+                            border: "3px solid",
+                            padding: "10px 20px",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            fontSize: "16px",
+                            fontWeight: 500,
+                            boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                            transition: "all 0.2s ease",
+
+                        }}
+                        onClick={(e) => goToPDFPage()}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "Black")}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#00b8d7")}
+                    >
+                        Convert to PDF
+                    </button>
+                    </div>
+
+                    
                     {action === 'edit' ?
                         <form className='edit_form'>
                             <>

@@ -17,6 +17,7 @@ import { sortSectionEntries } from '../../Utilities/Misc'
 
 import AddApplicationSectionEntry from './AddSectionEntryApplication'
 
+
 function EditApplication() {
 
     /* let current = currentApplicationData;
@@ -25,9 +26,9 @@ function EditApplication() {
     let x = current; 
     let y = copy; */
 
-   const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
-    
-   
+    const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
+
+
 
 
     const [currentSectionData, setCurrentSectionData] = useState({} as ApplicantInfo | EmployerInfo | ApplicantContent | ApplicationDate | ApplicationJobTitle | ApplicantContentHeadline)
@@ -186,7 +187,13 @@ function EditApplication() {
         let newApplicationdata = CopyApplicationDataToNew(currentApplicationData);
         setNewCurrentApplicationData(newApplicationdata)
         setCurrentApplicationData(newApplicationdata);
-       
+
+    }
+
+    function goToPDFPage() {
+
+        navigate("/apppdf");
+
     }
 
     const handleDeleteEntry = (e: any, entryIndex: number) => {
@@ -256,9 +263,8 @@ function EditApplication() {
         currentSectionData.entries = sortedEntryList;
     }
 
-    if ( currentApplicationData === null)
-    {
-        return(<></>);
+    if (currentApplicationData === null) {
+        return (<></>);
     }
 
     return (
@@ -267,18 +273,40 @@ function EditApplication() {
             <div className='edit_content'>
 
                 <div className='edit_content_content'>
+                    <div style={{
+                           marginBottom : '20px'
+                        }}>
+                        <GetApplicationFileLocal />
+                    </div>
+                     <div style={{
+                           marginBottom : '20px'
+                        }}>
+                        <SaveApplicationDataToFile />
+                    </div>
+                     <div style={{
+                           marginBottom : '20px'
+                        }}>
+                    <button
+                        style={{
+                            backgroundColor: "#00b8d7",  // Indigo blue
+                            color: "white",
+                            border: "3px solid",
+                            padding: "10px 20px",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            fontSize: "16px",
+                            fontWeight: 500,
+                            boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                            transition: "all 0.2s ease",
 
-
-                    <SaveApplicationDataToFile />
-
-                    <p>
-                        Vælg ansøgning
-                    </p>
-                    <GetApplicationFileLocal />
-
-
-
-                    
+                        }}
+                        onClick={(e) => goToPDFPage()}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "Black")}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#00b8d7")}
+                    >
+                        Convert to PDF
+                    </button>
+                    </div>
 
                     {action === 'edit' ?
                         <form className='edit_form'>

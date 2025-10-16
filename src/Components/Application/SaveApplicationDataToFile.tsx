@@ -3,10 +3,9 @@ import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContex
 
 function SaveApplicationDataToFile() {
 
-     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
-     
-    if (currentApplicationData === null )
-    {
+    const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
+
+    if (currentApplicationData === null) {
         return (<></>);
     }
 
@@ -30,13 +29,26 @@ function SaveApplicationDataToFile() {
 
     return (
         <>
-            <p >
-                Download aktuel ansøgning til din PC
-            </p>
-            <div className='admin_content_buttons'>
-            <button className='admin_buttons' onClick={download_application_as_json}> Hent</button>
-            </div>
-
+            <button
+                style={{
+                    backgroundColor: "#00b8d7",  // Indigo blue
+                    color: "white",
+                    border: "3px solid",
+                    padding: "10px 20px",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontSize: "16px",
+                    fontWeight: 500,
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                    transition: "all 0.2s ease",
+                    
+                }}
+                onClick={download_application_as_json}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "Black")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#00b8d7")}
+            >
+                Gem ansøgning
+            </button>          
         </>
     );
 }
