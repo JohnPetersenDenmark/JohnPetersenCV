@@ -304,7 +304,7 @@ function EditApplication() {
                         onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "Black")}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#00b8d7")}
                     >
-                        Convert to PDF
+                        Convert ansøgning to PDF
                     </button>
                     </div>
 

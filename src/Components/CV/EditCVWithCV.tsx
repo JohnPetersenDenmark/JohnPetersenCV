@@ -19,8 +19,8 @@ function EditCVWithCV() {
 
     const { currenrCVData, setCurrentCVData } = useCVData();
 
-    let [currentSectionData, setCurrentSectionData] = useState({} as Skills | Educations | ContactInfo | Sparetime | WorkingExperience | Languages | Motivation | Profile) ;
-       const [selectedSectionClassName, setSelectedSectionClassName] = useState('')
+    let [currentSectionData, setCurrentSectionData] = useState({} as Skills | Educations | ContactInfo | Sparetime | WorkingExperience | Languages | Motivation | Profile);
+    const [selectedSectionClassName, setSelectedSectionClassName] = useState('')
     const [rerenderForce, setRerenderForce] = useState(0)
 
     const [fromDraggedEntry, setFromDraggedEntry] = useState({} as SkillEntry | MotivationEntry | WorkingExperienceEntry | ContactInfoEntry | LanguageEntry | SparetimeEntry | ProfileEntry | EducationEntry)
@@ -46,17 +46,17 @@ function EditCVWithCV() {
 
         setSelectedSectionClassName(section_name);
 
-      
+
         let cv_section;
         // @ts-ignore   
         cv_section = currenrCVData[section_name];
-         setCurrentSectionData(cv_section)
+        setCurrentSectionData(cv_section)
 
         console.log('Clicked!');
     };
 
 
- function goToPDFPage() {
+    function goToPDFPage() {
 
         navigate("/cvpdf");
 
@@ -103,9 +103,9 @@ function EditCVWithCV() {
         let newCVdata = CopyCVDataToNew(currenrCVData);
         // @ts-ignore     
         newCVdata[currentSectionData.thisClassName] = currentSectionData;
-       // setNewCurrentCVData(newCVdata)
+        // setNewCurrentCVData(newCVdata)
 
-       
+
         setCurrentCVData(newCVdata)
     }
 
@@ -136,7 +136,7 @@ function EditCVWithCV() {
         // @ts-ignore   
         cv_section.entries[entryIndex] = sectionSelectedEntry;
         setCurrentSectionData(cv_section)
-      
+
         setCurrentCVData(tmpCopyCVdata)
     }
 
@@ -146,8 +146,8 @@ function EditCVWithCV() {
         if (yesNoString) {
 
             let newCVdata = CopyCVDataToNew(currenrCVData);
-          //  setNewCurrentCVData(newCVdata);
-            
+            //  setNewCurrentCVData(newCVdata);
+
             setCurrentCVData(newCVdata);
         }
     }
@@ -247,41 +247,41 @@ function EditCVWithCV() {
 
                 <div className='edit_content_content'>
                     <div style={{
-                           marginBottom : '20px'
-                        }}>
-                    <GetCVFileLocal />
+                        marginBottom: '20px'
+                    }}>
+                        <GetCVFileLocal />
                     </div>
                     <div style={{
-                           marginBottom : '20px'
-                        }}>
-                    <SaveCVDataToFile />
+                        marginBottom: '20px'
+                    }}>
+                        <SaveCVDataToFile />
                     </div>
- <div style={{
-                           marginBottom : '20px'
-                        }}>
-                    <button
-                        style={{
-                            backgroundColor: "#00b8d7",  // Indigo blue
-                            color: "white",
-                            border: "3px solid",
-                            padding: "10px 20px",
-                            borderRadius: "8px",
-                            cursor: "pointer",
-                            fontSize: "16px",
-                            fontWeight: 500,
-                            boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-                            transition: "all 0.2s ease",
+                    <div style={{
+                        marginBottom: '20px'
+                    }}>
+                        <button
+                            style={{
+                                backgroundColor: "#00b8d7",  // Indigo blue
+                                color: "white",
+                                border: "3px solid",
+                                padding: "10px 20px",
+                                borderRadius: "8px",
+                                cursor: "pointer",
+                                fontSize: "16px",
+                                fontWeight: 500,
+                                boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                                transition: "all 0.2s ease",
 
-                        }}
-                        onClick={(e) => goToPDFPage()}
-                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "Black")}
-                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#00b8d7")}
-                    >
-                        Convert to PDF
-                    </button>
+                            }}
+                            onClick={(e) => goToPDFPage()}
+                            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "Black")}
+                            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#00b8d7")}
+                        >
+                            Convert CV to PDF
+                        </button>
                     </div>
 
-                    
+
                     {action === 'edit' ?
                         <form className='edit_form'>
                             <>

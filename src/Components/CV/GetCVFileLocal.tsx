@@ -53,7 +53,7 @@ function GetCVFileLocal(props: any) {
         onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "black")}
         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#00b8d7")}
       >
-        Hent ansøgning
+        Hent CV
         <input
           id="fileUpload"
           type="file"
