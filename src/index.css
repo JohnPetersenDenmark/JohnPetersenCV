@@ -278,6 +278,8 @@ a:active {
   grid-auto-rows: minmax(50px, auto);
   max-width: 960px;
   margin: 0 auto;
+ /*  color : red;
+  background-color: White; */
   
   border-top: 30px solid;
   border-top-color: #fff;

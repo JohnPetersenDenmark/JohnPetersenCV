@@ -1,0 +1,44 @@
+.application_content_grid_XXX {
+  display: grid;
+  grid-template-columns: 130px ; /* matches your original layout */
+  gap: 10px; /* spacing between sections */
+  grid-auto-rows: minmax(100px, max-content);
+  
+  max-width: 960px;
+  margin: 0 auto;
+ background-color: gray;
+  border-top: 0px solid #fff;
+  border-bottom: 30px solid #fff;
+}
+
+.application_section_XXX {
+  display: flex;
+  flex-direction: column; /* stack header and body */
+  justify-content: flex-start;
+  align-items: stretch;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: grab;
+ 
+}
+ /* overflow: hidden; prevent content from floating out */
+
+.application_section:active {
+  cursor: grabbing;
+}
+
+.section_header_XXX {
+  font-weight: bold;
+  margin-bottom: 8px;
+  user-select: none; /* prevents text selection while dragging */
+}
+
+.section_body_XXX {
+  flex: 1;           /* take remaining space */
+  
+}
+
+
+/* overflow: auto;    scroll if content is too big */
