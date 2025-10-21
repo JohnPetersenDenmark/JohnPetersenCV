@@ -1,140 +1,217 @@
-import React, { useState, useRef } from "react";
+
+import React, { useRef, useEffect, useState } from "react";
+import { motion, AnimatePresence, PanInfo } from "framer-motion";
+
 import ApplicantInfo from "./ApplicantInfo";
 import Customerinfo from "./Customerinfo";
 import ApplicationJobTitle from "./ApplicationJobTitle";
 import ApplicationDate from "./ApplicationDate";
 import ApplicationContent from "./ApplicationContent";
-import DropToDivElement from "../Common/DropToDivElement";
 
-import "./ReorderApplicationSections.css";
+// --- CONFIG ---
+const COLUMN_WIDTHS = [200, 200, 200, 200];
+ //const COLUMN_WIDTHS = [50, 300, 300, 50];
+const ROW_HEIGHT = 50;
 
+// --- TYPES ---
 interface Section {
   id: string;
   label: string;
-  component: JSX.Element;
-  w: number; // column span
-  h: number; // row span (you can ignore if using auto height)
+  component: React.ReactNode;
+  x: number; // grid column start
+  y: number; // grid row start
+  w: number; // width in columns
+  h: number; // height in rows
 }
 
-const COLUMN_WIDTHS = [130, 400, 400, 130]; // px
-const GRID_COLUMNS = COLUMN_WIDTHS.length;
+// --- HELPERS ---
+/* function getColumnBoundaries(columnWidths: number[]): number[] {
+  const starts = [0];
+  for (const w of columnWidths) starts.push(starts[starts.length - 1] + w);
+  return starts;
+} */
 
-const INITIAL_SECTIONS: Section[] = [
-  { id: "applicant", label: "Applicant Info", component: <ApplicantInfo />, w: 1, h: 1 },
-  { id: "customer", label: "Customer Info", component: <Customerinfo />, w: 1, h: 1 },
-  { id: "job", label: "Job Title", component: <ApplicationJobTitle />, w: 1, h: 1 },
-  { id: "date", label: "Application Date", component: <ApplicationDate />, w: 1, h: 1 },
-  { id: "content", label: "Application Content", component: <ApplicationContent />, w: 2, h: 1 },
-   { id: "append", label: "Drop here", component: <DropToDivElement />, w: 1, h: 1 },
-];
+/* function calculateGridX(leftPx: number, boundaries: number[]): number {
+  for (let i = 0; i < boundaries.length - 1; i++) {
+    if (leftPx < boundaries[i + 1]) return i;
+  }
+  return boundaries.length - 2;
+} */
 
-const ReorderApplicationSections: React.FC = () => {
-  const [sections, setSections] = useState<Section[]>(INITIAL_SECTIONS);
-  const draggedSectionId = useRef<string | null>(null);
+/* function sectionsOverlap(a: Section, b: Section) {
+  const noOverlap =
+    a.x + a.w <= b.x ||
+    b.x + b.w <= a.x ||
+    a.y + a.h <= b.y ||
+    b.y + b.h <= a.y;
+  return !noOverlap;
+} */
 
-  // 🧩 Start dragging
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: string) => {
-    draggedSectionId.current = id;
-    e.dataTransfer.effectAllowed = "move";
+/* function resolveCollisions(sections: Section[], movedId: string): Section[] {
+  const moved = sections.find(s => s.id === movedId)!;
+  const others = sections.filter(s => s.id !== movedId);
+
+  const updated = others.map(s => {
+    if (sectionsOverlap(moved, s)) {
+      return { ...s, y: moved.y + moved.h }; // push down
+    }
+    return s;
+  });
+
+  return [moved, ...updated];
+} */
+
+// --- MAIN COMPONENT ---
+export default function DraggableGrid() {
+  const gridRef = useRef<HTMLDivElement>(null);
+  //const boundaries = getColumnBoundaries(COLUMN_WIDTHS);
+
+  const [sections, setSections] = useState<Section[]>([
+    { id: "applicant", label: "Applicant Info", component: <ApplicantInfo />, x: 0, y: 0, w: 2, h: 2 },
+    { id: "customer", label: "Customer Info", component: <Customerinfo />, x: 0, y: 4, w: 2, h: 1 },
+    { id: "job", label: "Job Title", component: <ApplicationJobTitle />, x: 0, y: 9, w: 2, h: 1 },
+    { id: "date", label: "Application Date", component: <ApplicationDate />, x: 0, y: 13, w: 2, h: 0 },
+    { id: "content", label: "Application Content", component: <ApplicationContent />, x: 0, y: 17, w: 4, h: 1 },
+  ]);
+
+  // const refs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const refs = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  useEffect(() => {
+    setSections(prev =>
+      prev.map(section => {
+        const el = refs.current.get(section.id);
+        if (!el) return section;
+        const w = calculateW(el.offsetWidth, COLUMN_WIDTHS) - 1;
+        const h = calculateH(el.scrollHeight, ROW_HEIGHT) - 1;
+        return { ...section, w, h };
+      })
+    );
+  }, []);
+
+  function calculateW(elementWidth: number, columnWidths: number[]): number {
+    let remaining = elementWidth;
+    let count = 0;
+    for (const w of columnWidths) {
+      remaining -= w;
+      count++;
+      if (remaining <= 0) break;
+    }
+    return count;
+  }
+
+  function calculateH(elementHeight: number, rowHeight: number): number {
+    return Math.ceil(elementHeight / rowHeight);
+  }
+
+
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+
+  // --- FRAMER MOTION DRAG HANDLERS ---
+  const handleDragStart = (id: string) => {
+    setDraggingId(id);
   };
 
-  // Allow drop
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => e.preventDefault();
+  const handleDragEnd = (id: string, event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    setDraggingId(null);
+    if (!gridRef.current) return;
 
-  // Drop handler
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>, targetIndex: number) => {
-    e.preventDefault();
-    if (!draggedSectionId.current) return;
+    /*    const gridRect = gridRef.current.getBoundingClientRect();
+       const leftPx = info.point.x - gridRect.left;
+       const topPx = info.point.y - gridRect.top;
+   
+       // Snap to grid
+       let x = calculateGridX(leftPx, boundaries);
+   
+   
+       let y = Math.floor(topPx / ROW_HEIGHT) - 1; */
+    let w = 0;
+    let h = 0;
 
-    const draggedId = draggedSectionId.current;
+    const el = refs.current.get(id);
+    if (el) {
+      w = calculateW(el.offsetWidth, COLUMN_WIDTHS) - 1;
+      h = calculateH(el.scrollHeight, ROW_HEIGHT) - 1;
+    }
 
-    setSections((prev) => {
-      const fromIndex = prev.findIndex((s) => s.id === draggedId);
-      const dragged = prev[fromIndex];
-      if (!dragged) return prev;
 
-      const reordered = [...prev];
-      reordered.splice(fromIndex, 1); // remove old position
-      reordered.splice(targetIndex, 0, dragged); // insert at new position
+    setSections(prev =>
+      prev.map(section =>
+        section.id === id ? { ...section, w, h } : section
+      )
+    );
 
-      return reordered;
-    });
-
-    draggedSectionId.current = null;
+    /* setSections(prev => {
+      const movedSections = prev.map(section =>
+        section.id === id ? { ...section, x, y } : section
+      );
+      return resolveCollisions(movedSections, id);
+    }); */
   };
 
-  // 🧮 Compute grid positions dynamically (flow layout)
-  const computeGridPositions = (sections: Section[]) => {
-    let x = 0;
-    let y = 0;
-    const positions: { [id: string]: { x: number; y: number } } = {};
-
-    sections.forEach((s) => {
-      if (x + s.w > GRID_COLUMNS) {
-        x = 0;
-        y += 1;
-      }
-      positions[s.id] = { x, y };
-      x += s.w;
-    });
-
-    return positions;
-  };
-
-  const positions = computeGridPositions(sections);
-
+  // --- RENDER ---
   return (
     <div
-      onDragOver={handleDragOver}
+      ref={gridRef}
       style={{
         display: "grid",
-        gridTemplateColumns: COLUMN_WIDTHS.map((w) => `${w}px`).join(" "),
-        gridAutoRows: "minmax(auto, max-content)",
+        gridTemplateColumns: COLUMN_WIDTHS.map(w => `${w}px`).join(" "),
+        gridAutoRows: `${ROW_HEIGHT}px`,
         gap: "10px",
         maxWidth: `${COLUMN_WIDTHS.reduce((a, b) => a + b, 0)}px`,
         margin: "0 auto",
+        background: "#f0f0f0",
+        padding: "20px",
+        borderRadius: "12px",
       }}
     >
-      {sections.map((section, index) => {
-        const pos = positions[section.id];
-        return (
-          <div
+      <AnimatePresence>
+        {sections.map(section => (
+          <motion.div
             key={section.id}
-            draggable
-            onDragStart={(e) => handleDragStart(e, section.id)}
-            onDrop={(e) => handleDrop(e, index)}
+            ref={el => {
+              if (el) refs.current.set(section.id, el);
+            }}
+            layout
+            drag
+            dragConstraints={gridRef}
+            onDragStart={() => handleDragStart(section.id)}
+            onDragEnd={(e, info) => handleDragEnd(section.id, e, info)}
             style={{
-              gridColumnStart: pos.x + 1,
-              gridColumnEnd: pos.x + 1 + section.w,
-              gridRowStart: pos.y + 1,
-              gridRowEnd: pos.y + 2,
-              backgroundColor: "#f8f9fa",
-              border: "1px solid #ddd",
+              gridColumnStart: section.x + 1,
+              gridColumnEnd: section.x + 1 + section.w,
+              gridRowStart: section.y + 1,
+              gridRowEnd: section.y + 1 + section.h,
+              backgroundColor:
+                draggingId === section.id ? "#d0ebff" : "#ffffff",
+              border: "1px solid #ccc",
               borderRadius: "8px",
               padding: "10px",
               cursor: "grab",
-              transition: "all 0.3s ease",
-              overflow: "hidden",
+              boxShadow:
+                draggingId === section.id
+                  ? "0 4px 12px rgba(0,0,0,0.15)"
+                  : "0 2px 6px rgba(0,0,0,0.1)",
+              display: "flex",
+              flexDirection: "column",
+              transition: "background-color 0.2s ease",
             }}
           >
-            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              <p
-                style={{
-                  fontSize: "18px",
-                  fontWeight: "bold",
-                  borderBottom: "1px solid #ddd",
-                  marginBottom: "8px",
-                }}
-              >
-                {section.label}
-              </p>
-              <div>{section.component}</div>
+            <div
+              style={{
+                fontWeight: "bold",
+                marginBottom: "8px",
+                userSelect: "none",
+              }}
+            >
+              ⠿ {section.label}
+
             </div>
-          </div>
-        );
-      })}
+            <div style={{ flex: 1, userSelect: "none" }}>{section.component}</div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
-};
-
-export default ReorderApplicationSections;
+}
