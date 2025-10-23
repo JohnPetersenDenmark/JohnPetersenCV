@@ -12,8 +12,8 @@ const ApplicantInfo: React.FC = () => {
   const { thisClassName, entries } = currentApplicationData.ApplicantInfo;
 
   return (
-    <div>
-      <p className="section_title" id={thisClassName}>
+    <div style={currentApplicationData.ApplicantInfo.cssStyles} >
+      <p  className="section_title" id={thisClassName}>
         {/* Optional: section title */}
       </p>
 

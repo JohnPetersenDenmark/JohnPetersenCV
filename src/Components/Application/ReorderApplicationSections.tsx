@@ -3,92 +3,80 @@ import React, { useRef, useEffect, useState } from "react";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
 
 import ApplicantInfo from "./ApplicantInfo";
-import Customerinfo from "./Customerinfo";
+import CustomerInfo from "./Customerinfo";
 import ApplicationJobTitle from "./ApplicationJobTitle";
 import ApplicationDate from "./ApplicationDate";
 import ApplicationContent from "./ApplicationContent";
 
-// --- CONFIG ---
-const COLUMN_WIDTHS = [200, 200, 200, 200];
- //const COLUMN_WIDTHS = [50, 300, 300, 50];
-const ROW_HEIGHT = 50;
+import { SectionPosition } from "../../Classes/ClassesApplicationData";
+import ApplicationPDF from "./ApplicationPDF";
 
-// --- TYPES ---
-interface Section {
-  id: string;
-  label: string;
-  component: React.ReactNode;
-  x: number; // grid column start
-  y: number; // grid row start
-  w: number; // width in columns
-  h: number; // height in rows
+import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
+
+import { ApplicantInfo as ApplicantInfoClass, Section } from "../../Classes/ClassesApplicationData";
+import { EmployerInfo as EmployerInfoClass } from "../../Classes/ClassesApplicationData";
+import { ApplicationJobTitle as ApplicationJobTitleClass } from "../../Classes/ClassesApplicationData";
+import { ApplicationDate as ApplicationDateClass } from "../../Classes/ClassesApplicationData";
+import { ApplicantContent as ApplicantContentClass } from "../../Classes/ClassesApplicationData";
+
+declare global {
+  interface Window {
+    convertHTMLToPDFWithCallback?: (htmlContent: string, callback: (pdfBlob: Blob) => void) => void;
+  }
 }
 
-// --- HELPERS ---
-/* function getColumnBoundaries(columnWidths: number[]): number[] {
-  const starts = [0];
-  for (const w of columnWidths) starts.push(starts[starts.length - 1] + w);
-  return starts;
-} */
-
-/* function calculateGridX(leftPx: number, boundaries: number[]): number {
-  for (let i = 0; i < boundaries.length - 1; i++) {
-    if (leftPx < boundaries[i + 1]) return i;
-  }
-  return boundaries.length - 2;
-} */
-
-/* function sectionsOverlap(a: Section, b: Section) {
-  const noOverlap =
-    a.x + a.w <= b.x ||
-    b.x + b.w <= a.x ||
-    a.y + a.h <= b.y ||
-    b.y + b.h <= a.y;
-  return !noOverlap;
-} */
-
-/* function resolveCollisions(sections: Section[], movedId: string): Section[] {
-  const moved = sections.find(s => s.id === movedId)!;
-  const others = sections.filter(s => s.id !== movedId);
-
-  const updated = others.map(s => {
-    if (sectionsOverlap(moved, s)) {
-      return { ...s, y: moved.y + moved.h }; // push down
-    }
-    return s;
-  });
-
-  return [moved, ...updated];
-} */
+// --- CONFIG ---
+const COLUMN_WIDTHS = [200, 200, 200, 200];
+//const COLUMN_WIDTHS = [50, 300, 300, 50];
+const ROW_HEIGHT = 50;
 
 // --- MAIN COMPONENT ---
-export default function DraggableGrid() {
+export default function ReorderApplicationSections() {
   const gridRef = useRef<HTMLDivElement>(null);
-  //const boundaries = getColumnBoundaries(COLUMN_WIDTHS);
 
-  const [sections, setSections] = useState<Section[]>([
-    { id: "applicant", label: "Applicant Info", component: <ApplicantInfo />, x: 0, y: 0, w: 2, h: 2 },
-    { id: "customer", label: "Customer Info", component: <Customerinfo />, x: 0, y: 4, w: 2, h: 1 },
-    { id: "job", label: "Job Title", component: <ApplicationJobTitle />, x: 0, y: 9, w: 2, h: 1 },
-    { id: "date", label: "Application Date", component: <ApplicationDate />, x: 0, y: 13, w: 2, h: 0 },
-    { id: "content", label: "Application Content", component: <ApplicationContent />, x: 0, y: 17, w: 4, h: 1 },
-  ]);
+  const componentMap: Record<string, React.FC> = {
 
-  // const refs = useRef<Record<string, HTMLDivElement | null>>({});
+    CustomerInfo,
+    ApplicationJobTitle,
+    ApplicationDate,
+    ApplicationContent,
+    ApplicantInfo,
+  };
+  const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
+  const [sections, setSections] = useState<any[]>(Object.entries(currentApplicationData))
+
+  const [PDFConversion, setPDFConversion] = useState(false);
 
   const refs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   useEffect(() => {
     setSections(prev =>
       prev.map(section => {
-        const el = refs.current.get(section.id);
+        const el = refs.current.get(section[1].sectionName);
         if (!el) return section;
+
         const w = calculateW(el.offsetWidth, COLUMN_WIDTHS) - 1;
         const h = calculateH(el.scrollHeight, ROW_HEIGHT) - 1;
-        return { ...section, w, h };
+
+        const Component = componentMap[section[1].thisClassName];
+        const component = Component ? <Component /> : null;
+
+        // ✅ Safely copy and update nested class instance
+        const updatedPos = Object.assign(
+          new SectionPosition(),
+          section[1].sectionPosition,
+          { width: w, height: h }
+        );
+
+        return {
+          ...section,
+          sectionPosition: updatedPos,
+          component,
+        };
       })
     );
   }, []);
+
 
   function calculateW(elementWidth: number, columnWidths: number[]): number {
     let remaining = elementWidth;
@@ -113,105 +101,138 @@ export default function DraggableGrid() {
     setDraggingId(id);
   };
 
-  const handleDragEnd = (id: string, event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const handleDragEnd = (
+    id: string,
+    event: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo
+  ) => {
     setDraggingId(null);
     if (!gridRef.current) return;
 
-    /*    const gridRect = gridRef.current.getBoundingClientRect();
-       const leftPx = info.point.x - gridRect.left;
-       const topPx = info.point.y - gridRect.top;
-   
-       // Snap to grid
-       let x = calculateGridX(leftPx, boundaries);
-   
-   
-       let y = Math.floor(topPx / ROW_HEIGHT) - 1; */
-    let w = 0;
-    let h = 0;
-
+    // Get element
     const el = refs.current.get(id);
-    if (el) {
-      w = calculateW(el.offsetWidth, COLUMN_WIDTHS) - 1;
-      h = calculateH(el.scrollHeight, ROW_HEIGHT) - 1;
-    }
-
+    const w = el ? calculateW(el.offsetWidth, COLUMN_WIDTHS) - 1 : 0;
+    const h = el ? calculateH(el.scrollHeight, ROW_HEIGHT) - 1 : 0;
 
     setSections(prev =>
-      prev.map(section =>
-        section.id === id ? { ...section, w, h } : section
-      )
-    );
+      prev.map(section => {
+        if (section.sectionName !== id) return section; // leave unchanged
 
-    /* setSections(prev => {
-      const movedSections = prev.map(section =>
-        section.id === id ? { ...section, x, y } : section
-      );
-      return resolveCollisions(movedSections, id);
-    }); */
+        // Get element
+        const el = refs.current.get(section.sectionName);
+        const w = el ? calculateW(el.offsetWidth, COLUMN_WIDTHS) - 1 : 0;
+        const h = el ? calculateH(el.scrollHeight, ROW_HEIGHT) - 1 : 0;
+
+        // Create updated SectionPosition
+        const updatedPos = Object.assign(
+          new SectionPosition(),
+          section.sectionPosition,
+          { width: w, height: h }
+        );
+
+        // Attach dynamic component if needed
+        const Component = componentMap[section.thisClassName ?? section.sectionName];
+        const component: React.ReactNode = Component ? <Component /> : null;
+
+        // Return updated section object
+        return {
+          ...section,
+          sectionPosition: updatedPos,
+          component,
+        };
+      })
+    );
   };
 
-  // --- RENDER ---
+
+  let noConversion = true;
+  function handleDownloadPDF() {
+    // 5️⃣ Call GrabzIt to convert HTML → PDF
+    if (window.convertHTMLToPDFWithCallback && gridRef.current) {
+      let noConversion = false;
+      window.convertHTMLToPDFWithCallback(gridRef.current.outerHTML, (pdfBlob) => {
+
+        console.log("PDF Blob received:", pdfBlob);
+
+        // Trigger download
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(pdfBlob);
+        link.download = "my_application.pdf";
+        link.click();
+        let noConversion = true;
+      });
+    }
+  }
+
+
   return (
-    <div
-      ref={gridRef}
-      style={{
-        display: "grid",
-        gridTemplateColumns: COLUMN_WIDTHS.map(w => `${w}px`).join(" "),
-        gridAutoRows: `${ROW_HEIGHT}px`,
-        gap: "10px",
-        maxWidth: `${COLUMN_WIDTHS.reduce((a, b) => a + b, 0)}px`,
-        margin: "0 auto",
-        background: "#f0f0f0",
-        padding: "20px",
-        borderRadius: "12px",
-      }}
-    >
-      <AnimatePresence>
-        {sections.map(section => (
-          <motion.div
-            key={section.id}
-            ref={el => {
-              if (el) refs.current.set(section.id, el);
-            }}
-            layout
-            drag
-            dragConstraints={gridRef}
-            onDragStart={() => handleDragStart(section.id)}
-            onDragEnd={(e, info) => handleDragEnd(section.id, e, info)}
-            style={{
-              gridColumnStart: section.x + 1,
-              gridColumnEnd: section.x + 1 + section.w,
-              gridRowStart: section.y + 1,
-              gridRowEnd: section.y + 1 + section.h,
-              backgroundColor:
-                draggingId === section.id ? "#d0ebff" : "#ffffff",
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-              padding: "10px",
-              cursor: "grab",
-              boxShadow:
-                draggingId === section.id
-                  ? "0 4px 12px rgba(0,0,0,0.15)"
-                  : "0 2px 6px rgba(0,0,0,0.1)",
-              display: "flex",
-              flexDirection: "column",
-              transition: "background-color 0.2s ease",
-            }}
-          >
-            <div
+    <>
+      <button className="download_button" onClick={handleDownloadPDF}>
+        Download PDF
+      </button>
+
+      <div
+        ref={gridRef}
+        style={{
+          display: "grid",
+          gridTemplateColumns: COLUMN_WIDTHS.map(w => `${w}px`).join(" "),
+          gridAutoRows: `${ROW_HEIGHT}px`,
+          gap: "10px",
+          maxWidth: `${COLUMN_WIDTHS.reduce((a, b) => a + b, 0)}px`,
+          margin: "0 auto",
+          background: "#00b8d7",
+          padding: "20px",
+          borderRadius: "12px",
+        }}
+      >
+        <AnimatePresence>
+          {sections.map(section => (
+            <motion.div
+              key={section[1].sectionName}
+              ref={el => {
+                if (el) refs.current.set(section[1].sectionName, el);
+              }}
+              layout
+              drag
+              dragConstraints={gridRef}
+              onDragStart={() => handleDragStart(section[1].sectionName)}
+              onDragEnd={(e, info) => handleDragEnd(section[1].sectionName, e, info)}
               style={{
-                fontWeight: "bold",
-                marginBottom: "8px",
-                userSelect: "none",
+                gridColumnStart: section.x + 1,
+                gridColumnEnd: section.x + 1 + section.w,
+                gridRowStart: section.y + 1,
+                gridRowEnd: section.y + 1 + section.h,
+                backgroundColor:
+                  draggingId === section[1].sectionName ? "#d0ebff" : "#ffffff",
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                padding: "10px",
+                cursor: "grab",
+                boxShadow:
+                  draggingId === section[1].sectionName
+                    ? "0 4px 12px rgba(0,0,0,0.15)"
+                    : "0 2px 6px rgba(0,0,0,0.1)",
+                display: "flex",
+                flexDirection: "column",
+                transition: "background-color 0.2s ease",
               }}
             >
-              ⠿ {section.label}
+              <div
+                style={{
+                  fontWeight: "bold",
+                  marginBottom: "8px",
+                  userSelect: "none",
+                }}
+              >
+                {/* ⠿ {section.label} */}
+                {noConversion && section[1].sectionNameLabel}
 
-            </div>
-            <div style={{ flex: 1, userSelect: "none" }}>{section.component}</div>
-          </motion.div>
-        ))}
-      </AnimatePresence>
-    </div>
+              </div>
+              <div style={{ flex: 1, userSelect: "none" }}>{section.component}</div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+    </>
   );
 }

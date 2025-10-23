@@ -28,7 +28,7 @@ function App() {
           <Route path={`${base_url}edit`} element={<Edit />} />
           <Route path={`${base_url}editcv`} element={<EditCVWithCV />} />
           <Route path={`${base_url}editapp`} element={<EditApplication />} />
-          <Route path={`${base_url}apppdf`} element={<ApplicationPDF />} />
+          {/* <Route path={`${base_url}apppdf`} element={<ApplicationPDF />} /> */}
           <Route path={`${base_url}cvpdf`} element={<CVPdf />} />
             <Route path={`${base_url}reorderapp`} element={<ReorderApplicationSections />} />
         </Routes>

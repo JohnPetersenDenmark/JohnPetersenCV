@@ -11,7 +11,7 @@ function ApplicationDate() {
     }
 
     return (
-        <div>
+        <div  style={currentApplicationData.ApplicationDate.cssStyles}>
             <p className="section_title" id={currentApplicationData.ApplicationDate.thisClassName}>
                 {/* {currentApplicationData.ApplicationDate.headline} */} 
             </p>

@@ -13,7 +13,7 @@ if (!currentApplicationData?.EmployerInfo) {
   return (
 
     // <div className='Applicaion_info_alignment'>
-    <div>
+    <div style={currentApplicationData.EmployerInfo.cssStyles}>
       <p className="section_title" id={currentApplicationData.EmployerInfo.thisClassName}>
         {/* {currentApplicationData.EmployerInfo.sectionName} */}
       </p>
