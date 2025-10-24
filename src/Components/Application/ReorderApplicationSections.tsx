@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
 
 import ApplicantInfo from "./ApplicantInfo";
-import CustomerInfo from "./Customerinfo";
+import EmployerInfo from "./EmployerInfo";
 import ApplicationJobTitle from "./ApplicationJobTitle";
 import ApplicationDate from "./ApplicationDate";
 import ApplicationContent from "./ApplicationContent";
@@ -26,7 +26,7 @@ declare global {
 }
 
 // --- CONFIG ---
-const COLUMN_WIDTHS = [200, 200, 200, 200];
+const COLUMN_WIDTHS = [50, 400, 400, 50];
 //const COLUMN_WIDTHS = [50, 300, 300, 50];
 const ROW_HEIGHT = 50;
 
@@ -36,12 +36,13 @@ export default function ReorderApplicationSections() {
 
   const componentMap: Record<string, React.FC> = {
 
-    CustomerInfo,
+    EmployerInfo,
     ApplicationJobTitle,
     ApplicationDate,
     ApplicationContent,
     ApplicantInfo,
   };
+
   const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
   const [sections, setSections] = useState<any[]>(Object.entries(currentApplicationData))
 
@@ -52,21 +53,42 @@ export default function ReorderApplicationSections() {
   useEffect(() => {
     setSections(prev =>
       prev.map(section => {
-        const el = refs.current.get(section[1].sectionName);
+        const el = refs.current.get(section[1].thisClassName);
         if (!el) return section;
+        const sectionRectangel = el.getBoundingClientRect();
 
-        const w = calculateW(el.offsetWidth, COLUMN_WIDTHS) - 1;
-        const h = calculateH(el.scrollHeight, ROW_HEIGHT) - 1;
+        if (!gridRef.current) return; // ✅ check before using
+        const gridRect = gridRef.current.getBoundingClientRect();
 
-        const Component = componentMap[section[1].thisClassName];
-        const component = Component ? <Component /> : null;
 
-        // ✅ Safely copy and update nested class instance
-        const updatedPos = Object.assign(
+        const relativeX = sectionRectangel.left - gridRect.left;
+        const relativeY = sectionRectangel.top - gridRect.top;
+
+        const startRow = Math.floor(relativeY / ROW_HEIGHT);
+        const startColumn = calculateColumnFromX(relativeX, COLUMN_WIDTHS)
+
+        const widthInColumns = calculateColumnsSpanned(sectionRectangel.width, COLUMN_WIDTHS, startColumn);
+        const heightInRows = Math.ceil(sectionRectangel.height / ROW_HEIGHT);
+
+         const updatedPos = Object.assign(
           new SectionPosition(),
           section[1].sectionPosition,
-          { width: w, height: h }
+          { width: widthInColumns, height: heightInRows, startColumn :  startColumn, startRow : startRow}
         );
+
+    
+        let componentName = '';
+
+        if (section[1].thisClassName === 'ApplicantContent') {
+          componentName = 'ApplicationContent';
+        }
+        else {
+          componentName = section[1].thisClassName;
+        }
+
+        const Component = componentMap[componentName];
+        const component = Component ? <Component /> : null;
+
 
         return {
           ...section,
@@ -77,6 +99,26 @@ export default function ReorderApplicationSections() {
     );
   }, []);
 
+
+  function calculateColumnFromX(x: number, columnWidths: number[]): number {
+    let total = 0;
+    for (let i = 0; i < columnWidths.length; i++) {
+      total += columnWidths[i];
+      if (x < total) return i; // 0-based column index
+    }
+    return columnWidths.length - 1; // last column if overflow
+  }
+
+  function calculateColumnsSpanned(width: number, columnWidths: number[], startColumn: number): number {
+    let remainingWidth = width;
+    let span = 0;
+    for (let i = startColumn; i < columnWidths.length; i++) {
+      remainingWidth -= columnWidths[i];
+      span++;
+      if (remainingWidth <= 0) break;
+    }
+    return span;
+  }
 
   function calculateW(elementWidth: number, columnWidths: number[]): number {
     let remaining = elementWidth;
@@ -89,9 +131,6 @@ export default function ReorderApplicationSections() {
     return count;
   }
 
-  function calculateH(elementHeight: number, rowHeight: number): number {
-    return Math.ceil(elementHeight / rowHeight);
-  }
 
 
   const [draggingId, setDraggingId] = useState<string | null>(null);
@@ -109,40 +148,45 @@ export default function ReorderApplicationSections() {
     setDraggingId(null);
     if (!gridRef.current) return;
 
-    // Get element
     const el = refs.current.get(id);
-    const w = el ? calculateW(el.offsetWidth, COLUMN_WIDTHS) - 1 : 0;
-    const h = el ? calculateH(el.scrollHeight, ROW_HEIGHT) - 1 : 0;
+  
+    // --- Get position of drop relative to grid ---
+    const gridRect = gridRef.current.getBoundingClientRect();
+    const relativeX = info.point.x - gridRect.left;
+    const relativeY = info.point.y - gridRect.top;
 
+    // --- Determine which column/row it was dropped into ---
+    const startColumn = calculateColumnFromX(relativeX, COLUMN_WIDTHS);
+    const startRow = Math.floor(relativeY / ROW_HEIGHT);
+
+    // --- Update state ---
     setSections(prev =>
       prev.map(section => {
-        if (section.sectionName !== id) return section; // leave unchanged
+        if (section[1].thisClassName !== id) return section;
 
-        // Get element
-        const el = refs.current.get(section.sectionName);
-        const w = el ? calculateW(el.offsetWidth, COLUMN_WIDTHS) - 1 : 0;
-        const h = el ? calculateH(el.scrollHeight, ROW_HEIGHT) - 1 : 0;
-
-        // Create updated SectionPosition
         const updatedPos = Object.assign(
           new SectionPosition(),
           section.sectionPosition,
-          { width: w, height: h }
+          {
+           /*  width: w,
+            height: h, */
+            startColumn,
+            startRow,
+          }
         );
 
-        // Attach dynamic component if needed
-        const Component = componentMap[section.thisClassName ?? section.sectionName];
-        const component: React.ReactNode = Component ? <Component /> : null;
-
-        // Return updated section object
         return {
           ...section,
           sectionPosition: updatedPos,
-          component,
+
         };
+
+
       })
     );
   };
+
+
 
 
   let noConversion = true;
@@ -188,28 +232,29 @@ export default function ReorderApplicationSections() {
         <AnimatePresence>
           {sections.map(section => (
             <motion.div
-              key={section[1].sectionName}
+              key={section[1].thisClassName}
               ref={el => {
-                if (el) refs.current.set(section[1].sectionName, el);
+                if (el) refs.current.set(section[1].thisClassName, el);
               }}
               layout
               drag
               dragConstraints={gridRef}
-              onDragStart={() => handleDragStart(section[1].sectionName)}
-              onDragEnd={(e, info) => handleDragEnd(section[1].sectionName, e, info)}
+              onDragStart={() => handleDragStart(section[1].thisClassName)}
+              onDragEnd={(e, info) => handleDragEnd(section[1].thisClassName, e, info)}
               style={{
-                gridColumnStart: section.x + 1,
-                gridColumnEnd: section.x + 1 + section.w,
-                gridRowStart: section.y + 1,
-                gridRowEnd: section.y + 1 + section.h,
+            /*    
+                  gridColumnStart: section[1].sectionPosition.startColumn + 1,
+                  gridColumnEnd: section[1].sectionPosition.startColumn + 1 + section[1].sectionPosition.width,
+                  gridRowStart: section[1].sectionPosition.startRow + 1,
+                  gridRowEnd: section[1].sectionPosition.startRow + 1 + section[1].sectionPosition.height, */
                 backgroundColor:
-                  draggingId === section[1].sectionName ? "#d0ebff" : "#ffffff",
+                  draggingId === section[1].thisClassName ? "#d0ebff" : "#ffffff",
                 border: "1px solid #ccc",
                 borderRadius: "8px",
                 padding: "10px",
                 cursor: "grab",
                 boxShadow:
-                  draggingId === section[1].sectionName
+                  draggingId === section[1].thisClassName
                     ? "0 4px 12px rgba(0,0,0,0.15)"
                     : "0 2px 6px rgba(0,0,0,0.1)",
                 display: "flex",

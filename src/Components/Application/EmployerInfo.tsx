@@ -2,7 +2,7 @@
 
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 
-function CustomerInfo() {
+function EmployerInfo() {
 
   const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
@@ -49,4 +49,4 @@ if (!currentApplicationData?.EmployerInfo) {
   );
 }
 
-export default CustomerInfo; 
+export default EmployerInfo; 

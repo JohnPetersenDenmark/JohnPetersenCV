@@ -1,6 +1,6 @@
 
 import ApplicantInfo from './ApplicantInfo';
-import Customerinfo from './Customerinfo';
+import Customerinfo from './EmployerInfo';
 import ApplicationDate from './ApplicationDate';
 import ApplicationJobTitle from './ApplicationJobTitle';
 import ApplicationContent from './ApplicationContent';

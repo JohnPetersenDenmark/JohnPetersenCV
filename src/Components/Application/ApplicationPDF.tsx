@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import Application from "./Application";
 import ApplicantInfo from './ApplicantInfo';
-import Customerinfo from './Customerinfo';
+import Customerinfo from './EmployerInfo';
 import ApplicationDate from './ApplicationDate';
 import ApplicationJobTitle from './ApplicationJobTitle';
 import ApplicationContent from './ApplicationContent';

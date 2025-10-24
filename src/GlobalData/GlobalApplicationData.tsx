@@ -53,7 +53,7 @@ let defaultApplicationEmployerdata = new EmployerInfo(
     defaultEmployerDataList,
     'Virksomhed',
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-     { width: 2, height: 6, startColumn: 3, startRow: 1 }
+     { width: 2, height: 3, startColumn: 1, startRow: 5 }
 )
 
 export const ApplicantInfoEntryLabels: SectionEntryLabels = {};
@@ -118,7 +118,7 @@ let defaultApplicantinfo = new ApplicantInfo(
     "John Petersen",
     "Ansøger",
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-     { width: 2, height: 6, startColumn: 3, startRow: 1 }
+     { width: 2, height: 3, startColumn: 1, startRow: 11 }
 )
 
 
@@ -158,7 +158,7 @@ let defaultapplicationContent = new ApplicantContent(
     'ApplicantContent',
     'Brødtekst',
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-    { width: 2, height: 10, startColumn: 2, startRow: 1 }
+    { width: 3, height: 2, startColumn: 0, startRow: 16 }
 
 )
 
@@ -190,7 +190,7 @@ export const defaultApplicationDate = new ApplicationDate(
     'ApplicationDate',
     'Dato for ansøgning',
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-     { width: 2, height: 10, startColumn: 3, startRow: 1 }
+     { width: 1, height: 1, startColumn: 1, startRow: 23 }
 )
 
 
@@ -218,7 +218,7 @@ let defaultApplicationJobTitle = new ApplicationJobTitle(
     'ApplicationJobTitle',
     'Jobtitel',
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-    { width: 1, height: 1, startColumn: 1, startRow: 6 }
+    { width: 2, height: 1, startColumn: 0, startRow:33 }
 )
 
 
@@ -246,7 +246,7 @@ let defaultContentHeaderline = new ApplicantContentHeadline(
     'Brødtekst overskrift',
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
 
-    { width: 1, height: 1, startColumn: 1, startRow: 1 }
+    { width: 1, height: 1, startColumn: 1, startRow: 44 }
 )
 
 let defaultApplicationData = new ApplicationData(
