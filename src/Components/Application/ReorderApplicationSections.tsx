@@ -8,6 +8,8 @@ import ApplicationJobTitle from "./ApplicationJobTitle";
 import ApplicationDate from "./ApplicationDate";
 import ApplicationContent from "./ApplicationContent";
 
+import { CopyApplicationDataToNew } from "../../GlobalData/GlobalApplicationData";
+
 import { SectionPosition } from "../../Classes/ClassesApplicationData";
 import ApplicationPDF from "./ApplicationPDF";
 
@@ -44,60 +46,97 @@ export default function ReorderApplicationSections() {
   };
 
   const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
-  const [sections, setSections] = useState<any[]>(Object.entries(currentApplicationData))
+
+ //const [sections, setSections] = useState<any[]>(Object.entries(currentApplicationData))
+
+ const [sections, setSections] = useState<any[]>(
+  Object.entries(currentApplicationData).filter(([key]) => key !== "ApplicantContentHeadline")
+);
+
+ 
+
+
+
+  for (let g = 0; g < sections.length; g++) {
+    let componentName = '';
+
+    let tmpSection = sections[g];
+
+    if (tmpSection[1].thisClassName === 'ApplicantContent') {
+      componentName = 'ApplicationContent';
+    }
+    else {
+      componentName = tmpSection[1].thisClassName;
+    }
+
+    const Component = componentMap[componentName];
+
+    const component = Component ? <Component /> : null;
+
+    tmpSection.component = component;
+  }
+
 
   const [PDFConversion, setPDFConversion] = useState(false);
 
   const refs = useRef<Map<string, HTMLDivElement>>(new Map());
 
+  const contentRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  
   useEffect(() => {
-    setSections(prev =>
-      prev.map(section => {
-        const el = refs.current.get(section[1].thisClassName);
-        if (!el) return section;
-        const sectionRectangel = el.getBoundingClientRect();
+  if (!currentApplicationData) return;
 
-        if (!gridRef.current) return; // ✅ check before using
-        const gridRect = gridRef.current.getBoundingClientRect();
+  // --- 1️⃣ Create a copy upfront
+  let tmpCopy = CopyApplicationDataToNew(currentApplicationData);
 
+  // --- 2️⃣ Update all section positions
+  const updatedSections = sections.map((section, index) => {
+    const el = refs.current.get(section[1].thisClassName);
+    if (!el) return section;
 
-        const relativeX = sectionRectangel.left - gridRect.left;
-        const relativeY = sectionRectangel.top - gridRect.top;
+    const sectionRect = el.getBoundingClientRect();
+    if (!gridRef.current) return section;
+    const gridRect = gridRef.current.getBoundingClientRect();
 
-        const startRow = Math.floor(relativeY / ROW_HEIGHT);
-        const startColumn = calculateColumnFromX(relativeX, COLUMN_WIDTHS)
+    const contentEl = contentRefs.current.get(section[1].thisClassName + index);
+    if (!contentEl) return section;
+    const contentRect = contentEl.getBoundingClientRect();
 
-        const widthInColumns = calculateColumnsSpanned(sectionRectangel.width, COLUMN_WIDTHS, startColumn);
-        const heightInRows = Math.ceil(sectionRectangel.height / ROW_HEIGHT);
+    const relativeX = contentRect.left - gridRect.left;
+    const relativeY = contentRect.top - gridRect.top;
 
-         const updatedPos = Object.assign(
-          new SectionPosition(),
-          section[1].sectionPosition,
-          { width: widthInColumns, height: heightInRows, startColumn :  startColumn, startRow : startRow}
-        );
+    const startRow = Math.floor(relativeY / ROW_HEIGHT);
+    const startColumn = calculateColumnFromX(relativeX, COLUMN_WIDTHS);
+    const widthInColumns = calculateColumnsSpanned(contentRect.width, COLUMN_WIDTHS, startColumn);
+    const heightInRows = Math.ceil(sectionRect.height / ROW_HEIGHT);
 
-    
-        let componentName = '';
+    const updatedPos = Object.assign(new SectionPosition(), section[1].sectionPosition, {
+      width: widthInColumns,
+      height: heightInRows,
+      startColumn,
+      startRow,
+    });
 
-        if (section[1].thisClassName === 'ApplicantContent') {
-          componentName = 'ApplicationContent';
-        }
-        else {
-          componentName = section[1].thisClassName;
-        }
+    // ✅ Update copy of global data
+    const sectionKey = section[1].thisClassName;
+     // @ts-ignore   
+    const appSection = tmpCopy[sectionKey];
+     // @ts-ignore   
+    tmpCopy[sectionKey] = { ...appSection, sectionPosition: updatedPos };
 
-        const Component = componentMap[componentName];
-        const component = Component ? <Component /> : null;
+    return [section[0], { ...section[1], sectionPosition: updatedPos }];
 
+  // return section;
+  });
 
-        return {
-          ...section,
-          sectionPosition: updatedPos,
-          component,
-        };
-      })
-    );
-  }, []);
+  // --- 3️⃣ Commit both updates once
+  //
+  setSections(updatedSections);
+  setCurrentApplicationData(tmpCopy);
+
+}, []);
+
 
 
   function calculateColumnFromX(x: number, columnWidths: number[]): number {
@@ -140,51 +179,73 @@ export default function ReorderApplicationSections() {
     setDraggingId(id);
   };
 
-  const handleDragEnd = (
-    id: string,
-    event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
-  ) => {
-    setDraggingId(null);
-    if (!gridRef.current) return;
+ const handleDragEnd = (
+  id: string,
+  event: MouseEvent | TouchEvent | PointerEvent,
+  info: PanInfo
+) => {
+  setDraggingId(null);
+  if (!gridRef.current) return;
 
-    const el = refs.current.get(id);
-  
-    // --- Get position of drop relative to grid ---
-    const gridRect = gridRef.current.getBoundingClientRect();
-    const relativeX = info.point.x - gridRect.left;
-    const relativeY = info.point.y - gridRect.top;
+   const gridRect = gridRef.current.getBoundingClientRect();
+ /* const relativeX = info.point.x - gridRect.left;
+  const relativeY = info.point.y - gridRect.top; */
 
-    // --- Determine which column/row it was dropped into ---
-    const startColumn = calculateColumnFromX(relativeX, COLUMN_WIDTHS);
+  let contentEl = null;
+  let index = 0
+  let contentRect = null;
+  for(let a = 0 ; a < 6 ; a++)
+  {
+    contentEl = contentRefs.current.get(id + a);
+    if (contentEl)
+     {
+          contentRect = contentEl.getBoundingClientRect();
+          
+     }
+  }
+ 
+  if ( !contentRect) return;
+
+ const relativeX = contentRect.left - gridRect.left;
+    const relativeY = contentRect.top - gridRect.top;
+
     const startRow = Math.floor(relativeY / ROW_HEIGHT);
+    const startColumn = calculateColumnFromX(relativeX, COLUMN_WIDTHS);
+ 
 
-    // --- Update state ---
-    setSections(prev =>
-      prev.map(section => {
-        if (section[1].thisClassName !== id) return section;
+  // --- Create new copies of both pieces of state ---
+  let updatedSections: typeof sections = [];
+  let updatedApplicationData = CopyApplicationDataToNew(currentApplicationData);
 
-        const updatedPos = Object.assign(
-          new SectionPosition(),
-          section.sectionPosition,
-          {
-           /*  width: w,
-            height: h, */
-            startColumn,
-            startRow,
-          }
-        );
+  updatedSections = sections.map(([key, value]) => {
+    if (value.thisClassName !== id) return [key, value];
 
-        return {
-          ...section,
-          sectionPosition: updatedPos,
+    // Copy and update SectionPosition
+    const updatedPos = Object.assign(new SectionPosition(), value.sectionPosition, {
+      startColumn,
+      startRow,
+    });
 
-        };
+    // Update corresponding section in global ApplicationData
+    const sectionKey = value.thisClassName;
+     // @ts-ignore   
+    const appSection = updatedApplicationData[sectionKey];
 
+     // @ts-ignore   
+    updatedApplicationData[sectionKey] = {
+      ...appSection,
+      sectionPosition: updatedPos,
+    };
 
-      })
-    );
-  };
+    // Return updated section for local state
+    return [key, { ...value, sectionPosition: updatedPos }];
+  });
+
+  // --- Commit both updates once ---
+  setSections(updatedSections);
+  setCurrentApplicationData(updatedApplicationData);
+};
+
 
 
 
@@ -225,12 +286,13 @@ export default function ReorderApplicationSections() {
           maxWidth: `${COLUMN_WIDTHS.reduce((a, b) => a + b, 0)}px`,
           margin: "0 auto",
           background: "#00b8d7",
+
           padding: "20px",
           borderRadius: "12px",
         }}
       >
         <AnimatePresence>
-          {sections.map(section => (
+          {sections.map((section, index) => (
             <motion.div
               key={section[1].thisClassName}
               ref={el => {
@@ -242,13 +304,16 @@ export default function ReorderApplicationSections() {
               onDragStart={() => handleDragStart(section[1].thisClassName)}
               onDragEnd={(e, info) => handleDragEnd(section[1].thisClassName, e, info)}
               style={{
-            /*    
-                  gridColumnStart: section[1].sectionPosition.startColumn + 1,
-                  gridColumnEnd: section[1].sectionPosition.startColumn + 1 + section[1].sectionPosition.width,
-                  gridRowStart: section[1].sectionPosition.startRow + 1,
-                  gridRowEnd: section[1].sectionPosition.startRow + 1 + section[1].sectionPosition.height, */
+
+                gridColumnStart: section[1].sectionPosition.startColumn + 1,
+                gridColumnEnd: section[1].sectionPosition.startColumn + 1 + section[1].sectionPosition.width,
+                gridRowStart: section[1].sectionPosition.startRow + 1,
+                gridRowEnd: section[1].sectionPosition.startRow + 1 + section[1].sectionPosition.height,
+
+                width: "fit-content", height: "fit-content",
+
                 backgroundColor:
-                  draggingId === section[1].thisClassName ? "#d0ebff" : "#ffffff",
+                  draggingId === section[1].thisClassName ? "#d0ebff" : section[1].cssStyles.backgroundColor,
                 border: "1px solid #ccc",
                 borderRadius: "8px",
                 padding: "10px",
@@ -262,18 +327,26 @@ export default function ReorderApplicationSections() {
                 transition: "background-color 0.2s ease",
               }}
             >
+              {noConversion ?
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    marginBottom: "8px",
+                    userSelect: "none",
+                  }}
+                >
+                  {/* ⠿ {section.label} */}
+                  {/* {section[1].sectionNameLabel} */}
+
+                </div> : ''}
               <div
-                style={{
-                  fontWeight: "bold",
-                  marginBottom: "8px",
-                  userSelect: "none",
+                style={{ width: "fit-content", height: "fit-content", flex: 1, userSelect: "none" }}
+                ref={el => {
+                  if (el) contentRefs.current.set(section[1].thisClassName + index, el);
                 }}
               >
-                {/* ⠿ {section.label} */}
-                {noConversion && section[1].sectionNameLabel}
-
+                {section.component}
               </div>
-              <div style={{ flex: 1, userSelect: "none" }}>{section.component}</div>
             </motion.div>
           ))}
         </AnimatePresence>
