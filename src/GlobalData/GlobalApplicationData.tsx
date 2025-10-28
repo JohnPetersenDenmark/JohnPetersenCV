@@ -53,7 +53,7 @@ let defaultApplicationEmployerdata = new EmployerInfo(
     defaultEmployerDataList,
     'Virksomhed',
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-     { width: 0, height: 0, startColumn: 0, startRow: 0 }
+     {  startXPosition: 1, startYPosition: 601 }
 )
 
 export const ApplicantInfoEntryLabels: SectionEntryLabels = {};
@@ -118,7 +118,7 @@ let defaultApplicantinfo = new ApplicantInfo(
     "John Petersen",
     "Ansøger",
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-      { width: 0, height: 0, startColumn: 2, startRow: 0 }
+      {  startXPosition: 1, startYPosition: 101  }
 )
 
 
@@ -158,7 +158,7 @@ let defaultapplicationContent = new ApplicantContent(
     'ApplicantContent',
     'Brødtekst',
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-     { width: 3, height: 0, startColumn: 0, startRow: 12 }
+     {  startXPosition: 1, startYPosition: 201 }
 
 )
 
@@ -190,7 +190,7 @@ export const defaultApplicationDate = new ApplicationDate(
     'ApplicationDate',
     'Dato for ansøgning',
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-      { width: 0, height: 0, startColumn: 2, startRow: 6 }
+      {  startXPosition: 1, startYPosition: 301  }
 )
 
 
@@ -218,7 +218,7 @@ let defaultApplicationJobTitle = new ApplicationJobTitle(
     'ApplicationJobTitle',
     'Jobtitel',
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-     { width: 0, height: 0, startColumn: 0, startRow: 6}
+     {  startXPosition: 1, startYPosition: 401 }
 )
 
 
@@ -246,7 +246,7 @@ let defaultContentHeaderline = new ApplicantContentHeadline(
     'Brødtekst overskrift',
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
 
-    { width: 0, height: 0, startColumn: 1, startRow: 9 }
+    {  startXPosition: 1, startYPosition: 501 }
 )
 
 let defaultApplicationData = new ApplicationData(

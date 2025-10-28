@@ -1,25 +1,12 @@
-
 import React, { useRef, useEffect, useState } from "react";
-import { motion, AnimatePresence, PanInfo } from "framer-motion";
-
 import ApplicantInfo from "./ApplicantInfo";
 import EmployerInfo from "./EmployerInfo";
 import ApplicationJobTitle from "./ApplicationJobTitle";
 import ApplicationDate from "./ApplicationDate";
 import ApplicationContent from "./ApplicationContent";
-
 import { CopyApplicationDataToNew } from "../../GlobalData/GlobalApplicationData";
-
 import { SectionPosition } from "../../Classes/ClassesApplicationData";
-import ApplicationPDF from "./ApplicationPDF";
-
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
-
-import { ApplicantInfo as ApplicantInfoClass, Section } from "../../Classes/ClassesApplicationData";
-import { EmployerInfo as EmployerInfoClass } from "../../Classes/ClassesApplicationData";
-import { ApplicationJobTitle as ApplicationJobTitleClass } from "../../Classes/ClassesApplicationData";
-import { ApplicationDate as ApplicationDateClass } from "../../Classes/ClassesApplicationData";
-import { ApplicantContent as ApplicantContentClass } from "../../Classes/ClassesApplicationData";
 
 declare global {
   interface Window {
@@ -29,12 +16,12 @@ declare global {
 
 // --- CONFIG ---
 const COLUMN_WIDTHS = [50, 400, 400, 50];
-//const COLUMN_WIDTHS = [50, 300, 300, 50];
 const ROW_HEIGHT = 50;
 
-// --- MAIN COMPONENT ---
 export default function ReorderApplicationSections() {
-  const gridRef = useRef<HTMLDivElement>(null);
+
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const componentMap: Record<string, React.FC> = {
 
@@ -47,15 +34,11 @@ export default function ReorderApplicationSections() {
 
   const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
-  //const [sections, setSections] = useState<any[]>(Object.entries(currentApplicationData))
+  const [useSectionHeaders, setUseSectionHeaders] = useState(true)
 
   const [sections, setSections] = useState<any[]>(
     Object.entries(currentApplicationData).filter(([key]) => key !== "ApplicantContentHeadline")
   );
-
-
-
-
 
   for (let g = 0; g < sections.length; g++) {
     let componentName = '';
@@ -79,166 +62,87 @@ export default function ReorderApplicationSections() {
 
   const [PDFConversion, setPDFConversion] = useState(false);
 
-  const refs = useRef<Map<string, HTMLDivElement>>(new Map());
-
-  const contentRefs = useRef<Map<string, HTMLDivElement>>(new Map());
-
-
-  useEffect(() => {
-    if (!currentApplicationData) return;
-
-    // --- 1️⃣ Create a copy upfront
-    let tmpCopy = CopyApplicationDataToNew(currentApplicationData);
-
-    // --- 2️⃣ Update all section positions
-    const updatedSections = sections.map((section, index) => {
-      const el = refs.current.get(section[1].thisClassName);
-      if (!el) return section;
-
-      const sectionRect = el.getBoundingClientRect();
-      if (!gridRef.current) return section;
-      const gridRect = gridRef.current.getBoundingClientRect();
-
-      const contentEl = contentRefs.current.get(section[1].thisClassName + index);
-      if (!contentEl) return section;
-      const contentRect = contentEl.getBoundingClientRect();
-
-      const relativeX = contentRect.left - gridRect.left;
-      const relativeY = contentRect.top - gridRect.top;
-
-      const startRow = Math.floor(relativeY / ROW_HEIGHT);
-      const startColumn = calculateColumnFromX(relativeX, COLUMN_WIDTHS);
-      const widthInColumns = calculateColumnsSpanned(contentRect.width, COLUMN_WIDTHS, startColumn);
-      const heightInRows = Math.ceil(sectionRect.height / ROW_HEIGHT);
-
-      const updatedPos = Object.assign(new SectionPosition(), section[1].sectionPosition, {
-        width: widthInColumns,
-        height: heightInRows,
-        startColumn,
-        startRow,
-      });
-
-
-      // @ts-ignore 
-      const sectionKey = section[1].thisClassName;
-      // @ts-ignore   
-      const appSection = tmpCopy[sectionKey];
-      // @ts-ignore   
-      tmpCopy[sectionKey] = { ...appSection, sectionPosition: updatedPos };
-
-      return [section[0], { ...section[1], sectionPosition: updatedPos }];
-
-      // return section;
-    });
-
-    // --- 3️⃣ Commit both updates once
-    //
-    setSections(updatedSections);
-    setCurrentApplicationData(tmpCopy);
-
-  }, []);
-
-
-
-  function calculateColumnFromX(x: number, columnWidths: number[]): number {
-    let total = 0;
-    for (let i = 0; i < columnWidths.length; i++) {
-      total += columnWidths[i];
-      if (x < total) return i; // 0-based column index
-    }
-    return columnWidths.length - 1; // last column if overflow
-  }
-
-  function calculateColumnsSpanned(width: number, columnWidths: number[], startColumn: number): number {
-    let remainingWidth = width;
-    let span = 0;
-    for (let i = startColumn; i < columnWidths.length; i++) {
-      remainingWidth -= columnWidths[i];
-      span++;
-      if (remainingWidth <= 0) break;
-    }
-    return span;
-  }
-
-  function calculateW(elementWidth: number, columnWidths: number[]): number {
-    let remaining = elementWidth;
-    let count = 0;
-    for (const w of columnWidths) {
-      remaining -= w;
-      count++;
-      if (remaining <= 0) break;
-    }
-    return count;
-  }
-
-
-
   const [draggingId, setDraggingId] = useState<string | null>(null);
 
-  // --- FRAMER MOTION DRAG HANDLERS ---
-  const handleDragStart = (id: string) => {
-    setDraggingId(id);
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: string) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.dataTransfer.setData("text/plain", JSON.stringify({
+      id,
+      offsetX: e.clientX - rect.left,
+      offsetY: e.clientY - rect.top,
+    }));
   };
 
-  const handleDragEnd = (
-    id: string,
-    event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
-  ) => {
-    setDraggingId(null);
-    if (!gridRef.current) return;
+  function handleDownloadPDF() {
+    const canvasEl = canvasRef.current;
+    if (!canvasEl || !window.convertHTMLToPDFWithCallback) return;
 
-    const gridRect = gridRef.current.getBoundingClientRect();
+    // 1️⃣ Hide all section elements before conversion
+    const hiddenElements: HTMLElement[] = [];
 
-    // Use pointer position to determine grid cell
-    const relativeX = info.point.x - gridRect.left;
-    const relativeY = info.point.y - gridRect.top;
-
-    const startRow = Math.round(relativeY / ROW_HEIGHT); // 0-based
-    const startColumn = calculateColumnFromX(relativeX, COLUMN_WIDTHS); // 0-based
-
-    // Update sections and application data
-    const updatedApplicationData = CopyApplicationDataToNew(currentApplicationData);
-    const updatedSections = sections.map(([key, value]) => {
-      if (value.thisClassName !== id) return [key, value];
-
-      const updatedPos = Object.assign(new SectionPosition(), value.sectionPosition, {
-        startColumn,
-        startRow,
-      });
-
-      // @ts-ignore
-      updatedApplicationData[value.thisClassName] = {...updatedApplicationData[value.thisClassName], sectionPosition: updatedPos, };
-
-      return [key, { ...value, sectionPosition: updatedPos }];
+    sections.forEach((section, index) => {
+      const id = section[1].thisClassName + index;
+      const el = canvasEl.querySelector<HTMLElement>("#" + CSS.escape(id));
+      if (el) {
+        el.style.display = "none";
+        hiddenElements.push(el); // keep track so we can restore later
+      }
     });
 
-    setSections(updatedSections);
-    setCurrentApplicationData(updatedApplicationData);
+    // 2️⃣ Convert to PDF using GrabzIt (or your custom converter)
+    window.convertHTMLToPDFWithCallback(canvasEl.outerHTML, (pdfBlob: Blob) => {
+      console.log("PDF Blob received:", pdfBlob);
+
+      // 3️⃣ Restore visibility
+      hiddenElements.forEach(el => {
+        el.style.display = "";
+      });
+
+      // 4️⃣ Trigger download
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(pdfBlob);
+      link.download = "my_application.pdf";
+      link.click();
+    });
+  }
+
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (!canvasRef.current) return;
+
+    const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+    const { id, offsetX, offsetY } = data;
+
+    const canvasRect = canvasRef.current.getBoundingClientRect();
+    const newX = e.clientX - canvasRect.left - offsetX;
+    const newY = e.clientY - canvasRect.top - offsetY;
+
+    setSections(prev =>
+      prev.map(([key, value]) => {
+        if (value.thisClassName !== id) return [key, value];
+        return [key, { ...value, sectionPosition: { startXPosition: newX, startYPosition: newY } }];
+      })
+    );
+
+    let tmpCopy = CopyApplicationDataToNew(currentApplicationData);
+    const sectionKey = id;
+    // @ts-ignore   
+    const appSection = tmpCopy[sectionKey];
+
+    const updatedPos = Object.assign(new SectionPosition(), appSection.sectionPosition, {
+      startXPosition: newX,
+      startYPosition: newY,
+    });
+
+    // @ts-ignore   
+    tmpCopy[sectionKey] = { ...appSection, sectionPosition: updatedPos };
+    setCurrentApplicationData(tmpCopy)
   };
 
-
-
-
-
-  let noConversion = true;
-  function handleDownloadPDF() {
-    // 5️⃣ Call GrabzIt to convert HTML → PDF
-    if (window.convertHTMLToPDFWithCallback && gridRef.current) {
-      let noConversion = false;
-      window.convertHTMLToPDFWithCallback(gridRef.current.outerHTML, (pdfBlob) => {
-
-        console.log("PDF Blob received:", pdfBlob);
-
-        // Trigger download
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(pdfBlob);
-        link.download = "my_application.pdf";
-        link.click();
-        let noConversion = true;
-      });
-    }
-  }
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault(); // Allow drop
+  };
 
 
   return (
@@ -248,83 +152,57 @@ export default function ReorderApplicationSections() {
       </button>
 
       <div
-        ref={gridRef}
+        ref={canvasRef}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
         style={{
-          display: "grid",
-          gridTemplateColumns: COLUMN_WIDTHS.map(w => `${w}px`).join(" "),
-          gridAutoRows: `${ROW_HEIGHT}px`,
-          gap: "10px",
-          maxWidth: `${COLUMN_WIDTHS.reduce((a, b) => a + b, 0)}px`,
-          margin: "0 auto",
-          padding: "20px",
+          position: "relative",
+          width: "794px",
+          height: "1123px",
+          margin: "20px auto",
+          background: "#f0f0f0",
+          border: "2px dashed #ccc",
           borderRadius: "12px",
-          background: "#00b8d7",
         }}
       >
-        <AnimatePresence>
-          {sections.map((section, index) => (
+        {sections.map((section, index) => (
+          <div
+            ref={sectionRef}
+            key={section[1].thisClassName}
+            
+            draggable
+            onDragStart={e => handleDragStart(e, section[1].thisClassName)}
+            style={{
+              position: "absolute",
+              left: section[1].sectionPosition.startXPosition,
+              top: section[1].sectionPosition.startYPosition,
+              background: "#fff",
+              border: "1px solid #ccc",
+              borderRadius: "8px",
+              padding: "10px",
+              cursor: "grab",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+            }}
+          >
             <div
-              key={section[1].thisClassName}
-              style={{
-                gridColumnStart: section[1].sectionPosition.startColumn + 1,
-                gridColumnEnd:
-                  section[1].sectionPosition.startColumn + 1 + section[1].sectionPosition.width,
-                gridRowStart: section[1].sectionPosition.startRow + 1,
-                gridRowEnd:
-                  section[1].sectionPosition.startRow + 1 + section[1].sectionPosition.height,
-                position: "relative", // Container stays in the grid
-              }}
-            >
-              <motion.div
-                ref={el => {
-                  if (el) refs.current.set(section[1].thisClassName, el);
-                }}
-                drag
-                dragConstraints={gridRef}
-                layout={false} // disable Framer Motion layout animations
-                onDragStart={() => setDraggingId(section[1].thisClassName)}
-                onDragEnd={(e, info) =>
-                  handleDragEnd(section[1].thisClassName, e, info)
-                }
-                style={{
-                  position:
-                    draggingId === section[1].thisClassName ? "absolute" : "relative",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  zIndex: draggingId === section[1].thisClassName ? 999 : 1,
-                  backgroundColor:
-                    draggingId === section[1].thisClassName
-                      ? "#d0ebff"
-                      : section[1].cssStyles.backgroundColor,
-                  border: "1px solid #ccc",
-                  borderRadius: "8px",
-                  padding: "10px",
-                  cursor: "grab",
-                  boxShadow:
-                    draggingId === section[1].thisClassName
-                      ? "0 4px 12px rgba(0,0,0,0.15)"
-                      : "0 2px 6px rgba(0,0,0,0.1)",
-                   display: "flex",
-               flexDirection: "column",
-                  transition: "background-color 0.2s ease",
-                }}
-              >
-                <div
-                  ref={el => {
-                  if (el) contentRefs.current.set(section[1].thisClassName + index, el);
-                }}
-                >
-                  {section.component}
-                </div>
+             id={section[1].thisClassName + index}
+            style={{
 
-              </motion.div>
+              background: "#fff",
+              border: "1px solid #ccc",
+              borderRadius: "8px",
+              padding: "10px",
+              fontWeight: '700',
+              fontSize: '20px',
+              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+            }}>
+              {useSectionHeaders ? section[1].sectionNameLabel : ''}
             </div>
-          ))}
-        </AnimatePresence>
-      </div>
 
+            {section.component}
+          </div>
+        ))}
+      </div>
     </>
   );
 }

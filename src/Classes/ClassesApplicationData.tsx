@@ -3,10 +3,10 @@ import { SectionEntryLabels, SectionEntryInput } from './ClassesCVData'
 
 
 export class SectionPosition {
-    width: number = 0
-    height: number = 0
-    startColumn: number = 0
-    startRow: number = 0;
+    //width: number = 0
+   // height: number = 0
+    startXPosition: number = 0
+    startYPosition: number = 0;
 
 }
 
