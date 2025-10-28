@@ -1,6 +1,6 @@
 
 import React, { useRef, useEffect, useState } from "react";
-import { motion, AnimatePresence, PanInfo } from "framer-motion";
+//import { motion, AnimatePresence, PanInfo } from "framer-motion";
 
 import ApplicantInfo from "./ApplicantInfo";
 import EmployerInfo from "./EmployerInfo";
@@ -33,8 +33,8 @@ const COLUMN_WIDTHS = [50, 400, 400, 50];
 const ROW_HEIGHT = 50;
 
 // --- MAIN COMPONENT ---
-export default function ReorderApplicationSections() {
-  const gridRef = useRef<HTMLDivElement>(null);
+export default function ReorderV2() {
+  const canvasRef = useRef<HTMLDivElement>(null);
 
   const componentMap: Record<string, React.FC> = {
 
@@ -96,8 +96,8 @@ export default function ReorderApplicationSections() {
       if (!el) return section;
 
       const sectionRect = el.getBoundingClientRect();
-      if (!gridRef.current) return section;
-      const gridRect = gridRef.current.getBoundingClientRect();
+      if (!canvasRef.current) return section;
+      const gridRect = canvasRef.current.getBoundingClientRect();
 
       const contentEl = contentRefs.current.get(section[1].thisClassName + index);
       if (!contentEl) return section;
@@ -106,16 +106,16 @@ export default function ReorderApplicationSections() {
       const relativeX = contentRect.left - gridRect.left;
       const relativeY = contentRect.top - gridRect.top;
 
-      const startRow = Math.floor(relativeY / ROW_HEIGHT);
+     /*  const startRow = Math.floor(relativeY / ROW_HEIGHT);
       const startColumn = calculateColumnFromX(relativeX, COLUMN_WIDTHS);
       const widthInColumns = calculateColumnsSpanned(contentRect.width, COLUMN_WIDTHS, startColumn);
-      const heightInRows = Math.ceil(sectionRect.height / ROW_HEIGHT);
+      const heightInRows = Math.ceil(sectionRect.height / ROW_HEIGHT); */
 
       const updatedPos = Object.assign(new SectionPosition(), section[1].sectionPosition, {
-        width: widthInColumns,
-        height: heightInRows,
-        startColumn,
-        startRow,
+        width: 0,
+        height: 0,
+        startColumn : relativeX ,
+        startRow : relativeY,
       });
 
 
@@ -139,7 +139,7 @@ export default function ReorderApplicationSections() {
   }, []);
 
 
-
+/* 
   function calculateColumnFromX(x: number, columnWidths: number[]): number {
     let total = 0;
     for (let i = 0; i < columnWidths.length; i++) {
@@ -170,75 +170,85 @@ export default function ReorderApplicationSections() {
     }
     return count;
   }
-
+ */
 
 
   const [draggingId, setDraggingId] = useState<string | null>(null);
 
-  // --- FRAMER MOTION DRAG HANDLERS ---
-  const handleDragStart = (id: string) => {
-    setDraggingId(id);
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: string) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.dataTransfer.setData("text/plain", JSON.stringify({
+      id,
+      offsetX: e.clientX - rect.left,
+      offsetY: e.clientY - rect.top,
+    }));
   };
 
-  const handleDragEnd = (
-    id: string,
-    event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
-  ) => {
-    setDraggingId(null);
-    if (!gridRef.current) return;
+  /* const handleDragEnd = (e: React.DragEvent<HTMLDivElement>, id: string) => {
+    if (!canvasRef.current) return;
 
-    const gridRect = gridRef.current.getBoundingClientRect();
+    const gridRect = canvasRef.current.getBoundingClientRect();
+    const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+    const { offsetX, offsetY } = data;
 
-    // Use pointer position to determine grid cell
-    const relativeX = info.point.x - gridRect.left;
-    const relativeY = info.point.y - gridRect.top;
+    const newX = e.clientX - gridRect.left - offsetX;
+    const newY = e.clientY - gridRect.top - offsetY;
 
-    const startRow = Math.round(relativeY / ROW_HEIGHT); // 0-based
-    const startColumn = calculateColumnFromX(relativeX, COLUMN_WIDTHS); // 0-based
-
-    // Update sections and application data
-    const updatedApplicationData = CopyApplicationDataToNew(currentApplicationData);
-    const updatedSections = sections.map(([key, value]) => {
-      if (value.thisClassName !== id) return [key, value];
-
-      const updatedPos = Object.assign(new SectionPosition(), value.sectionPosition, {
-        startColumn,
-        startRow,
-      });
-
-      // @ts-ignore
-      updatedApplicationData[value.thisClassName] = {...updatedApplicationData[value.thisClassName], sectionPosition: updatedPos, };
-
-      return [key, { ...value, sectionPosition: updatedPos }];
-    });
-
-    setSections(updatedSections);
-    setCurrentApplicationData(updatedApplicationData);
+    setSections(prev =>
+      prev.map(([key, value]) => {
+        if (value.thisClassName !== id) return [key, value];
+        return [key, { ...value, position: { x: newX, y: newY } }];
+      })
+    );
   };
 
+  */
 
 
 
 
   let noConversion = true;
   function handleDownloadPDF() {
-    // 5️⃣ Call GrabzIt to convert HTML → PDF
-    if (window.convertHTMLToPDFWithCallback && gridRef.current) {
-      let noConversion = false;
-      window.convertHTMLToPDFWithCallback(gridRef.current.outerHTML, (pdfBlob) => {
-
-        console.log("PDF Blob received:", pdfBlob);
-
-        // Trigger download
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(pdfBlob);
-        link.download = "my_application.pdf";
-        link.click();
-        let noConversion = true;
-      });
-    }
+    
+       if (window.convertHTMLToPDFWithCallback && canvasRef.current) {
+         let noConversion = false;
+         window.convertHTMLToPDFWithCallback(canvasRef.current.outerHTML, (pdfBlob) => {
+   
+           console.log("PDF Blob received:", pdfBlob);
+   
+           // Trigger download
+           const link = document.createElement("a");
+           link.href = URL.createObjectURL(pdfBlob);
+           link.download = "my_application.pdf";
+           link.click();
+           let noConversion = true;
+         }); 
+        }
   }
+
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (!canvasRef.current) return;
+
+    const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+    const { id, offsetX, offsetY } = data;
+
+    const canvasRect = canvasRef.current.getBoundingClientRect();
+    const newX = e.clientX - canvasRect.left - offsetX;
+    const newY = e.clientY - canvasRect.top - offsetY;
+
+    setSections(prev =>
+      prev.map(([key, value]) => {
+        if (value.thisClassName !== id) return [key, value];
+        return [key, { ...value, sectionPosition: { startColumn: newX, startRow: newY } }];
+      })
+    );
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault(); // Allow drop
+  };
 
 
   return (
@@ -248,83 +258,40 @@ export default function ReorderApplicationSections() {
       </button>
 
       <div
-        ref={gridRef}
+        ref={canvasRef}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
         style={{
-          display: "grid",
-          gridTemplateColumns: COLUMN_WIDTHS.map(w => `${w}px`).join(" "),
-          gridAutoRows: `${ROW_HEIGHT}px`,
-          gap: "10px",
-          maxWidth: `${COLUMN_WIDTHS.reduce((a, b) => a + b, 0)}px`,
-          margin: "0 auto",
-          padding: "20px",
+          position: "relative",
+          width: "1000px",
+          height: "800px",
+          margin: "20px auto",
+          background: "#f0f0f0",
+          border: "2px dashed #ccc",
           borderRadius: "12px",
-          background: "#00b8d7",
         }}
       >
-        <AnimatePresence>
-          {sections.map((section, index) => (
-            <div
-              key={section[1].thisClassName}
-              style={{
-                gridColumnStart: section[1].sectionPosition.startColumn + 1,
-                gridColumnEnd:
-                  section[1].sectionPosition.startColumn + 1 + section[1].sectionPosition.width,
-                gridRowStart: section[1].sectionPosition.startRow + 1,
-                gridRowEnd:
-                  section[1].sectionPosition.startRow + 1 + section[1].sectionPosition.height,
-                position: "relative", // Container stays in the grid
-              }}
-            >
-              <motion.div
-                ref={el => {
-                  if (el) refs.current.set(section[1].thisClassName, el);
-                }}
-                drag
-                dragConstraints={gridRef}
-                layout={false} // disable Framer Motion layout animations
-                onDragStart={() => setDraggingId(section[1].thisClassName)}
-                onDragEnd={(e, info) =>
-                  handleDragEnd(section[1].thisClassName, e, info)
-                }
-                style={{
-                  position:
-                    draggingId === section[1].thisClassName ? "absolute" : "relative",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  zIndex: draggingId === section[1].thisClassName ? 999 : 1,
-                  backgroundColor:
-                    draggingId === section[1].thisClassName
-                      ? "#d0ebff"
-                      : section[1].cssStyles.backgroundColor,
-                  border: "1px solid #ccc",
-                  borderRadius: "8px",
-                  padding: "10px",
-                  cursor: "grab",
-                  boxShadow:
-                    draggingId === section[1].thisClassName
-                      ? "0 4px 12px rgba(0,0,0,0.15)"
-                      : "0 2px 6px rgba(0,0,0,0.1)",
-                   display: "flex",
-               flexDirection: "column",
-                  transition: "background-color 0.2s ease",
-                }}
-              >
-                <div
-                  ref={el => {
-                  if (el) contentRefs.current.set(section[1].thisClassName + index, el);
-                }}
-                >
-                  {section.component}
-                </div>
-
-              </motion.div>
-            </div>
-          ))}
-        </AnimatePresence>
+        {sections.map(( section) => (
+          <div
+            key={section[1].thisClassName}
+            draggable
+            onDragStart={e => handleDragStart(e, section[1].thisClassName)}
+            style={{
+              position: "absolute",
+              left: section[1].sectionPosition.startColumn,
+              top: section[1].sectionPosition.startRow,
+              background: "#fff",
+              border: "1px solid #ccc",
+              borderRadius: "8px",
+              padding: "10px",
+              cursor: "grab",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+            }}
+          >
+            {section.component}
+          </div>
+        ))}
       </div>
-
     </>
   );
 }
