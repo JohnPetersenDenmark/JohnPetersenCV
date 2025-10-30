@@ -1,3 +1,5 @@
+import { SectionPosition } from "./ClassesApplicationData";
+
 export class inputFieldDescription {
     type : string
 
@@ -22,13 +24,18 @@ export class Profile {
     sectionName: string
     sectionNameLabel: string
     entries: ProfileEntry[];
+     cssStyles: React.CSSProperties
+      sectionPosition: SectionPosition
    
 
-    public constructor(sectionName: string,  sectionNameLabel: string, entries: ProfileEntry[]) {
+    public constructor(sectionName: string,  sectionNameLabel: string, entries: ProfileEntry[] , cssStyles: React.CSSProperties, sectionPosition: SectionPosition) {
         this.sectionName = sectionName;
         this.entries = entries;
         this.sectionNameLabel =  sectionNameLabel;
         this.thisClassName = 'Profile'
+
+          this.cssStyles = cssStyles
+          this.sectionPosition = sectionPosition
     }
 }
 
@@ -42,6 +49,7 @@ export class ProfileEntry {
         this.labels =   labels 
         this.sectionEntryInput = sectionEntryInput
         this.sortorder = sortorder
+      
     }
 }
 
@@ -50,12 +58,17 @@ export class Motivation {
     sectionName: string   
     sectionNameLabel: string
     entries: MotivationEntry[];
+     cssStyles: React.CSSProperties
+      			sectionPosition: SectionPosition
 
-    public constructor(sectionName: string,  entries: MotivationEntry[],  sectionNameLabel: string) {
+    public constructor(sectionName: string,  entries: MotivationEntry[],  sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition) {
         this.sectionName = sectionName;        
         this.entries = entries;
         this.sectionNameLabel = sectionNameLabel
         this.thisClassName = 'Motivation'
+         this.cssStyles = cssStyles
+          this.sectionPosition = sectionPosition
+
     }
 }
 
@@ -97,11 +110,16 @@ export class ContactInfo {
     sectionName: string
     sectionNameLabel: string
     entries: ContactInfoEntry[];
-    public constructor(sectionName: string, sectionNameLabel: string, entries: ContactInfoEntry[]) {
+     cssStyles: React.CSSProperties
+      			sectionPosition: SectionPosition
+
+    public constructor(sectionName: string, sectionNameLabel: string, entries: ContactInfoEntry[] , cssStyles: React.CSSProperties, sectionPosition: SectionPosition) {
         this.sectionName = sectionName;
         this.entries = entries;
         this.sectionNameLabel = sectionNameLabel;
         this.thisClassName = 'ContactInfo'
+        this.cssStyles = cssStyles
+          this.sectionPosition = sectionPosition
     }
 }
 
@@ -142,13 +160,17 @@ export class WorkingExperience {
     sectionNameLabel: string
     achivementstitle: string
     entries: WorkingExperienceEntry[]
+     cssStyles: React.CSSProperties
+      			sectionPosition: SectionPosition
 
-    public constructor(sectionName: string, achivementstitle: string, entries: WorkingExperienceEntry[], sectionNameLabel: string) {
+    public constructor(sectionName: string, achivementstitle: string, entries: WorkingExperienceEntry[], sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition) {
         this.sectionName = sectionName;
         this.achivementstitle = achivementstitle
         this.entries = entries
         this.sectionNameLabel = sectionNameLabel
         this.thisClassName = 'WorkingExperience'
+         this.cssStyles = cssStyles
+          this.sectionPosition = sectionPosition
     }
 }
 
@@ -174,13 +196,17 @@ export class Skills {
     sectionName: string
     sectionNameLabel: string
     entries: SkillEntry[]
+     cssStyles: React.CSSProperties
+      			sectionPosition: SectionPosition
 
-    public constructor(sectionName: string, entries: SkillEntry[], sectionNameLabel: string) {
+    public constructor(sectionName: string, entries: SkillEntry[], sectionNameLabel: string,  cssStyles: React.CSSProperties, sectionPosition: SectionPosition) {
 
         this.sectionName = sectionName;
         this.entries = entries;
         this.sectionNameLabel = sectionNameLabel
         this.thisClassName = 'Skills'
+         this.cssStyles = cssStyles
+          this.sectionPosition = sectionPosition
     }
 }
 
@@ -189,13 +215,17 @@ export class Educations {
     sectionName: string
     sectionNameLabel: string
     entries : EducationEntry[]
+    cssStyles: React.CSSProperties
+      			sectionPosition: SectionPosition
 
-    public constructor(sectionName: string,  entries : EducationEntry[], sectionNameLabel: string) {
+    public constructor(sectionName: string,  entries : EducationEntry[], sectionNameLabel: string , cssStyles: React.CSSProperties, sectionPosition: SectionPosition) {
 
         this.sectionName = sectionName;
         this.entries = entries;
         this.sectionNameLabel = sectionNameLabel
          this.thisClassName = 'Educations'
+         this.cssStyles = cssStyles
+          this.sectionPosition = sectionPosition
     }
 }
  
@@ -241,13 +271,17 @@ export class Languages {
     sectionName: string
     entries : LanguageEntry[]
     sectionNameLabel: string
+      cssStyles: React.CSSProperties
+      			sectionPosition: SectionPosition
 
-    public constructor(sectionName: string,  entries : LanguageEntry[],  sectionNameLabel: string) {
+    public constructor(sectionName: string,  entries : LanguageEntry[],  sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition) {
 
         this.sectionName = sectionName;
         this.entries = entries;
         this.sectionNameLabel = sectionNameLabel
         this.thisClassName = 'Languages'
+        this.cssStyles = cssStyles
+          this.sectionPosition = sectionPosition
     }
 }
 
@@ -256,12 +290,16 @@ export class Sparetime {
     sectionName: string
     sectionNameLabel: string
     entries : SparetimeEntry[]
+    cssStyles: React.CSSProperties
+      			sectionPosition: SectionPosition
 
-    public constructor(sectionName: string,  entries : SparetimeEntry[], sectionNameLabel: string) {
+    public constructor(sectionName: string,  entries : SparetimeEntry[], sectionNameLabel: string , cssStyles: React.CSSProperties, sectionPosition: SectionPosition) {
         this.sectionName = sectionName;
         this.entries = entries;
         this.sectionNameLabel = sectionNameLabel   
-        this.thisClassName = 'Sparetime'           
+        this.thisClassName = 'Sparetime'  
+        this.cssStyles = cssStyles
+          this.sectionPosition = sectionPosition        
     }
 }
 

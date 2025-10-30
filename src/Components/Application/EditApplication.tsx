@@ -48,6 +48,23 @@ function EditApplication() {
     useEffect(() => {
 
 
+
+        const appGrid = document.querySelector<HTMLDivElement>(".application_content_grid");
+
+        if (appGrid) {
+            // Find all <div> elements INSIDE that grid
+            const innerDivs = appGrid.querySelectorAll<HTMLDivElement>("div");
+
+            // Optional: get your background color from your app state
+            const backgroundColor = currentApplicationData?.CssStyles?.backgroundColor ?? "Blue";
+
+            // Loop through all inner divs
+            innerDivs.forEach(div => {
+                div.style.backgroundColor = backgroundColor;
+            });
+        }
+
+        
         const onBeforeUnload = (event: BeforeUnloadEvent) => {
             // Prevent the user from leaving the page
             event.preventDefault();
@@ -69,7 +86,7 @@ function EditApplication() {
             element.classList.add("title_clickable");
         })
 
-    }, []);
+    }, [currentApplicationData]);
 
     const handleClick = (event: any) => {
         let section_name = event.target.id
@@ -183,13 +200,7 @@ function EditApplication() {
     }
 
     function updateSectionInApplication(sectionData: any, index: number) {
-
-        // let tmpCopyApplicationdata = CopyApplicationDataToNew(applicationDataCopy);
-        // @ts-ignore      
-        // tmpCopyApplicationdata[currentSectionData.thisClassName] = currentSectionData;
-        // setApplicationDataCopy(tmpCopyApplicationdata);
-        //  setCurrentApplicationData (tmpCopyApplicationdata);
-
+   
         let newApplicationdata = CopyApplicationDataToNew(currentApplicationData);
         setNewCurrentApplicationData(newApplicationdata)
         setCurrentApplicationData(newApplicationdata);
@@ -217,24 +228,29 @@ function EditApplication() {
     }
 
     const handleStyleChange = (id: string, newStyle: React.CSSProperties) => {
-        
+
         let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
         let application_section;
         // @ts-ignore   
         application_section = tmpCopyApplicationdata[currentSectionData.thisClassName]
         application_section.cssStyles = newStyle;
 
-       //  let newApplicationdata = CopyApplicationDataToNew(currentApplicationData);
-       // setNewCurrentApplicationData(newApplicationdata)
-       // setCurrentApplicationData(newApplicationdata);
-
-       // let newApplicationdata = CopyApplicationDataToNew(tmpCopyApplicationdata);
-      //  setNewCurrentApplicationData(tmpCopyApplicationdata)
         setCurrentApplicationData(tmpCopyApplicationdata);
 
         setCurrentSectionData(application_section);
-        
-        
+
+
+    };
+
+    const handleApplicationStyleChange = (id: string, newStyle: React.CSSProperties) => {
+
+        let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
+
+        tmpCopyApplicationdata["CssStyles"] = newStyle
+
+        setCurrentApplicationData(tmpCopyApplicationdata);
+
+
     };
 
     const handleDragStart: (entry: ApplicantInfoEntry | ApplicantContentEntry | ApplicationDateEntry | EmployerInfoEntry | ApplicationJobTitleEntry | ApplicantContentHeadlineEntry) => React.DragEventHandler<HTMLDivElement> = (entry) => (e) => {
@@ -332,7 +348,13 @@ function EditApplication() {
                             Convert ansøgning to PDF
                         </button>
                     </div>
-
+                    <SectionStyleEditor
+                        section={{
+                            sectionId: selectedSectionClassName,
+                            cssStyles: currentSectionData.cssStyles,
+                        }}
+                        onStyleChange={handleApplicationStyleChange}
+                    />
                     {action === 'edit' ?
                         <form className='edit_form'>
                             <>
@@ -347,11 +369,11 @@ function EditApplication() {
                                                         {currentSectionData.sectionNameLabel}
 
                                                     </h3>
-                                                   <p style={{ color: currentSectionData.cssStyles.color }}>
+                                                    <p style={{ color: currentSectionData.cssStyles.color }}>
                                                         <input type="text"
                                                             name={elementValue[0]}
                                                             value={elementValue[1]}
-                                                            
+
                                                             onChange={(e) => OnChangeSectionTitleContent(e.target)}>
                                                         </input>
                                                         <span className='section-title-error'>
@@ -382,7 +404,7 @@ function EditApplication() {
                                 onStyleChange={handleStyleChange}
                             />
 
-                            
+
                             <div id='dropdiv'  >
 
                                 {currentSectionData.entries ? (currentSectionData.entries).map((entry, entryIndex) => (
@@ -397,18 +419,18 @@ function EditApplication() {
                                                                 {entry.labels[elementValue[0]]}
                                                             </h3>
                                                             <p >
-                                                                
+
                                                                 {entry.sectionEntryInput && entry.sectionEntryInput[elementValue[0]].type === 'input'
                                                                     ?
                                                                     <input type="text"
-                                                                    style={ currentSectionData.cssStyles }
+                                                                        style={currentSectionData.cssStyles}
                                                                         name={elementValue[0]}
                                                                         value={elementValue[1]}
                                                                         onChange={(e) => OnChangeEntry(e.target, entryIndex)}>
                                                                     </input>
                                                                     :
                                                                     <textarea
-                                                                    style={ currentSectionData.cssStyles }
+                                                                        style={currentSectionData.cssStyles}
                                                                         name={elementValue[0]}
                                                                         value={elementValue[1]}
                                                                         onChange={(e) => OnChangeEntry(e.target, entryIndex)}

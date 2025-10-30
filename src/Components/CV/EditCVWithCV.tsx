@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CopyCVDataToNew, setNewCurrentCVData, } from '../../GlobalData/GlobalCVData';
+import SectionStyleEditor from '../Common/SectionStyleEditor';
 
 import { useCVData } from '../../GlobalData/GlobalCVDataContext';
 
@@ -58,9 +59,30 @@ function EditCVWithCV() {
 
     function goToPDFPage() {
 
-        navigate("/cvpdf");
+        navigate("/reordercv");
 
     }
+
+     const handleStyleChange = (id: string, newStyle: React.CSSProperties) => {
+     
+            let tmpCopyCVdata = CopyCVDataToNew(currenrCVData);
+            let CV_section;
+            // @ts-ignore   
+            CV_section = tmpCopyCVdata[currentSectionData.thisClassName]
+            CV_section.cssStyles = newStyle;
+    
+           //  let newApplicationdata = CopyApplicationDataToNew(currentApplicationData);
+           // setNewCurrentApplicationData(newApplicationdata)
+           // setCurrentApplicationData(newApplicationdata);
+    
+           // let newApplicationdata = CopyApplicationDataToNew(tmpCopyApplicationdata);
+          //  setNewCurrentApplicationData(tmpCopyApplicationdata)
+            setCurrentCVData(tmpCopyCVdata);
+    
+            setCurrentSectionData(CV_section);
+            
+            
+        };
 
     const OnChangeSectionTitleContent = (targetField: any) => {
 
@@ -296,7 +318,7 @@ function EditCVWithCV() {
                                                         {currentSectionData.sectionNameLabel}
 
                                                     </h3>
-                                                    <p>
+                                                    <p style={{ color: currentSectionData.cssStyles.color }}>
                                                         <input type="text"
                                                             name={elementValue[0]}
                                                             value={elementValue[1]}
@@ -322,6 +344,16 @@ function EditCVWithCV() {
                                 }
 
                             </>
+
+                            <SectionStyleEditor
+                                section={{
+                                    sectionId: selectedSectionClassName,
+                                    cssStyles: currentSectionData.cssStyles,
+                                }}
+                                onStyleChange={handleStyleChange}
+                            />
+
+
                             {/* <div id='dropdiv'  onDrop={drop} onDragOver={allowDrop}> */}
                             <div id='dropdiv'  >
 
@@ -340,12 +372,14 @@ function EditCVWithCV() {
                                                                 {entry.sectionEntryInput && entry.sectionEntryInput[elementValue[0]].type === 'input'
                                                                     ?
                                                                     <input type="text"
+                                                                    style={ currentSectionData.cssStyles }
                                                                         name={elementValue[0]}
                                                                         value={elementValue[1]}
                                                                         onChange={(e) => OnChangeEntry(e.target, entryIndex)}>
                                                                     </input>
                                                                     :
                                                                     <textarea
+                                                                    style={ currentSectionData.cssStyles }
                                                                         name={elementValue[0]}
                                                                         value={elementValue[1]}
                                                                         onChange={(e) => OnChangeEntry(e.target, entryIndex)}

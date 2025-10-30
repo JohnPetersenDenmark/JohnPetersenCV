@@ -242,6 +242,7 @@ export class ApplicationJobTitleEntry {
 }
 
 export class ApplicationData {
+      CssStyles : React.CSSProperties
     ApplicantInfo: ApplicantInfo;
     EmployerInfo: EmployerInfo;
     ApplicationJobTitle: ApplicationJobTitle;
@@ -252,6 +253,7 @@ export class ApplicationData {
 
 
     public constructor(
+        CssStyles : {},
         ApplicantInfo: ApplicantInfo,
         EmployerInfo: EmployerInfo,
         ApplicationJobTitle: ApplicationJobTitle,
@@ -265,6 +267,7 @@ export class ApplicationData {
         this.ApplicationDate = ApplicationDate;
         this.ApplicantContent = ApplicantContent;
         this.ApplicantContentHeadline = ApplicantContentHeadline
+        this.CssStyles = CssStyles
     }
 }
 

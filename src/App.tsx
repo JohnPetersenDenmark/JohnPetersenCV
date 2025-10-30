@@ -10,6 +10,7 @@ import CVPdf from './Components/CV/CVPdf';
 import { ApplicationDataProvider } from './GlobalData/GlobalApplicationDataContext';
 import { CVDataProvider } from './GlobalData/GlobalCVDataContext';
 import ReorderApplicationSections from './Components/Application/ReorderApplicationSections';
+import ReorderCVSections from './Components/CV/ReorderCVSections';
 
 
 const _ = require('lodash');
@@ -31,7 +32,9 @@ function App() {
           <Route path={`${base_url}editapp`} element={<EditApplication />} />
           {/* <Route path={`${base_url}apppdf`} element={<ApplicationPDF />} /> */}
           <Route path={`${base_url}cvpdf`} element={<CVPdf />} />
-            <Route path={`${base_url}reorderapp`} element={<ReorderApplicationSections />} />               
+            <Route path={`${base_url}reorderapp`} element={<ReorderApplicationSections />} />   
+ <Route path={`${base_url}reordercv`} element={<ReorderCVSections />} />   
+                        
         </Routes>
       </div>
         </CVDataProvider>

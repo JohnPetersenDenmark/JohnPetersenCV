@@ -1,12 +1,18 @@
+import Motivation from './Motivation';
+import Profile from './Profile';
+import ContactInfo from './ContactInfo';
+import Skills from './Skills';
+import Education from './Education';
+import Languages from './Languages';
+import WorkingHistory from './WorkingHistory';
+import Sparetime from './Sparetime';
+
 import React, { useRef, useEffect, useState } from "react";
-import ApplicantInfo from "./ApplicantInfo";
-import EmployerInfo from "./EmployerInfo";
-import ApplicationJobTitle from "./ApplicationJobTitle";
-import ApplicationDate from "./ApplicationDate";
-import ApplicationContent from "./ApplicationContent";
-import { CopyApplicationDataToNew } from "../../GlobalData/GlobalApplicationData";
+
+
+import { CopyCVDataToNew } from '../../GlobalData/GlobalCVData';
 import { SectionPosition } from "../../Classes/ClassesApplicationData";
-import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
+// import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 import { useCVData } from '../../GlobalData/GlobalCVDataContext';
 
 declare global {
@@ -19,27 +25,30 @@ declare global {
 const COLUMN_WIDTHS = [50, 400, 400, 50];
 const ROW_HEIGHT = 50;
 
-export default function ReorderApplicationSections() {
+export default function ReorderCVSections() {
 
   const canvasRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   const componentMap: Record<string, React.FC> = {
 
-    EmployerInfo,
-    ApplicationJobTitle,
-    ApplicationDate,
-    ApplicationContent,
-    ApplicantInfo,
+    Motivation,
+    Profile,
+    Skills, 
+    Education,
+    ContactInfo,
+    Languages,
+    WorkingHistory,
+    Sparetime
   };
 
-  const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
+  const { currenrCVData, setCurrentCVData } = useCVData();
   
 
   const [useSectionHeaders, setUseSectionHeaders] = useState(true)
 
   const [sections, setSections] = useState<any[]>(
-    Object.entries(currentApplicationData).filter(([key]) => key !== "ApplicantContentHeadline" && key !== 'CssStyles')
+    Object.entries(currenrCVData).filter(([key]) => key !== "ApplicantContentHeadline")
   );
 
   for (let g = 0; g < sections.length; g++) {
@@ -127,7 +136,7 @@ export default function ReorderApplicationSections() {
       })
     );
 
-    let tmpCopy = CopyApplicationDataToNew(currentApplicationData);
+    let tmpCopy = CopyCVDataToNew(currenrCVData);
     const sectionKey = id;
     // @ts-ignore   
     const appSection = tmpCopy[sectionKey];
@@ -139,7 +148,7 @@ export default function ReorderApplicationSections() {
 
     // @ts-ignore   
     tmpCopy[sectionKey] = { ...appSection, sectionPosition: updatedPos };
-    setCurrentApplicationData(tmpCopy)
+    setCurrentCVData(tmpCopy)
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {

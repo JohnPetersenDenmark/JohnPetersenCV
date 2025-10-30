@@ -249,7 +249,12 @@ let defaultContentHeaderline = new ApplicantContentHeadline(
     {  startXPosition: 1, startYPosition: 501 }
 )
 
+let defaultCssStyles :  React.CSSProperties = (
+    {backgroundColor : '#000000'}
+)
+
 let defaultApplicationData = new ApplicationData(
+    defaultCssStyles,
     defaultApplicantinfo,
     defaultApplicationEmployerdata,
     defaultApplicationJobTitle,
@@ -261,6 +266,7 @@ let defaultApplicationData = new ApplicationData(
 export { defaultApplicationData }
 
 let currentApplicationData = new ApplicationData(
+    defaultCssStyles ,
     defaultApplicantinfo,
     defaultApplicationEmployerdata,
     defaultApplicationJobTitle,
@@ -279,6 +285,7 @@ for (let i = 0; i < copyOfCurrentApplicationApplicantInfo.entries.length; i++) {
 }
 let copyOfCurrentApplicationData = new ApplicationData(
 
+     { ...currentApplicationData.CssStyles },
     { ...currentApplicationData.ApplicantInfo },
     //copyOfCurrentApplicationApplicantInfo,
     { ...currentApplicationData.EmployerInfo },
@@ -316,6 +323,7 @@ export function setNewCurrentApplicationData(applicationdatanew: any) {
 
     let tmpApplicationData: ApplicationData = new ApplicationData(
 
+        {...applicationdatanew.CssStyles },
         { ...applicationdatanew.ApplicantInfo },
         { ...applicationdatanew.EmployerInfo },
         { ...applicationdatanew.ApplicationJobTitle },
@@ -371,6 +379,7 @@ export function CopyApplicationDataToNew(applicationdataCopyFrom: ApplicationDat
 
 
     copyOfCurrentApplicationData = new ApplicationData(
+        defaultCssStyles,
         applicantInfo,
         employerInfo,
         JobTitle,
