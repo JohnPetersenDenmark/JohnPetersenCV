@@ -12,7 +12,7 @@ function Applicationheadline() {
     }
 
     return (
-        <div>
+        <>
 
             <p className="section_title" id={currentApplicationData.ApplicantContentHeadline.thisClassName}>
                 {/* {currentApplicationData.ApplicantContentHeadline.sectionName} */} 
@@ -25,7 +25,7 @@ function Applicationheadline() {
 
             ))}
 
-        </div>
+        </>
     );
 }
 

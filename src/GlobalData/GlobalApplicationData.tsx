@@ -341,6 +341,11 @@ export function setNewCurrentApplicationData(applicationdatanew: any) {
 
 export function CopyApplicationDataToNew(applicationdataCopyFrom: ApplicationData): ApplicationData {
 
+    let CssStyles : React.CSSProperties = applicationdataCopyFrom.CssStyles;
+   
+       
+      
+    
     let applicantInfo;
     if (true) {
         let { applicantname, entries, thisClassName, sectionName, sectionNameLabel, cssStyles, sectionPosition } = applicationdataCopyFrom.ApplicantInfo;
@@ -379,7 +384,7 @@ export function CopyApplicationDataToNew(applicationdataCopyFrom: ApplicationDat
 
 
     copyOfCurrentApplicationData = new ApplicationData(
-        defaultCssStyles,
+        CssStyles,
         applicantInfo,
         employerInfo,
         JobTitle,

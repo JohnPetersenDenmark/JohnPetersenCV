@@ -279,7 +279,7 @@ a:active {
   max-width: 960px;
   margin: 0 auto;
  /*  color : red;
-  /* background-color: White;  */
+  background-color: White; 
   
   border-top: 30px solid;
   border-top-color: #fff;
@@ -288,21 +288,12 @@ a:active {
   border-bottom-color: #fff;
 }
 
-.application_content_grid>div {
 
-  
-  padding-left: 10px;
-  padding-right: 10px;
-  font-size: 15px;
-  font-family: "Helvetica", Arial, sans-serif;
- 
-
-}
 
 .item1 {
   grid-row: 1;
   grid-column: 2/span 2;
-  background: #00b8d7;
+  background-color: #00b8d7;
   text-align: right;
  
 

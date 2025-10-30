@@ -53,10 +53,13 @@ function EditApplication() {
 
         if (appGrid) {
             // Find all <div> elements INSIDE that grid
+             const backgroundColor = currentApplicationData?.CssStyles?.backgroundColor ?? "Blue";
+            appGrid.style.backgroundColor = backgroundColor
+
             const innerDivs = appGrid.querySelectorAll<HTMLDivElement>("div");
 
             // Optional: get your background color from your app state
-            const backgroundColor = currentApplicationData?.CssStyles?.backgroundColor ?? "Blue";
+           
 
             // Loop through all inner divs
             innerDivs.forEach(div => {
@@ -64,7 +67,7 @@ function EditApplication() {
             });
         }
 
-        
+
         const onBeforeUnload = (event: BeforeUnloadEvent) => {
             // Prevent the user from leaving the page
             event.preventDefault();

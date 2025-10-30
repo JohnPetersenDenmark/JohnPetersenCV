@@ -12,15 +12,15 @@ const ApplicantInfo: React.FC = () => {
   const { thisClassName, entries } = currentApplicationData.ApplicantInfo;
 
   return (
-    <div style={currentApplicationData.ApplicantInfo.cssStyles} >
-      <p  className="section_title" id={thisClassName}>
+  <>
+      <p  className="section_title" id={thisClassName} style={currentApplicationData.ApplicantInfo.cssStyles}>
         {/* Optional: section title */}
       </p>
 
       {entries?.map((applicantInfo, index) => (
-        <p key={index}>{applicantInfo.description}</p>
+        <p key={index} style={currentApplicationData.ApplicantInfo.cssStyles}>{applicantInfo.description }</p>
       ))}
-    </div>
+    </>
   );
 };
 

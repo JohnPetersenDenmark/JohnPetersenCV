@@ -12,7 +12,7 @@ function ApplicationContent() {
     let tmp = currentApplicationData;
     let x = tmp;
     return (
-        <div  style={currentApplicationData.ApplicantContent.cssStyles}>
+       <>
             <p className="section_title" id={currentApplicationData.ApplicantContent.thisClassName}>
                 {/* {currentApplicationData.ApplicantContent.sectionName} */}
             </p>
@@ -24,7 +24,7 @@ function ApplicationContent() {
 
             ))}
 
-        </div>
+        </>
     );
 }
 

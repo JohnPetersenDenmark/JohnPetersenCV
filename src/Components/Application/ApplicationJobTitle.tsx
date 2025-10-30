@@ -10,7 +10,7 @@ function ApplicationJobTitle() {
     }
     
     return (
-        <div  style={currentApplicationData.ApplicationJobTitle.cssStyles}>
+        <>
             <p className="section_title" id={currentApplicationData.ApplicationJobTitle.thisClassName}>
                 {/* {currentApplicationData.ApplicationJobTitle.sectionName} */} 
             </p>
@@ -22,7 +22,7 @@ function ApplicationJobTitle() {
 
             ))}
 
-        </div>
+        </>
     );
 }
 
