@@ -1,6 +1,7 @@
 
 
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
+import ApplicationStyling from '../Common/ApplicationStyling';
 
 function EmployerInfo() {
 
@@ -10,22 +11,12 @@ if (!currentApplicationData?.EmployerInfo) {
     return null; // safe guard
   }
 
-
-
-  const paraGraphStyle: React.CSSProperties = {
-  ...currentApplicationData.EmployerInfo.cssStyles,
-   margin: 0
-};
-
- const sectionStyle: React.CSSProperties = {
-  ...currentApplicationData.EmployerInfo.cssStyles,
-   margin: 0, fontSize : '18px', fontWeight : '700'
-};
-
-const sectionDivStyle: React.CSSProperties = {
-  ...currentApplicationData.EmployerInfo.cssStyles,
-   margin: 0, padding : '10px' , border : '1px', borderRadius : '8px' , fontWeight : '700'
-};
+const {
+     sectionDivOuterStyle,
+    sectionInnerDivStyle,
+    paraGraphSectionStyle,
+    paraGraphStyle
+  } = ApplicationStyling(currentApplicationData.EmployerInfo);
 
 // border: 1px solid rgb(204, 204, 204); border-radius: 8px; padding: 10px; font-weight: 700; font-size: 20px; box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 6px;
   return (
@@ -33,8 +24,9 @@ const sectionDivStyle: React.CSSProperties = {
     // <div className='Applicaion_info_alignment'>
    
     <>
-    <div style={sectionDivStyle}>
-      <p className="section_title" id={currentApplicationData.EmployerInfo.thisClassName} style={sectionStyle}>
+    <div style={sectionDivOuterStyle}>
+      <div style={sectionInnerDivStyle}>
+      <p className="section_title" id={currentApplicationData.EmployerInfo.thisClassName} style={paraGraphSectionStyle}> 
         {/* {currentApplicationData.EmployerInfo.sectionName} */}
       </p>
       {currentApplicationData.EmployerInfo.entries.map((EmployerEntry) => (
@@ -60,6 +52,7 @@ const sectionDivStyle: React.CSSProperties = {
         </>
 
       ))}
+      </div>
 </div>
 
      </>

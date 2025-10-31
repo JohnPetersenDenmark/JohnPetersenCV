@@ -1,27 +1,38 @@
 
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
+import ApplicationStyling from '../Common/ApplicationStyling';
 
 function ApplicationJobTitle() {
 
- const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
+    const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
-  if (!currentApplicationData?.ApplicationJobTitle) {
-      return null; // safe guard
+    if (!currentApplicationData?.ApplicationJobTitle) {
+        return null; // safe guard
     }
-    
+
+    const {
+        sectionDivOuterStyle,
+        sectionInnerDivStyle,
+        paraGraphSectionStyle,
+        paraGraphStyle
+    } = ApplicationStyling(currentApplicationData.ApplicationJobTitle);
+
     return (
         <>
-            <p className="section_title" id={currentApplicationData.ApplicationJobTitle.thisClassName}>
-                {/* {currentApplicationData.ApplicationJobTitle.sectionName} */} 
-            </p>
+            <div style={sectionDivOuterStyle}>
+                <div style={sectionInnerDivStyle}>
+                    <p className="section_title" id={currentApplicationData.ApplicationJobTitle.thisClassName} style={paraGraphSectionStyle}>
+                        {/* {currentApplicationData.ApplicationJobTitle.sectionName} */}
+                    </p>
 
-            {currentApplicationData.ApplicationJobTitle.entries.map((entry) => (
+                    {currentApplicationData.ApplicationJobTitle.entries.map((entry) => (
 
 
-                <p> {entry.jobtitle} </p>
+                        <p style={paraGraphStyle}> {entry.jobtitle} </p>
 
-            ))}
-
+                    ))}
+                </div>
+            </div>
         </>
     );
 }
