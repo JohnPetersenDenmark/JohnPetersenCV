@@ -34,13 +34,36 @@ export default function ReorderApplicationSections() {
   };
 
   const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
-  
 
-  const [useSectionHeaders, setUseSectionHeaders] = useState(true)
+
+ // const [hideForPDF, setHideForPDF] = useState(true)
 
   const [sections, setSections] = useState<any[]>(
     Object.entries(currentApplicationData).filter(([key]) => key !== "ApplicantContentHeadline" && key !== 'CssStyles')
   );
+
+  let mainDivStyle: React.CSSProperties = {
+    position: "relative",
+    width: "794px",
+    height: "1123px",   
+    background: currentApplicationData?.CssStyles?.backgroundColor ?? "Blue",
+     margin: "20px auto",
+    border: "2px dashed #ccc",
+    borderRadius: "12px",
+  }
+
+ /*  useEffect(() => {
+
+    const appGrid = document.querySelector<HTMLDivElement>(".edit_content_app");
+
+    if (appGrid) {
+      // Find all <div> elements INSIDE that grid
+      const backgroundColor = currentApplicationData?.CssStyles?.backgroundColor ?? "Blue";
+      appGrid.style.backgroundColor = backgroundColor
+    }
+  }, [currentApplicationData]); */
+
+
 
   for (let g = 0; g < sections.length; g++) {
     let componentName = '';
@@ -157,49 +180,37 @@ export default function ReorderApplicationSections() {
         ref={canvasRef}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        style={{
-          position: "relative",
-          width: "794px",
-          height: "1123px",
-          margin: "20px auto",
-          background: "#f0f0f0",
-          border: "2px dashed #ccc",
-          borderRadius: "12px",
-        }}
+       style= {mainDivStyle}   
       >
         {sections.map((section, index) => (
           <div
             ref={sectionRef}
             key={section[1].thisClassName}
-            
+
             draggable
             onDragStart={e => handleDragStart(e, section[1].thisClassName)}
             style={{
               position: "absolute",
               left: section[1].sectionPosition.startXPosition,
-              top: section[1].sectionPosition.startYPosition,
-              background: "#fff",
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-              padding: "10px",
-              cursor: "grab",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-            }}
+              top: section[1].sectionPosition.startYPosition,                      
+             cursor: "grab",            
+            }}      
+            
           >
-            <div
-             id={section[1].thisClassName + index}
-            style={{
+          <div
+              id={section[1].thisClassName + index}
+              style={{
 
-              background: "#fff",
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-              padding: "10px",
-              fontWeight: '700',
-              fontSize: '20px',
-              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-            }}>
-              {useSectionHeaders ? section[1].sectionNameLabel : ''}
-            </div>
+                background: "#fff",
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                padding: "10px",
+                fontWeight: '700',
+                fontSize: '20px',
+                boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+              }}>
+              {section[1].sectionNameLabel}
+            </div> 
 
             {section.component}
           </div>

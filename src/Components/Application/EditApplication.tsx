@@ -49,22 +49,12 @@ function EditApplication() {
 
 
 
-        const appGrid = document.querySelector<HTMLDivElement>(".application_content_grid");
+        const appGrid = document.querySelector<HTMLDivElement>(".edit_content_app");
 
         if (appGrid) {
             // Find all <div> elements INSIDE that grid
              const backgroundColor = currentApplicationData?.CssStyles?.backgroundColor ?? "Blue";
             appGrid.style.backgroundColor = backgroundColor
-
-            const innerDivs = appGrid.querySelectorAll<HTMLDivElement>("div");
-
-            // Optional: get your background color from your app state
-           
-
-            // Loop through all inner divs
-            innerDivs.forEach(div => {
-                div.style.backgroundColor = backgroundColor;
-            });
         }
 
 
