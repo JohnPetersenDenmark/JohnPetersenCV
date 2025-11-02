@@ -118,7 +118,7 @@ let defaultApplicantinfo = new ApplicantInfo(
     "John Petersen",
     "Ansøger",
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-      {  startXPosition: 1, startYPosition: 101  }
+      {  startXPosition: 1, startYPosition: 51  }
 )
 
 
@@ -158,7 +158,7 @@ let defaultapplicationContent = new ApplicantContent(
     'ApplicantContent',
     'Brødtekst',
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-     {  startXPosition: 1, startYPosition: 201 }
+     {  startXPosition: 1, startYPosition: 101 }
 
 )
 
@@ -190,7 +190,7 @@ export const defaultApplicationDate = new ApplicationDate(
     'ApplicationDate',
     'Dato for ansøgning',
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-      {  startXPosition: 1, startYPosition: 301  }
+      {  startXPosition: 1, startYPosition: 151  }
 )
 
 
@@ -218,7 +218,7 @@ let defaultApplicationJobTitle = new ApplicationJobTitle(
     'ApplicationJobTitle',
     'Jobtitel',
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-     {  startXPosition: 1, startYPosition: 401 }
+     {  startXPosition: 1, startYPosition: 201 }
 )
 
 
@@ -246,7 +246,7 @@ let defaultContentHeaderline = new ApplicantContentHeadline(
     'Brødtekst overskrift',
     { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
 
-    {  startXPosition: 1, startYPosition: 501 }
+    {  startXPosition: 1, startYPosition: 251 }
 )
 
 let defaultCssStyles :  React.CSSProperties = (

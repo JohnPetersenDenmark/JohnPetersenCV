@@ -97,17 +97,6 @@ function Home(props: any) {
                     Editer CV
                 </button>
             </div>
-
-
-
-
-
-
-
-
-
-
-
                 <CV />
                 <Application />
             </div>
