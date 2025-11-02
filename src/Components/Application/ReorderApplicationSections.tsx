@@ -36,7 +36,7 @@ export default function ReorderApplicationSections() {
   const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
 
- // const [hideForPDF, setHideForPDF] = useState(true)
+  // const [hideForPDF, setHideForPDF] = useState(true)
 
   const [sections, setSections] = useState<any[]>(
     Object.entries(currentApplicationData).filter(([key]) => key !== "ApplicantContentHeadline" && key !== 'CssStyles')
@@ -44,24 +44,25 @@ export default function ReorderApplicationSections() {
 
   let mainDivStyle: React.CSSProperties = {
     position: "relative",
+    // left: '100px',
     width: "794px",
-    height: "1123px",   
+    height: "1123px",
     background: currentApplicationData?.CssStyles?.backgroundColor ?? "Blue",
-     margin: "20px auto",
+    margin: "20px auto",
     border: "2px dashed #ccc",
     borderRadius: "12px",
   }
 
- /*  useEffect(() => {
-
-    const appGrid = document.querySelector<HTMLDivElement>(".edit_content_app");
-
-    if (appGrid) {
-      // Find all <div> elements INSIDE that grid
-      const backgroundColor = currentApplicationData?.CssStyles?.backgroundColor ?? "Blue";
-      appGrid.style.backgroundColor = backgroundColor
-    }
-  }, [currentApplicationData]); */
+  /*  useEffect(() => {
+ 
+     const appGrid = document.querySelector<HTMLDivElement>(".edit_content_app");
+ 
+     if (appGrid) {
+       // Find all <div> elements INSIDE that grid
+       const backgroundColor = currentApplicationData?.CssStyles?.backgroundColor ?? "Blue";
+       appGrid.style.backgroundColor = backgroundColor
+     }
+   }, [currentApplicationData]); */
 
 
 
@@ -106,8 +107,9 @@ export default function ReorderApplicationSections() {
     const hiddenElements: HTMLElement[] = [];
 
     sections.forEach((section, index) => {
-      const id = section[1].thisClassName + index;
-      const el = canvasEl.querySelector<HTMLElement>("#" + CSS.escape(id));
+      const id = "dummy" + index;
+      //const el = canvasEl.querySelector<HTMLElement>("#" + CSS.escape(id));
+      const el = document.getElementById(id)
       if (el) {
         el.style.display = "none";
         hiddenElements.push(el); // keep track so we can restore later
@@ -180,41 +182,31 @@ export default function ReorderApplicationSections() {
         ref={canvasRef}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-       style= {mainDivStyle}   
+        style={mainDivStyle}
       >
-        {sections.map((section, index) => (
-          <div
-            ref={sectionRef}
-            key={section[1].thisClassName}
+        {sections.map((section, index) => {
+          const divid = "dummy" + index; // ✅ declare here
 
-            draggable
-            onDragStart={e => handleDragStart(e, section[1].thisClassName)}
-            style={{
-              position: "absolute",
-              left: section[1].sectionPosition.startXPosition,
-              top: section[1].sectionPosition.startYPosition,                      
-             cursor: "grab",            
-            }}      
-            
-          >
-          <div
-              id={section[1].thisClassName + index}
+          return (
+            <div
+              ref={sectionRef}
+              key={section[1].thisClassName}
+              draggable
+              onDragStart={(e) => handleDragStart(e, section[1].thisClassName)}
               style={{
-
-                background: "#fff",
-                border: "1px solid #ccc",
-                borderRadius: "8px",
-                padding: "10px",
-                fontWeight: '700',
-                fontSize: '20px',
-                boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-              }}>
-              {section[1].sectionNameLabel}
-            </div> 
-
-            {section.component}
-          </div>
-        ))}
+                position: "absolute",
+                left: section[1].sectionPosition.startXPosition,
+                top: section[1].sectionPosition.startYPosition,
+                cursor: "grab",
+              }}
+            >
+              <div id={divid} style={{ color: "yellow" }}>
+                {section[1].sectionNameLabel}
+              </div>
+              {section.component}
+            </div>
+          );
+        })}
       </div>
     </>
   );

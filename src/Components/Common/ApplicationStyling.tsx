@@ -5,9 +5,9 @@ function ApplicationStyling(props : any) {
    const sectionDivOuterStyle: React.CSSProperties = {
       ...props.cssStyles,
       margin: 0,
-      position : 'relative',
+  /*     position : 'absolute',
       left: props.sectionPosition.startXPosition,
-      top: props.sectionPosition.startYPosition
+      top: props.sectionPosition.startYPosition */
    };
 
    const sectionInnerDivStyle: React.CSSProperties = {
