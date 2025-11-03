@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
-
+import CustomQuillEditor from '../Common/RichtextEditorQuill';
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 
 import SaveApplicationDataToFile from '../Application/SaveApplicationDataToFile'
@@ -18,7 +18,7 @@ import { ApplicantInfoEntry, ApplicantContentEntry, ApplicationDateEntry, Employ
 import { sortSectionEntries } from '../../Utilities/Misc'
 
 import AddApplicationSectionEntry from './AddSectionEntryApplication'
-import SectionStyleEditor from '../Common/SectionStyleEditor';
+//import SectionStyleEditor from '../Common/SectionStyleEditor';
 
 function EditApplication() {
 
@@ -30,14 +30,14 @@ function EditApplication() {
 
     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
-
+    const [sectionDetails, setSectionDetails] = useState<string>('');
 
 
     const [currentSectionData, setCurrentSectionData] = useState({} as ApplicantInfo | EmployerInfo | ApplicantContent | ApplicationDate | ApplicationJobTitle | ApplicantContentHeadline)
     const [selectedSectionClassName, setSelectedSectionClassName] = useState('')
 
     const [fromDraggedEntry, setFromDraggedEntry] = useState({} as ApplicantInfoEntry | ApplicantContentEntry | ApplicationDateEntry | EmployerInfoEntry | ApplicationJobTitleEntry | ApplicantContentHeadlineEntry)
-     let [action, setAction] = useState('edit')
+    let [action, setAction] = useState('edit')
     let [canBeSaved, setCanBeSaved] = useState(true)
     let [reRender, setReRender] = useState(0)
     let [dirtyFlag, setDirtyFlag] = useState(false)
@@ -51,7 +51,7 @@ function EditApplication() {
 
         if (appGrid) {
             // Find all <div> elements INSIDE that grid
-             const backgroundColor = currentApplicationData?.CssStyles?.backgroundColor ?? "Blue";
+            const backgroundColor = currentApplicationData?.CssStyles?.backgroundColor ?? "Blue";
             appGrid.style.backgroundColor = backgroundColor
         }
 
@@ -187,7 +187,7 @@ function EditApplication() {
     }
 
     function updateSectionInApplication(sectionData: any, index: number) {
-   
+
         let newApplicationdata = CopyApplicationDataToNew(currentApplicationData);
         setNewCurrentApplicationData(newApplicationdata)
         setCurrentApplicationData(newApplicationdata);
@@ -240,6 +240,13 @@ function EditApplication() {
 
     };
 
+    const handleRichTextEditorChange = (editorHtml: string) => {
+        setSectionDetails(editorHtml)
+        //setEditorHtml(editorHtml);
+    }
+
+
+
     if (currentApplicationData === null) {
         return (<></>);
     }
@@ -284,13 +291,13 @@ function EditApplication() {
                             Convert ansøgning to PDF
                         </button>
                     </div>
-                    <SectionStyleEditor
+                    {/*  <SectionStyleEditor
                         section={{
                             sectionId: selectedSectionClassName,
                             cssStyles: currentSectionData.cssStyles,
                         }}
                         onStyleChange={handleApplicationStyleChange}
-                    />
+                    /> */}
                     {action === 'edit' ?
                         <form className='edit_form'>
                             <>
@@ -332,20 +339,33 @@ function EditApplication() {
 
                             </>
 
-                            <SectionStyleEditor
+                            {/*  <SectionStyleEditor
                                 section={{
                                     sectionId: selectedSectionClassName,
                                     cssStyles: currentSectionData.cssStyles,
                                 }}
                                 onStyleChange={handleStyleChange}
-                            />
+                            /> */}
+                            <div>
+                                <p>
+                                    Richtext editor
+                                </p>
+                                <CustomQuillEditor
 
+                                    initialValue={sectionDetails}
+                                    onChange={handleRichTextEditorChange}
+                                />
+                            </div>
+                            <div>
+                                <p> from richtext editor </p>
+                                {sectionDetails}
+                            </div>
 
                             <div id='dropdiv'  >
 
                                 {currentSectionData.entries ? (currentSectionData.entries).map((entry, entryIndex) => (
                                     <>
-                                        <section  key={'sectionid' + entryIndex.toString()} className="card-row"> 
+                                        <section key={'sectionid' + entryIndex.toString()} className="card-row">
 
                                             <article className="card">
                                                 {entry ? Object.entries(entry).map((elementValue) => (
