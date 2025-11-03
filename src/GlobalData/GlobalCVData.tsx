@@ -24,7 +24,7 @@ defaultprofiledataTmp.sectionName = 'Profil'
 defaultprofiledataTmp.sectionNameLabel = "Sektion";
 defaultprofiledataTmp.entries = defaultprofileentries
 defaultprofiledataTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
-defaultprofiledataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 }
+defaultprofiledataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100}
 
 let defaultprofiledata = new Profile(defaultprofiledataTmp.sectionName, defaultprofiledataTmp.sectionNameLabel, defaultprofiledataTmp.entries, defaultprofiledataTmp.cssStyles, defaultprofiledataTmp.sectionPosition )
 
@@ -50,7 +50,7 @@ let defaultmotivationdataTmp = {} as Motivation
 defaultmotivationdataTmp.sectionName = 'Det er helt OK at støtte sporten'
 defaultmotivationdataTmp.sectionNameLabel = "Sektion"
 defaultmotivationdataTmp.entries = defaultmotivationentries
-defaultmotivationdataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 }
+defaultmotivationdataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100}
 defaultmotivationdataTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
 let defaultmotivationdata = new Motivation(defaultmotivationdataTmp.sectionName, defaultmotivationdataTmp.entries, defaultmotivationdataTmp.sectionNameLabel, defaultmotivationdataTmp.cssStyles, defaultmotivationdataTmp.sectionPosition)
 
@@ -117,7 +117,7 @@ defaultcontactinfoTmp.sectionName = 'John Petersen'
 defaultcontactinfoTmp.sectionNameLabel = "CV for "
 defaultcontactinfoTmp.entries = defaultcontactinfoentries
 defaultcontactinfoTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
-defaultcontactinfoTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 }
+defaultcontactinfoTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100}
 let defaultcontactinfo = new ContactInfo(defaultcontactinfoTmp.sectionName, defaultcontactinfoTmp.sectionNameLabel, defaultcontactinfoTmp.entries, defaultcontactinfoTmp.cssStyles, defaultcontactinfoTmp.sectionPosition)
 
 
@@ -246,7 +246,7 @@ defaultworkingexperienceTmp.sectionName = 'Erfaring'
 defaultworkingexperienceTmp.entries = defaultworkingExperienceEntries
 defaultworkingexperienceTmp.sectionNameLabel = 'Sektion'
 defaultworkingexperienceTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
-defaultworkingexperienceTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 }
+defaultworkingexperienceTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100 }
 
 let defaultworkingexperience = new WorkingExperience(
     defaultworkingexperienceTmp.sectionName,
@@ -318,7 +318,7 @@ defaultskillsdataTmp.sectionName = 'Kompetencer'
 defaultskillsdataTmp.entries = defaultskillEntries
 defaultskillsdataTmp.sectionNameLabel = "Sektion";
 defaultskillsdataTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
-defaultskillsdataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 }
+defaultskillsdataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100 }
 
 let defaultskillsdata = new Skills(
     defaultskillsdataTmp.sectionName,
@@ -369,14 +369,14 @@ defaulteducationdataTmp.sectionName = 'Uddannelse'
 defaulteducationdataTmp.entries = defaulteducationentries
 defaulteducationdataTmp.sectionNameLabel = "Sektion"
 defaulteducationdataTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
-defaulteducationdataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 }
+defaulteducationdataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100}
 
 let defaulteducationdata = new Educations(
     defaulteducationdataTmp.sectionName,
     defaulteducationdataTmp.entries,
     defaulteducationdataTmp.sectionNameLabel,
     defaulteducationdataTmp.cssStyles,
-    defaulteducationdataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 }
+    defaulteducationdataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100 }
 )
 
 
@@ -422,7 +422,7 @@ defaultlanguagedataTmp.sectionName = 'Sprog'
 defaultlanguagedataTmp.entries = defaultlanguageentries
 defaultlanguagedataTmp.sectionNameLabel = "Sektion"
 defaultlanguagedataTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
-defaultlanguagedataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 }
+defaultlanguagedataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100}
 let defaultlanguagedata = new Languages(
     defaultlanguagedataTmp.sectionName,
     defaultlanguagedataTmp.entries,
@@ -453,14 +453,14 @@ defaultsparetimedataTmp.sectionName = 'Fritidsinteresser'
 defaultsparetimedataTmp.entries = defaultsparetimeentries
 defaultsparetimedataTmp.sectionNameLabel = "Sektion"
 defaultsparetimedataTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
-defaultsparetimedataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 }
+defaultsparetimedataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100}
 
 let defaultsparetimedata = new Sparetime(
     defaultsparetimedataTmp.sectionName,
     defaultsparetimedataTmp.entries,
     defaultsparetimedataTmp.sectionNameLabel,
 defaultsparetimedataTmp.cssStyles,
-    defaultsparetimedataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 }
+    defaultsparetimedataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100}
 )
 
 

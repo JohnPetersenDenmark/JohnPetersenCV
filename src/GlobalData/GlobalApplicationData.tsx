@@ -52,8 +52,8 @@ let defaultApplicationEmployerdata = new EmployerInfo(
     'Virksomhed',
     defaultEmployerDataList,
     'Virksomhed',
-    { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-     {  startXPosition: 0, startYPosition: 0 }
+    { backgroundColor: "#00b8d7", color: "#000000", fontSize: "16px", fontWeight: "normal" },
+     {  startXPosition: 0, startYPosition: 0 , width : 300 , height : 100}
 )
 
 export const ApplicantInfoEntryLabels: SectionEntryLabels = {};
@@ -117,8 +117,8 @@ let defaultApplicantinfo = new ApplicantInfo(
     'ApplicantInfo',
     "John Petersen",
     "Ansøger",
-    { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-      {  startXPosition: 0, startYPosition: 0  }
+    { backgroundColor: "#00b8d7", color: "#000000", fontSize: "16px", fontWeight: "normal" },
+      {  startXPosition: 0, startYPosition: 0  , width : 300 , height : 100}
 )
 
 
@@ -157,8 +157,8 @@ let defaultapplicationContent = new ApplicantContent(
     'Indhold',
     'ApplicantContent',
     'Brødtekst',
-    { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-     {  startXPosition: 0, startYPosition: 0 }
+    { backgroundColor: "#00b8d7", color: "#000000", fontSize: "16px", fontWeight: "normal" },
+     {  startXPosition: 0, startYPosition: 0 , width : 300 , height : 100}
 
 )
 
@@ -189,8 +189,8 @@ export const defaultApplicationDate = new ApplicationDate(
     'Ansøgningsdato',
     'ApplicationDate',
     'Dato for ansøgning',
-    { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-      {  startXPosition: 0, startYPosition: 0  }
+    { backgroundColor: "#00b8d7", color: "#000000", fontSize: "16px", fontWeight: "normal" },
+      {  startXPosition: 0, startYPosition: 0 , width : 300 , height : 100 }
 )
 
 
@@ -217,8 +217,8 @@ let defaultApplicationJobTitle = new ApplicationJobTitle(
     'titel',
     'ApplicationJobTitle',
     'Jobtitel',
-    { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
-     {  startXPosition: 0, startYPosition: 0 }
+    { backgroundColor: "#00b8d7", color: "#000000", fontSize: "16px", fontWeight: "normal" },
+     {  startXPosition: 0, startYPosition: 0 , width : 300 , height : 100}
 )
 
 
@@ -244,9 +244,9 @@ let defaultContentHeaderline = new ApplicantContentHeadline(
     'Overskrift',
     'ApplicantContentHeadline',
     'Brødtekst overskrift',
-    { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" },
+    { backgroundColor: "#00b8d7", color: "#000000", fontSize: "16px", fontWeight: "normal" },
 
-    {  startXPosition: 0, startYPosition: 0 }
+    {  startXPosition: 0, startYPosition: 0 , width : 300 , height : 100}
 )
 
 let defaultCssStyles :  React.CSSProperties = (

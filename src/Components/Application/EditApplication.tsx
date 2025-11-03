@@ -37,9 +37,7 @@ function EditApplication() {
     const [selectedSectionClassName, setSelectedSectionClassName] = useState('')
 
     const [fromDraggedEntry, setFromDraggedEntry] = useState({} as ApplicantInfoEntry | ApplicantContentEntry | ApplicationDateEntry | EmployerInfoEntry | ApplicationJobTitleEntry | ApplicantContentHeadlineEntry)
-    const [draggableEntries, setDragableEntries] = useState({} as ApplicantInfoEntry[] | ApplicantContentEntry[] | ApplicationDateEntry[] | EmployerInfoEntry[] | ApplicationJobTitleEntry[] | ApplicantContentHeadlineEntry[])
-
-    let [action, setAction] = useState('edit')
+     let [action, setAction] = useState('edit')
     let [canBeSaved, setCanBeSaved] = useState(true)
     let [reRender, setReRender] = useState(0)
     let [dirtyFlag, setDirtyFlag] = useState(false)
@@ -93,10 +91,6 @@ function EditApplication() {
         application_section = { ...tmpCopyApplicationdata[section_name] };
 
         setCurrentSectionData(application_section)
-
-
-
-        setDragableEntries(application_section.entries)
 
         console.log('Clicked!');
     };
@@ -246,57 +240,6 @@ function EditApplication() {
 
     };
 
-    const handleDragStart: (entry: ApplicantInfoEntry | ApplicantContentEntry | ApplicationDateEntry | EmployerInfoEntry | ApplicationJobTitleEntry | ApplicantContentHeadlineEntry) => React.DragEventHandler<HTMLDivElement> = (entry) => (e) => {
-        setFromDraggedEntry(entry)
-        console.log('DragStart', entry, e)
-    }
-
-    const handleDragOver: (entry: ApplicantInfoEntry | ApplicantContentEntry | ApplicationDateEntry | EmployerInfoEntry | ApplicationJobTitleEntry | ApplicantContentHeadlineEntry) => React.DragEventHandler<HTMLDivElement> = (entry) => (e) => {
-        e.preventDefault();
-        console.log('DragEnter', entry, e)
-
-    }
-
-    const handleDrop: (entry: ApplicantInfoEntry | ApplicantContentEntry | ApplicationDateEntry | EmployerInfoEntry | ApplicationJobTitleEntry | ApplicantContentHeadlineEntry) => React.DragEventHandler<HTMLDivElement> = (entry) => (e) => {
-
-        let toDraggedEntry = entry;
-
-        let multiplyFactor = toDraggedEntry.sortorder >= fromDraggedEntry.sortorder ? -1 : 1;
-
-
-
-        let newEntries = draggableEntries.map((dragableEntry) => {
-
-            if (fromDraggedEntry.sortorder === dragableEntry.sortorder) {
-                return {
-                    ...dragableEntry,
-                    sortorder: toDraggedEntry.sortorder
-                }
-            }
-            else {
-                let toDraggedEntryOrder = toDraggedEntry.sortorder * multiplyFactor;
-                let fromDraggedEntryOrder = fromDraggedEntry.sortorder * multiplyFactor;
-                let dragableItemOrder = dragableEntry.sortorder * multiplyFactor;
-
-                if (dragableItemOrder >= toDraggedEntryOrder && dragableItemOrder < fromDraggedEntryOrder) {
-                    return {
-                        ...dragableEntry,
-                        sortorder: dragableEntry.sortorder + (1 * multiplyFactor)
-                    }
-                }
-                else {
-                    return {
-                        ...dragableEntry,
-                    }
-                }
-            }
-        })
-
-        let sortedEntryList = sortSectionEntries(newEntries)
-        setDragableEntries(sortedEntryList);
-        currentSectionData.entries = sortedEntryList;
-    }
-
     if (currentApplicationData === null) {
         return (<></>);
     }
@@ -402,7 +345,7 @@ function EditApplication() {
 
                                 {currentSectionData.entries ? (currentSectionData.entries).map((entry, entryIndex) => (
                                     <>
-                                        <section draggable onDragStart={handleDragStart(entry)} onDragOver={handleDragOver(entry)} onDrop={handleDrop(entry)} key={'sectionid' + entryIndex.toString()} className="card-row">
+                                        <section  key={'sectionid' + entryIndex.toString()} className="card-row"> 
 
                                             <article className="card">
                                                 {entry ? Object.entries(entry).map((elementValue) => (

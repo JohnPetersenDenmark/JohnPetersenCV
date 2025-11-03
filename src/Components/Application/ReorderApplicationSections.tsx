@@ -34,7 +34,8 @@ export default function ReorderApplicationSections() {
   };
 
   const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
-
+  const [isResizing, setIsResizing] = useState(false);
+ 
 
   // const [hideForPDF, setHideForPDF] = useState(true)
 
@@ -47,24 +48,18 @@ export default function ReorderApplicationSections() {
     // left: '100px',
     width: "794px",
     height: "1123px",
-    background: currentApplicationData?.CssStyles?.backgroundColor ?? "Blue",
+     background: currentApplicationData?.CssStyles?.backgroundColor ?? "Blue",
+   // background: 'Yellow',
     margin: "20px auto",
     border: "2px dashed #ccc",
     borderRadius: "12px",
+    /* 🟩 GRID PATTERN */
+    backgroundImage: `
+      linear-gradient(to right, rgba(0,0,0,0.3) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
+    `,
+    backgroundSize: "20px 20px", // grid spacing in pixels
   }
-
-  /*  useEffect(() => {
- 
-     const appGrid = document.querySelector<HTMLDivElement>(".edit_content_app");
- 
-     if (appGrid) {
-       // Find all <div> elements INSIDE that grid
-       const backgroundColor = currentApplicationData?.CssStyles?.backgroundColor ?? "Blue";
-       appGrid.style.backgroundColor = backgroundColor
-     }
-   }, [currentApplicationData]); */
-
-
 
   for (let g = 0; g < sections.length; g++) {
     let componentName = '';
@@ -91,12 +86,25 @@ export default function ReorderApplicationSections() {
   const [draggingId, setDraggingId] = useState<string | null>(null);
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: string) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    e.dataTransfer.setData("text/plain", JSON.stringify({
-      id,
-      offsetX: e.clientX - rect.left,
-      offsetY: e.clientY - rect.top,
-    }));
+    e.stopPropagation();
+
+    const section = sections.find(([_, v]) => v.thisClassName === id)?.[1];
+    if (!section || !canvasRef.current) return;
+
+    const canvasRect = canvasRef.current.getBoundingClientRect();
+
+    // The element’s known position relative to the canvas
+    const startX = section.sectionPosition.startXPosition;
+    const startY = section.sectionPosition.startYPosition;
+
+    // Compute mouse offset relative to that logical start point
+    const offsetX = e.clientX - (canvasRect.left + startX);
+    const offsetY = e.clientY - (canvasRect.top + startY);
+
+    e.dataTransfer.setData(
+      "text/plain",
+      JSON.stringify({ id, offsetX, offsetY })
+    );
   };
 
   function handleDownloadPDF() {
@@ -148,7 +156,7 @@ export default function ReorderApplicationSections() {
     setSections(prev =>
       prev.map(([key, value]) => {
         if (value.thisClassName !== id) return [key, value];
-        return [key, { ...value, sectionPosition: { startXPosition: newX, startYPosition: newY } }];
+        return [key, { ...value, sectionPosition: { ...value.sectionPosition, startXPosition: newX, startYPosition: newY } }];
       })
     );
 
@@ -172,6 +180,79 @@ export default function ReorderApplicationSections() {
   };
 
 
+
+  const startResize = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    id: string
+  ) => {
+    e.stopPropagation(); // prevent triggering drag
+    e.preventDefault();
+
+    setIsResizing(true);
+
+    const target = e.currentTarget.parentElement as HTMLDivElement;
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startWidth = target.offsetWidth;
+    const startHeight = target.offsetHeight;
+
+    const doResize = (moveEvent: MouseEvent) => {
+      const newWidth = Math.max(50, startWidth + (moveEvent.clientX - startX));
+      const newHeight = Math.max(40, startHeight + (moveEvent.clientY - startY));
+
+      /* const newWidth = 0;
+      const newHeight = 0; */
+
+      setSections((prev) =>
+        prev.map(([key, value]) => {
+          if (value.thisClassName !== id) return [key, value];
+          return [
+            key,
+            {
+              ...value,
+              sectionPosition: {
+                ...value.sectionPosition,
+                width: newWidth,
+                height: newHeight,
+              },
+            },
+          ];
+        })
+      );
+
+      let tmpCopy = CopyApplicationDataToNew(currentApplicationData);
+      const sectionKey = id;
+      // @ts-ignore   
+      const appSection = tmpCopy[sectionKey];
+
+      const oldStartXPosition = appSection.sectionPosition.startXPosition;
+      const oldStartYPosition = appSection.sectionPosition.startYPosition;
+
+      const updatedPos = Object.assign(new SectionPosition(), appSection.sectionPosition, {
+        width: newWidth,
+        height: newHeight,
+        startXPosition: oldStartXPosition,
+        startYPosition: oldStartYPosition,
+      });
+
+      // @ts-ignore   
+      tmpCopy[sectionKey] = { ...appSection, sectionPosition: updatedPos };
+      setCurrentApplicationData(tmpCopy)
+
+    };
+
+    const stopResize = () => {
+      setIsResizing(false);
+      window.removeEventListener("mousemove", doResize);
+      window.removeEventListener("mouseup", stopResize);
+    };
+
+    window.addEventListener("mousemove", doResize);
+    window.addEventListener("mouseup", stopResize);
+  };
+
+
+
   return (
     <>
       <button className="download_button" onClick={handleDownloadPDF}>
@@ -181,9 +262,14 @@ export default function ReorderApplicationSections() {
       <div
         ref={canvasRef}
         onDragOver={handleDragOver}
-        onDrop={handleDrop}
+        onDrop={(e) => {
+          handleDrop(e);
+        
+        }}
         style={mainDivStyle}
       >
+
+     
         {sections.map((section, index) => {
           const divid = "dummy" + index; // ✅ declare here
 
@@ -191,19 +277,47 @@ export default function ReorderApplicationSections() {
             <div
               ref={sectionRef}
               key={section[1].thisClassName}
-              draggable
-              onDragStart={(e) => handleDragStart(e, section[1].thisClassName)}
+              draggable={!isResizing} // 🟢 disable drag if resizing
+              onDragStart={(e) => {
+                handleDragStart(e, section[1].thisClassName);
+                
+              }}
+              
               style={{
                 position: "absolute",
                 left: section[1].sectionPosition.startXPosition,
-                top: section[1].sectionPosition.startYPosition,
+                top: section[1].sectionPosition.startYPosition + (4 * index * ROW_HEIGHT),
+                width: section[1].sectionPosition.width,
+                height: section[1].sectionPosition.height,
                 cursor: "grab",
+                backgroundColor: section[1]?.cssStyles?.backgroundColor
               }}
             >
               <div id={divid} style={{ color: "yellow" }}>
                 {section[1].sectionNameLabel}
               </div>
               {section.component}
+
+
+              <div
+                onMouseDown={(e) =>
+                  startResize(e, section[1].thisClassName)
+                }
+                style={{
+                  position: "absolute",
+                  bottom: "2px",
+                  right: "2px",
+                  width: "50px",
+                  height: "50px",
+                  background: currentApplicationData?.CssStyles?.backgroundColor,
+                  borderRadius: "2px",
+                  cursor: "se-resize",
+                }}
+              ></div>
+
+
+
+
             </div>
           );
         })}
