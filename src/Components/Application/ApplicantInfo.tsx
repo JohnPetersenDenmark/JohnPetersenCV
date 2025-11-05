@@ -27,9 +27,13 @@ const ApplicantInfo: React.FC = () => {
         {/* Optional: section title */}
       </p>
 
-      {entries?.map((applicantInfo, index) => (
+          <div
+  dangerouslySetInnerHTML={{ __html: currentApplicationData.ApplicantInfo.sectionContent }}
+/>
+
+     {/*  {entries?.map((applicantInfo, index) => (
         <p key={index} style={paraGraphStyle}>{applicantInfo.description }</p>
-      ))}
+      ))} */}
       </div>
       </div>
     </>

@@ -1,5 +1,5 @@
 // CustomQuillEditor.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css"; // keep Quill's base styling
 
@@ -46,17 +46,14 @@ icons["italic"] = "K";    // replace I with Kursiv (optional)
 ]; */
 
 interface CustomQuillEditorProps {
-  initialValue?: string;
+  value: string;
   onChange?: (html: string) => void;
 }
 
-const CustomQuillEditor: React.FC<CustomQuillEditorProps> = ({ initialValue, onChange}) => {
- 
+const CustomQuillEditor: React.FC<CustomQuillEditorProps> = ({ value, onChange }) => {
 
-  const [value, setValue] = useState<string>(initialValue ?? "");
 
   const handleChange = (html: string) => {
-    setValue(html);
     onChange?.(html);
   };
 

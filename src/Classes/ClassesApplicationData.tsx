@@ -17,15 +17,17 @@ export class EmployerInfo {
     sectionNameLabel: string
     sectionPosition: SectionPosition
     cssStyles: React.CSSProperties
+    sectionContent : string
     entries: EmployerInfoEntry[];
 
-    public constructor(thisClassName: string, sectionName: string, entries: EmployerInfoEntry[], sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition) {
+    public constructor(thisClassName: string, sectionName: string, entries: EmployerInfoEntry[], sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition , sectionContent : string) {
         this.thisClassName = thisClassName
         this.sectionName = sectionName
         this.entries = entries
         this.sectionNameLabel = sectionNameLabel
         this.cssStyles = cssStyles
         this.sectionPosition = sectionPosition
+        this.sectionContent = sectionContent
     }
 }
 
@@ -95,10 +97,11 @@ export class ApplicantInfo {
     applicantname: string
     sectionPosition: SectionPosition
     cssStyles: React.CSSProperties
+     sectionContent : string
     entries: ApplicantInfoEntry[];
 
 
-    public constructor(applicantname: string, entries: ApplicantInfoEntry[], thisClassName: string, sectionName: string, sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition) {
+    public constructor(applicantname: string, entries: ApplicantInfoEntry[], thisClassName: string, sectionName: string, sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition,  sectionContent : string) {
         this.applicantname = applicantname;
         this.entries = entries;
         this.sectionNameLabel = sectionNameLabel
@@ -106,6 +109,7 @@ export class ApplicantInfo {
         this.thisClassName = thisClassName
         this.cssStyles = cssStyles
         this.sectionPosition = sectionPosition
+        this.sectionContent = sectionContent
     }
 }
 
@@ -116,8 +120,9 @@ export class ApplicantContent {
     sectionNameLabel: string
     cssStyles: React.CSSProperties
     sectionPosition: SectionPosition
+     sectionContent : string
     entries: ApplicantContentEntry[];
-    public constructor(entries: ApplicantContentEntry[], sectionName: string, thisClassName: string, sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition) {
+    public constructor(entries: ApplicantContentEntry[], sectionName: string, thisClassName: string, sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition,  sectionContent : string) {
 
         this.entries = entries;
         this.sectionName = sectionName
@@ -125,6 +130,7 @@ export class ApplicantContent {
         this.sectionNameLabel = sectionNameLabel
         this.cssStyles = cssStyles
         this.sectionPosition = sectionPosition
+        this. sectionContent = sectionContent
     }
 }
 
@@ -147,14 +153,16 @@ export class ApplicantContentHeadline {
     sectionNameLabel: string
     sectionPosition: SectionPosition
     cssStyles: React.CSSProperties
+     sectionContent : string
     entries: ApplicantContentHeadlineEntry[];
-    public constructor(entries: ApplicantContentHeadlineEntry[], sectionName: string, thisClassName: string, sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition) {
+    public constructor(entries: ApplicantContentHeadlineEntry[], sectionName: string, thisClassName: string, sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition,  sectionContent : string) {
         this.entries = entries
         this.sectionName = sectionName
         this.thisClassName = thisClassName
         this.sectionNameLabel = sectionNameLabel
         this.cssStyles = cssStyles
         this.sectionPosition = sectionPosition
+        this.sectionContent = sectionContent
     }
 }
 
@@ -180,9 +188,10 @@ export class ApplicationDate {
     headline: string
     cssStyles: React.CSSProperties
     sectionPosition: SectionPosition
+     sectionContent : string
     entries: ApplicationDateEntry[];
 
-    public constructor(headline: string, entries: ApplicationDateEntry[], sectionName: string, thisClassName: string, sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition) {
+    public constructor(headline: string, entries: ApplicationDateEntry[], sectionName: string, thisClassName: string, sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition,  sectionContent : string) {
         this.headline = headline;
         this.entries = entries;
         this.sectionName = sectionName
@@ -190,6 +199,7 @@ export class ApplicationDate {
         this.sectionNameLabel = sectionNameLabel
         this.cssStyles = cssStyles
         this.sectionPosition = sectionPosition
+        this. sectionContent = sectionContent
     }
 }
 
@@ -214,9 +224,10 @@ export class ApplicationJobTitle {
     headline: string
     cssStyles: React.CSSProperties
     sectionPosition: SectionPosition
+    sectionContent : string
     entries: ApplicationJobTitleEntry[];
 
-    public constructor(headline: string, entries: ApplicationJobTitleEntry[], sectionName: string, thisClassName: string, sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition) {
+    public constructor(headline: string, entries: ApplicationJobTitleEntry[], sectionName: string, thisClassName: string, sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition , sectionContent : string) {
         this.headline = headline;
         this.entries = entries;
         this.sectionName = sectionName
@@ -224,8 +235,10 @@ export class ApplicationJobTitle {
         this.sectionNameLabel = sectionNameLabel
         this.cssStyles = cssStyles
         this.sectionPosition = sectionPosition
-    }
+        this.sectionContent = sectionContent
 }
+    }
+    
 
 export class ApplicationJobTitleEntry {
     jobtitle: string;

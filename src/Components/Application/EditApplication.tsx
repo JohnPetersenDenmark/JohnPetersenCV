@@ -66,6 +66,12 @@ function EditApplication() {
         window.addEventListener('beforeunload', onBeforeUnload);
 
 
+      
+
+    }, [currentApplicationData]);
+
+    useEffect(() => {
+
         const elements = Array.from(document.getElementsByClassName("section_title"));
         elements.forEach((element) => {
             let sectionClassName = element.id
@@ -77,7 +83,7 @@ function EditApplication() {
             element.classList.add("title_clickable");
         })
 
-    }, [currentApplicationData]);
+    }, []);
 
     const handleClick = (event: any) => {
         let section_name = event.target.id
@@ -88,9 +94,11 @@ function EditApplication() {
 
         let application_section;
         // @ts-ignore   
-        application_section = { ...tmpCopyApplicationdata[section_name] };
+        application_section = tmpCopyApplicationdata[section_name] ;
 
         setCurrentSectionData(application_section)
+
+        setSectionDetails(application_section.sectionContent)
 
         console.log('Clicked!');
     };
@@ -242,7 +250,24 @@ function EditApplication() {
 
     const handleRichTextEditorChange = (editorHtml: string) => {
         setSectionDetails(editorHtml)
-        //setEditorHtml(editorHtml);
+
+          let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
+        let application_section;
+        // @ts-ignore   
+        application_section = tmpCopyApplicationdata[selectedSectionClassName]
+      
+       if (! application_section)
+       {
+        return;
+       }
+        application_section.sectionContent = editorHtml;
+
+         // @ts-ignore   
+        tmpCopyApplicationdata[selectedSectionClassName] = application_section
+        setCurrentApplicationData(tmpCopyApplicationdata);
+
+        setCurrentSectionData(application_section);
+        
     }
 
 
@@ -352,14 +377,14 @@ function EditApplication() {
                                 </p>
                                 <CustomQuillEditor
 
-                                    initialValue={sectionDetails}
+                                    value={sectionDetails}
                                     onChange={handleRichTextEditorChange}
                                 />
                             </div>
-                            <div>
+                          {/*   <div>
                                 <p> from richtext editor </p>
                                 {sectionDetails}
-                            </div>
+                            </div> */}
 
                             <div id='dropdiv'  >
 

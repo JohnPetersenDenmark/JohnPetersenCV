@@ -29,7 +29,12 @@ const {
       <p className="section_title" id={currentApplicationData.EmployerInfo.thisClassName} style={paraGraphSectionStyle}> 
         {/* {currentApplicationData.EmployerInfo.sectionName} */}
       </p>
-      {currentApplicationData.EmployerInfo.entries.map((EmployerEntry) => (
+     
+
+       <div
+  dangerouslySetInnerHTML={{ __html: currentApplicationData.EmployerInfo.sectionContent }}
+/>
+     {/*  {currentApplicationData.EmployerInfo.entries.map((EmployerEntry) => (
         <>
 
           <p style={paraGraphStyle}>
@@ -51,7 +56,7 @@ const {
 
         </>
 
-      ))}
+      ))} */}
       </div>
 </div>
 
