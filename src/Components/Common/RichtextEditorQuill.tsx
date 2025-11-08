@@ -1,11 +1,11 @@
 // CustomQuillEditor.tsx
-import React, { useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import ReactQuill, { Quill } from "react-quill";
-import "react-quill/dist/quill.snow.css"; // keep Quill's base styling
+import "react-quill/dist/quill.snow.css";
 
 const toolbarContainerStyle: React.CSSProperties = {
   display: "flex",
-  flexWrap: "wrap", // ⬅️ allows multiple lines
+  flexWrap: "wrap",
   gap: "6px",
   alignItems: "center",
   padding: "6px",
@@ -15,74 +15,73 @@ const toolbarContainerStyle: React.CSSProperties = {
   borderTopRightRadius: 8,
 };
 
-// optional: make the editor itself compact
 const editorWrapperStyle: React.CSSProperties = {
   border: "1px solid #e5e7eb",
   borderRadius: 8,
   overflow: "hidden",
 };
 
+// Custom icon replacement
 const icons = Quill.import("ui/icons");
-icons["underline"] = "U";    // replace U with Fed
-icons["bold"] = "F";         // replace B with Fed (optional)
-icons["italic"] = "K";    // replace I with Kursiv (optional)
-
-
-// You can keep this minimal; include only formats you actually use
-/* const formats = [
-  "header",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "list",
-  "bullet",
-"link",
-  "image",
-  "color",
-  "background",
-  "align",
-  "clean",
-]; */
+icons["underline"] = "U";
+icons["bold"] = "F";
+icons["italic"] = "K";
 
 interface CustomQuillEditorProps {
   value: string;
-  onChange?: (html: string) => void;
+  sectionClassName: string;
+  onChange?: (html: string, sectionClassName: string) => void;
 }
 
-const CustomQuillEditor: React.FC<CustomQuillEditorProps> = ({ value, onChange }) => {
+const CustomQuillEditor: React.FC<CustomQuillEditorProps> = ({
+  value,
+  sectionClassName,
+  onChange
+}) => {
+
+  /**
+   * Tracks whether an update came from parent value changes
+   * (programmatic = ignore onChange)
+   */
+  const programmatic = useRef(false);
+
+  // When parent updates `value`, ignore the next onChange event from Quill
+  useEffect(() => {
+    programmatic.current = true;
+    const timer = setTimeout(() => {
+      programmatic.current = false;
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [value]);
 
 
+  /** Handle Quill HTML change */
   const handleChange = (html: string) => {
-    onChange?.(html);
+    // Ignore Quill change event caused by updating `value` prop
+    if (programmatic.current)
+      {
+return;
+      } 
+
+    onChange?.(html, sectionClassName);
   };
+
 
   return (
     <div>
-      {/* Inline CSS tweaks that target Quill classes (scoped by this component) */}
       <style>{`
-        .ql-toolbar.ql-snow { /* already flex from our inline container, but style buttons */
-          padding: 0; /* we handle padding in our container */
-        }
-        /* Make buttons/selects a bit smaller for dialogs */
-        .ql-toolbar button, .ql-toolbar .ql-picker {
-          height: 28px;
-        }
+        .ql-toolbar.ql-snow { padding: 0; }
+        .ql-toolbar button, .ql-toolbar .ql-picker { height: 28px; }
         .ql-toolbar .ql-picker-label,
-        .ql-toolbar .ql-picker-item {
-          line-height: 28px;
-        }
-        /* Tighter spacing between groups, we also have gap inline */
+        .ql-toolbar .ql-picker-item { line-height: 28px; }
         .ql-toolbar .ql-formats { margin-right: 0; }
-        /* Editor area height */
         .ql-container { min-height: 180px; }
-        /* Responsive images in content */
         .ql-editor img { max-width: 100%; height: auto; }
       `}</style>
 
-      {/* Custom toolbar DOM — full control over layout */}
+      {/* Custom Toolbar */}
       <div id="da-toolbar" style={toolbarContainerStyle}>
-        {/* Row 1 groups */}
         <span className="ql-formats">
           <button className="ql-bold" aria-label="Fed" />
           <button className="ql-italic" aria-label="Kursiv" />
@@ -91,7 +90,6 @@ const CustomQuillEditor: React.FC<CustomQuillEditorProps> = ({ value, onChange }
         </span>
 
         <span className="ql-formats">
-          {/* Heading dropdown: default/normal, H1, H2, H3 */}
           <select className="ql-header" defaultValue="">
             <option value="">Brødtekst</option>
             <option value="1">Overskrift 1</option>
@@ -105,7 +103,6 @@ const CustomQuillEditor: React.FC<CustomQuillEditorProps> = ({ value, onChange }
           <button className="ql-list" value="bullet" aria-label="Punktliste" />
         </span>
 
-        {/* Row 2 groups (they’ll wrap thanks to flexWrap) */}
         <span className="ql-formats">
           <button className="ql-link" aria-label="Link" />
           <button className="ql-image" aria-label="Billede" />
@@ -131,16 +128,15 @@ const CustomQuillEditor: React.FC<CustomQuillEditorProps> = ({ value, onChange }
           theme="snow"
           value={value}
           onChange={handleChange}
-          // formats={formats}
           modules={{
-            toolbar: { container: "#da-toolbar" }, // ⬅️ bind to our custom toolbar
+            toolbar: { container: "#da-toolbar" },
             history: { delay: 400, maxStack: 100, userOnly: true },
             clipboard: { matchVisual: false },
           }}
         />
       </div>
 
-      {/* Optional: live HTML preview */}
+      {/* (Optional) Live HTML preview */}
       <div style={{ marginTop: 12 }}>
         <strong>Preview (HTML):</strong>
         <div
@@ -156,6 +152,6 @@ const CustomQuillEditor: React.FC<CustomQuillEditorProps> = ({ value, onChange }
       </div>
     </div>
   );
-}
+};
 
-export default CustomQuillEditor
+export default CustomQuillEditor;

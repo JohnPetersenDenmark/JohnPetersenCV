@@ -25,12 +25,14 @@ function ApplicationDate() {
                         {/* {currentApplicationData.ApplicationDate.headline} */}
                     </p>
 
-                    {currentApplicationData.ApplicationDate.entries.map((entry) => (
+                    <div dangerouslySetInnerHTML={{ __html: currentApplicationData?.ApplicationDate?.sectionContent ?? "" }}
+                    />
+                    {/*  {currentApplicationData.ApplicationDate.entries.map((entry) => (
 
 
                         <p className='application_content_paragraphs'  style={paraGraphStyle}> {entry.date} </p>
 
-                    ))}
+                    ))} */}
                 </div>
             </div>
         </>

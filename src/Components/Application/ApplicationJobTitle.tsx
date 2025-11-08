@@ -25,12 +25,15 @@ function ApplicationJobTitle() {
                         {/* {currentApplicationData.ApplicationJobTitle.sectionName} */}
                     </p>
 
-                    {currentApplicationData.ApplicationJobTitle.entries.map((entry) => (
+                    {/*   {currentApplicationData.ApplicationJobTitle.entries.map((entry) => (
 
 
                         <p style={paraGraphStyle}> {entry.jobtitle} </p>
 
-                    ))}
+                    ))} */}
+
+                    <div  dangerouslySetInnerHTML={{ __html: currentApplicationData?.ApplicationJobTitle?.sectionContent ?? "" }}
+                    />
                 </div>
             </div>
         </>

@@ -1,8 +1,9 @@
 import { copyOfCurrentApplicationData, CopyApplicationDataToNew, setNewCurrentApplicationData } from '../../GlobalData/GlobalApplicationData';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 
 
 import CustomQuillEditor from '../Common/RichtextEditorQuill';
@@ -18,20 +19,23 @@ import { ApplicantInfoEntry, ApplicantContentEntry, ApplicationDateEntry, Employ
 import { sortSectionEntries } from '../../Utilities/Misc'
 
 import AddApplicationSectionEntry from './AddSectionEntryApplication'
-//import SectionStyleEditor from '../Common/SectionStyleEditor';
+import SectionStyleEditor from '../Common/SectionStyleEditor';
 
 function EditApplication() {
 
-    /* let current = currentApplicationData;
-    let copy = copyOfCurrentApplicationData;
+    const selectedSectionRef = useRef<string>();
 
-    let x = current; 
-    let y = copy; */
 
     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
-    const [sectionDetails, setSectionDetails] = useState<string>('');
+  
+   
 
+     const [sectionDetails, setSectionDetails] = useState<string>('');
+
+    const [sectionData, setSectionData] = useState<string>('');
+   
+//let tmp = currentApplicationData
 
     const [currentSectionData, setCurrentSectionData] = useState({} as ApplicantInfo | EmployerInfo | ApplicantContent | ApplicationDate | ApplicationJobTitle | ApplicantContentHeadline)
     const [selectedSectionClassName, setSelectedSectionClassName] = useState('')
@@ -43,17 +47,13 @@ function EditApplication() {
     let [dirtyFlag, setDirtyFlag] = useState(false)
     const navigate = useNavigate();
 
+  
+
     useEffect(() => {
 
 
 
-        const appGrid = document.querySelector<HTMLDivElement>(".edit_content_app");
-
-        if (appGrid) {
-            // Find all <div> elements INSIDE that grid
-            const backgroundColor = currentApplicationData?.CssStyles?.backgroundColor ?? "Blue";
-            appGrid.style.backgroundColor = backgroundColor
-        }
+       
 
 
         const onBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -65,10 +65,20 @@ function EditApplication() {
 
         window.addEventListener('beforeunload', onBeforeUnload);
 
+       /*  const tmpCopy = CopyApplicationDataToNew(currentApplicationData);
+        if (selectedSectionRef.current) {
+            let selectedsec = selectedSectionRef.current
+            // @ts-ignore   
+            const application_section = tmpCopy[selectedsec];
 
-      
+            setSectionData( application_section.sectionContent)
 
-    }, [currentApplicationData]);
+
+        } */
+
+
+
+    }, []);
 
     useEffect(() => {
 
@@ -85,24 +95,50 @@ function EditApplication() {
 
     }, []);
 
+ const appGrid = document.querySelector<HTMLDivElement>(".edit_content_app");
+
+        if (appGrid) {
+            // Find all <div> elements INSIDE that grid
+            const backgroundColor = currentApplicationData?.CssStyles?.backgroundColor ?? "Blue";
+            appGrid.style.backgroundColor = backgroundColor
+        }
+
     const handleClick = (event: any) => {
-        let section_name = event.target.id
+        const sectionName = event.target.id;
 
-        setSelectedSectionClassName(section_name);
+        selectedSectionRef.current = sectionName;
+        setSelectedSectionClassName(sectionName);
 
-        let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
-
-        let application_section;
+        const tmpCopy = CopyApplicationDataToNew(currentApplicationData);
         // @ts-ignore   
-        application_section = tmpCopyApplicationdata[section_name] ;
+        const application_section = tmpCopy[sectionName];
 
-        setCurrentSectionData(application_section)
+    //    setSectionData( application_section.sectionContent)
 
-        setSectionDetails(application_section.sectionContent)
+     //   setCurrentApplicationData(tmpCopy);
 
-        console.log('Clicked!');
+        setCurrentSectionData(application_section);
+           setSectionDetails(application_section.sectionContent);
     };
 
+    const handleRichTextEditorChange = (editorHtml: string) => {
+        const sectionClassName = selectedSectionRef.current;
+        if (!sectionClassName) return;
+
+        let tmpCopy = CopyApplicationDataToNew(currentApplicationData);
+        // @ts-ignore   
+        let application_section = tmpCopy[sectionClassName];
+
+        if (application_section.sectionContent === editorHtml) return;
+
+        application_section.sectionContent = editorHtml;
+        // @ts-ignore   
+        tmpCopy[sectionClassName] = application_section;
+
+          setSectionDetails(editorHtml);
+        setCurrentApplicationData(tmpCopy);
+        // setCurrentSectionData(application_section);
+    };
 
 
     const OnChangeSectionTitleContent = (targetField: any) => {
@@ -248,27 +284,7 @@ function EditApplication() {
 
     };
 
-    const handleRichTextEditorChange = (editorHtml: string) => {
-        setSectionDetails(editorHtml)
 
-          let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
-        let application_section;
-        // @ts-ignore   
-        application_section = tmpCopyApplicationdata[selectedSectionClassName]
-      
-       if (! application_section)
-       {
-        return;
-       }
-        application_section.sectionContent = editorHtml;
-
-         // @ts-ignore   
-        tmpCopyApplicationdata[selectedSectionClassName] = application_section
-        setCurrentApplicationData(tmpCopyApplicationdata);
-
-        setCurrentSectionData(application_section);
-        
-    }
 
 
 
@@ -316,13 +332,14 @@ function EditApplication() {
                             Convert ansøgning to PDF
                         </button>
                     </div>
-                    {/*  <SectionStyleEditor
+                      { selectedSectionClassName  ?
+                     <SectionStyleEditor
                         section={{
                             sectionId: selectedSectionClassName,
                             cssStyles: currentSectionData.cssStyles,
                         }}
                         onStyleChange={handleApplicationStyleChange}
-                    /> */}
+                    /> : ''}
                     {action === 'edit' ?
                         <form className='edit_form'>
                             <>
@@ -364,29 +381,37 @@ function EditApplication() {
 
                             </>
 
-                            {/*  <SectionStyleEditor
+                             <SectionStyleEditor
                                 section={{
                                     sectionId: selectedSectionClassName,
                                     cssStyles: currentSectionData.cssStyles,
                                 }}
                                 onStyleChange={handleStyleChange}
-                            /> */}
+                            />
                             <div>
                                 <p>
                                     Richtext editor
                                 </p>
+                                
+                                  
+                                { selectedSectionClassName  ?
                                 <CustomQuillEditor
 
-                                    value={sectionDetails}
+                                    //  value={sectionDetails}
+                                    // value={'aaa'}
+                                     // @ts-ignore   
+                                    value={currentApplicationData[selectedSectionClassName].sectionContent}
+                                    sectionClassName={selectedSectionClassName}
                                     onChange={handleRichTextEditorChange}
                                 />
-                            </div>
-                          {/*   <div>
+                              : ''}
+                            </div> 
+                            {/*   <div>
                                 <p> from richtext editor </p>
                                 {sectionDetails}
                             </div> */}
 
-                            <div id='dropdiv'  >
+{/*                             <div id='dropdiv'  >
 
                                 {currentSectionData.entries ? (currentSectionData.entries).map((entry, entryIndex) => (
                                     <>
@@ -433,12 +458,12 @@ function EditApplication() {
                                         </section>
                                     </>
                                 )) : ""}
-                            </div>
+                            </div> */}
 
                         </form>
                         :
                         <AddApplicationSectionEntry
-                            currentSectionData={currentSectionData}
+                            currentSectionData={currentSectionData.sectionContent}
                             action={action}
                             selectedSectionClassName={selectedSectionClassName}
                             setAction={setAction}

@@ -27,12 +27,8 @@ function ApplicationContent() {
                         {/* {currentApplicationData.ApplicantContent.sectionName} */}
                     </p>
 
-                    {currentApplicationData.ApplicantContent.entries.map((paragraph) => (
+                    <div dangerouslySetInnerHTML={{ __html: currentApplicationData?.ApplicantContent?.sectionContent ?? "" }} />
 
-
-                        <p className='application_content_paragraphs' style={{ whiteSpace: "pre-wrap" }}> {paragraph.bodyparagraph} </p>
-
-                    ))}
                 </div>
             </div>
         </>
