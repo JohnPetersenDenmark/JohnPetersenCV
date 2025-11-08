@@ -1,0 +1,19 @@
+.my-quill-editor {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: white;
+}
+
+.my-quill-editor .ql-toolbar {
+  border-bottom: 1px solid #ddd;
+  background: #f9f9f9;
+}
+
+.my-quill-editor .ql-container {
+  min-height: 200px;
+}
+
+.my-quill-editor .ql-editor {
+  font-size: 20px;
+  line-height: 1.5;
+}

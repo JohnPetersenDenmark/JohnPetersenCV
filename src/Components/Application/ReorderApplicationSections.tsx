@@ -115,14 +115,37 @@ export default function ReorderApplicationSections() {
     const hiddenElements: HTMLElement[] = [];
 
     sections.forEach((section, index) => {
-      const id = "dummy" + index;
+      let id = "dummy" + index;
       //const el = canvasEl.querySelector<HTMLElement>("#" + CSS.escape(id));
-      const el = document.getElementById(id)
+      let el = document.getElementById(id)
       if (el) {
         el.style.display = "none";
         hiddenElements.push(el); // keep track so we can restore later
       }
+
+       id = "moredummy" + index;
+        el = document.getElementById(id)
+      if (el) {
+        el.style.display = "none";
+        hiddenElements.push(el); // keep track so we can restore later
+      }
+
     });
+
+    const div = canvasRef.current;
+    if (!div) return;
+
+    for ( var i= 0 ; i <div.style.length ; i++)
+    {
+      let propertyName = div.style[i];
+      let propertyValue = div.style.getPropertyValue(propertyName)
+       if (propertyValue.includes("linear-gradient")) {
+        div.style.removeProperty(propertyValue);
+      }
+     
+    }
+    div.style.removeProperty("background-size");
+   
 
     // 2️⃣ Convert to PDF using GrabzIt (or your custom converter)
     window.convertHTMLToPDFWithCallback(canvasEl.outerHTML, (pdfBlob: Blob) => {
@@ -132,6 +155,13 @@ export default function ReorderApplicationSections() {
       hiddenElements.forEach(el => {
         el.style.display = "";
       });
+
+       div.style.backgroundImage = `
+    linear-gradient(to right, rgba(0,0,0,0.3) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
+  `;
+
+  div.style.backgroundSize = "20px 20px";
 
       // 4️⃣ Trigger download
       const link = document.createElement("a");
@@ -272,6 +302,7 @@ export default function ReorderApplicationSections() {
      
         {sections.map((section, index) => {
           const divid = "dummy" + index; // ✅ declare here
+          const divid1 = "moredummy" + index
 
           return (
             <div
@@ -299,7 +330,7 @@ export default function ReorderApplicationSections() {
               {section.component}
 
 
-              <div
+              <div id={divid1}
                 onMouseDown={(e) =>
                   startResize(e, section[1].thisClassName)
                 }
@@ -314,10 +345,6 @@ export default function ReorderApplicationSections() {
                   cursor: "se-resize",
                 }}
               ></div>
-
-
-
-
             </div>
           );
         })}

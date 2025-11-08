@@ -28,14 +28,14 @@ function EditApplication() {
 
     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
-  
-   
 
-     const [sectionDetails, setSectionDetails] = useState<string>('');
+
+
+    const [sectionDetails, setSectionDetails] = useState<string>('');
 
     const [sectionData, setSectionData] = useState<string>('');
-   
-//let tmp = currentApplicationData
+
+    //let tmp = currentApplicationData
 
     const [currentSectionData, setCurrentSectionData] = useState({} as ApplicantInfo | EmployerInfo | ApplicantContent | ApplicationDate | ApplicationJobTitle | ApplicantContentHeadline)
     const [selectedSectionClassName, setSelectedSectionClassName] = useState('')
@@ -47,13 +47,13 @@ function EditApplication() {
     let [dirtyFlag, setDirtyFlag] = useState(false)
     const navigate = useNavigate();
 
-  
+
 
     useEffect(() => {
 
 
 
-       
+
 
 
         const onBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -65,16 +65,16 @@ function EditApplication() {
 
         window.addEventListener('beforeunload', onBeforeUnload);
 
-       /*  const tmpCopy = CopyApplicationDataToNew(currentApplicationData);
-        if (selectedSectionRef.current) {
-            let selectedsec = selectedSectionRef.current
-            // @ts-ignore   
-            const application_section = tmpCopy[selectedsec];
-
-            setSectionData( application_section.sectionContent)
-
-
-        } */
+        /*  const tmpCopy = CopyApplicationDataToNew(currentApplicationData);
+         if (selectedSectionRef.current) {
+             let selectedsec = selectedSectionRef.current
+             // @ts-ignore   
+             const application_section = tmpCopy[selectedsec];
+ 
+             setSectionData( application_section.sectionContent)
+ 
+ 
+         } */
 
 
 
@@ -95,13 +95,13 @@ function EditApplication() {
 
     }, []);
 
- const appGrid = document.querySelector<HTMLDivElement>(".edit_content_app");
+    const appGrid = document.querySelector<HTMLDivElement>(".edit_content_app");
 
-        if (appGrid) {
-            // Find all <div> elements INSIDE that grid
-            const backgroundColor = currentApplicationData?.CssStyles?.backgroundColor ?? "Blue";
-            appGrid.style.backgroundColor = backgroundColor
-        }
+    if (appGrid) {
+        // Find all <div> elements INSIDE that grid
+        const backgroundColor = currentApplicationData?.CssStyles?.backgroundColor ?? "Blue";
+        appGrid.style.backgroundColor = backgroundColor
+    }
 
     const handleClick = (event: any) => {
         const sectionName = event.target.id;
@@ -113,12 +113,12 @@ function EditApplication() {
         // @ts-ignore   
         const application_section = tmpCopy[sectionName];
 
-    //    setSectionData( application_section.sectionContent)
+        //    setSectionData( application_section.sectionContent)
 
-     //   setCurrentApplicationData(tmpCopy);
+        //   setCurrentApplicationData(tmpCopy);
 
         setCurrentSectionData(application_section);
-           setSectionDetails(application_section.sectionContent);
+        setSectionDetails(application_section.sectionContent);
     };
 
     const handleRichTextEditorChange = (editorHtml: string) => {
@@ -135,7 +135,7 @@ function EditApplication() {
         // @ts-ignore   
         tmpCopy[sectionClassName] = application_section;
 
-          setSectionDetails(editorHtml);
+        setSectionDetails(editorHtml);
         setCurrentApplicationData(tmpCopy);
         // setCurrentSectionData(application_section);
     };
@@ -285,7 +285,7 @@ function EditApplication() {
     };
 
 
-
+    const headLine: string = "jjjjjj";
 
 
     if (currentApplicationData === null) {
@@ -332,86 +332,57 @@ function EditApplication() {
                             Convert ansøgning to PDF
                         </button>
                     </div>
-                      { selectedSectionClassName  ?
-                     <SectionStyleEditor
+
+                    <p>
+                        Ansøgningens baggrundsfarve
+                    </p>
+                    <SectionStyleEditor
                         section={{
-                            sectionId: selectedSectionClassName,
-                            cssStyles: currentSectionData.cssStyles,
+
+                            sectionId: 'aaaa',
+                            cssStyles: currentApplicationData.CssStyles,
                         }}
                         onStyleChange={handleApplicationStyleChange}
-                    /> : ''}
+                    />
+
+
                     {action === 'edit' ?
                         <form className='edit_form'>
-                            <>
-                                {currentSectionData ?
-                                    Object.entries(currentSectionData).map((elementValue, index) => (
-                                        elementValue[0] === 'sectionName' ?
-                                            <section className="header-card-row ">
-                                                {/* <section key={index} className="header-card-row "> */}
-                                                <article className="header-card ">
-                                                    <h3>
+                            {selectedSectionClassName ?
+                                <>
+                                    <p>
+                                        Afsnittets baggrundsfarve
+                                    </p>
+                                    <SectionStyleEditor
+                                        section={{
 
-                                                        {currentSectionData.sectionNameLabel}
-
-                                                    </h3>
-                                                    <p style={{ color: currentSectionData.cssStyles.color }}>
-                                                        <input type="text"
-                                                            name={elementValue[0]}
-                                                            value={elementValue[1]}
-
-                                                            onChange={(e) => OnChangeSectionTitleContent(e.target)}>
-                                                        </input>
-                                                        <span className='section-title-error'>
-
-                                                        </span>
-                                                    </p>
-
-                                                    {currentSectionData.entries &&
-                                                        selectedSectionClassName !== 'ApplicationDate' &&
-                                                        selectedSectionClassName !== 'ApplicationJobTitle'
-                                                        ?
-                                                        <button type="button" onClick={handleAddEntry}>Tilføj</button> : ""}
-                                                </article>
-
-                                            </section>
-                                            : ""
-                                    ))
-                                    : ""
-                                }
-
-                            </>
-
-                             <SectionStyleEditor
-                                section={{
-                                    sectionId: selectedSectionClassName,
-                                    cssStyles: currentSectionData.cssStyles,
-                                }}
-                                onStyleChange={handleStyleChange}
-                            />
+                                            sectionId: selectedSectionClassName,
+                                            cssStyles: currentSectionData.cssStyles,
+                                        }}
+                                        onStyleChange={handleStyleChange}
+                                    /> </> : ''}
                             <div>
-                                <p>
+                                {/*  <p> 
                                     Richtext editor
                                 </p>
-                                
-                                  
-                                { selectedSectionClassName  ?
-                                <CustomQuillEditor
+                                 */}
 
-                                    //  value={sectionDetails}
-                                    // value={'aaa'}
-                                     // @ts-ignore   
-                                    value={currentApplicationData[selectedSectionClassName].sectionContent}
-                                    sectionClassName={selectedSectionClassName}
-                                    onChange={handleRichTextEditorChange}
-                                />
-                              : ''}
-                            </div> 
+                                {selectedSectionClassName ?
+                                    <CustomQuillEditor
+                                        className="my-quill-editor"
+                                        // @ts-ignore   
+                                        value={currentApplicationData[selectedSectionClassName].sectionContent}
+                                        sectionClassName={selectedSectionClassName}
+                                        onChange={handleRichTextEditorChange}
+                                    />
+                                    : ''}
+                            </div>
                             {/*   <div>
                                 <p> from richtext editor </p>
                                 {sectionDetails}
                             </div> */}
 
-{/*                             <div id='dropdiv'  >
+                            {/*                             <div id='dropdiv'  >
 
                                 {currentSectionData.entries ? (currentSectionData.entries).map((entry, entryIndex) => (
                                     <>
@@ -462,17 +433,7 @@ function EditApplication() {
 
                         </form>
                         :
-                        <AddApplicationSectionEntry
-                            currentSectionData={currentSectionData.sectionContent}
-                            action={action}
-                            selectedSectionClassName={selectedSectionClassName}
-                            setAction={setAction}
-                            returnNewSectionData={(newSectionData: any) => {
-                                doAddSection(newSectionData)
-                            }
-
-                            }
-                        />}
+                        ''}
                 </div>
                 <div className='edit_content_app'>
                     <Application />

@@ -1,15 +1,14 @@
 import { ApplicantInfo, EmployerInfo, ApplicantContent, ApplicationDate, ApplicationJobTitle , ApplicantContentHeadline} from "../../Classes/ClassesApplicationData";
 
-type StyleEditorProps = {
-  // section: ApplicantInfo | EmployerInfo | ApplicantContent | ApplicationDate | ApplicationJobTitle | ApplicantContentHeadline;
-  section : {
-    sectionId : string
-     cssStyles: React.CSSProperties
-  }
+type StyleEditorProps = {  
+  section: {             
+    sectionId: string;
+    cssStyles: React.CSSProperties;   
+  };
   onStyleChange: (id: string, style: React.CSSProperties) => void;
 };
 
-const SectionStyleEditor: React.FC<StyleEditorProps> = ({ section, onStyleChange }) => {
+const SectionStyleEditor: React.FC<StyleEditorProps> = ({  section, onStyleChange }) => {
 
   const handleChange = (key: keyof React.CSSProperties, value: string) => {
     onStyleChange(section.sectionId, { ...section.cssStyles, [key]: value });
@@ -23,10 +22,10 @@ if (!section.cssStyles || !section.sectionId)
 
   return (
     <div className="style-editor p-4 border-l border-gray-300 bg-gray-50 w-64">
-      <h3 className="font-semibold text-lg mb-3">🎨 Style Editor</h3>
+      {/* <h3 className="font-semibold text-lg mb-3">{section.sectionId}</h3> */}
       <div className="flex flex-col gap-3 text-sm">
         <label>
-          Background:
+          {/* Baggrundsfarve: */}
           <input
             type="color"
             value={section.cssStyles.backgroundColor as string}
@@ -34,7 +33,7 @@ if (!section.cssStyles || !section.sectionId)
           />
         </label>
 
-        <label>
+       {/*  <label>
           Text Color:
           <input
             type="color"
@@ -78,7 +77,7 @@ if (!section.cssStyles || !section.sectionId)
             <option value="Courier New">Courier New</option>
             <option value="Roboto">Roboto</option>
           </select>
-        </label>
+        </label> */}
       </div>
     </div>
   );

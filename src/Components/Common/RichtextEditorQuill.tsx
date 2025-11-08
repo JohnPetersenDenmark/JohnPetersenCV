@@ -2,6 +2,7 @@
 import React, { useRef, useEffect } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import "./RichtextEditorQuill.css"
 
 const toolbarContainerStyle: React.CSSProperties = {
   display: "flex",
@@ -28,12 +29,14 @@ icons["bold"] = "F";
 icons["italic"] = "K";
 
 interface CustomQuillEditorProps {
+  className : string;
   value: string;
   sectionClassName: string;
   onChange?: (html: string, sectionClassName: string) => void;
 }
 
 const CustomQuillEditor: React.FC<CustomQuillEditorProps> = ({
+  className,
   value,
   sectionClassName,
   onChange
@@ -125,6 +128,7 @@ return;
       {/* Editor */}
       <div style={editorWrapperStyle}>
         <ReactQuill
+        className={className}
           theme="snow"
           value={value}
           onChange={handleChange}
@@ -137,7 +141,7 @@ return;
       </div>
 
       {/* (Optional) Live HTML preview */}
-      <div style={{ marginTop: 12 }}>
+    {/*   <div style={{ marginTop: 12 }}>
         <strong>Preview (HTML):</strong>
         <div
           style={{
@@ -149,7 +153,7 @@ return;
           }}
           dangerouslySetInnerHTML={{ __html: value }}
         />
-      </div>
+      </div> */}
     </div>
   );
 };
