@@ -9,6 +9,11 @@ import { SectionPosition } from "../../Classes/ClassesApplicationData";
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 import { useCVData } from '../../GlobalData/GlobalCVDataContext';
 
+import bg from "../../assets/background.jpg";
+import bg1 from "../../assets/resize.svg";
+
+
+
 declare global {
   interface Window {
     convertHTMLToPDFWithCallback?: (htmlContent: string, callback: (pdfBlob: Blob) => void) => void;
@@ -35,7 +40,7 @@ export default function ReorderApplicationSections() {
 
   const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
   const [isResizing, setIsResizing] = useState(false);
- 
+
 
   // const [hideForPDF, setHideForPDF] = useState(true)
 
@@ -48,8 +53,8 @@ export default function ReorderApplicationSections() {
     // left: '100px',
     width: "794px",
     height: "1123px",
-     background: currentApplicationData?.CssStyles?.backgroundColor ?? "Blue",
-   // background: 'Yellow',
+    background: currentApplicationData?.CssStyles?.backgroundColor ?? "Blue",
+    // background: 'Yellow',
     margin: "20px auto",
     border: "2px dashed #ccc",
     borderRadius: "12px",
@@ -123,8 +128,8 @@ export default function ReorderApplicationSections() {
         hiddenElements.push(el); // keep track so we can restore later
       }
 
-       id = "moredummy" + index;
-        el = document.getElementById(id)
+      id = "moredummy" + index;
+      el = document.getElementById(id)
       if (el) {
         el.style.display = "none";
         hiddenElements.push(el); // keep track so we can restore later
@@ -135,17 +140,16 @@ export default function ReorderApplicationSections() {
     const div = canvasRef.current;
     if (!div) return;
 
-    for ( var i= 0 ; i <div.style.length ; i++)
-    {
+    for (var i = 0; i < div.style.length; i++) {
       let propertyName = div.style[i];
       let propertyValue = div.style.getPropertyValue(propertyName)
-       if (propertyValue.includes("linear-gradient")) {
+      if (propertyValue.includes("linear-gradient")) {
         div.style.removeProperty(propertyValue);
       }
-     
+
     }
     div.style.removeProperty("background-size");
-   
+
 
     // 2️⃣ Convert to PDF using GrabzIt (or your custom converter)
     window.convertHTMLToPDFWithCallback(canvasEl.outerHTML, (pdfBlob: Blob) => {
@@ -156,12 +160,12 @@ export default function ReorderApplicationSections() {
         el.style.display = "";
       });
 
-       div.style.backgroundImage = `
+      div.style.backgroundImage = `
     linear-gradient(to right, rgba(0,0,0,0.3) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
   `;
 
-  div.style.backgroundSize = "20px 20px";
+      div.style.backgroundSize = "20px 20px";
 
       // 4️⃣ Trigger download
       const link = document.createElement("a");
@@ -294,12 +298,12 @@ export default function ReorderApplicationSections() {
         onDragOver={handleDragOver}
         onDrop={(e) => {
           handleDrop(e);
-        
+
         }}
         style={mainDivStyle}
       >
 
-     
+
         {sections.map((section, index) => {
           const divid = "dummy" + index; // ✅ declare here
           const divid1 = "moredummy" + index
@@ -311,9 +315,9 @@ export default function ReorderApplicationSections() {
               draggable={!isResizing} // 🟢 disable drag if resizing
               onDragStart={(e) => {
                 handleDragStart(e, section[1].thisClassName);
-                
+
               }}
-              
+
               style={{
                 position: "absolute",
                 left: section[1].sectionPosition.startXPosition,
@@ -330,21 +334,27 @@ export default function ReorderApplicationSections() {
               {section.component}
 
 
-              <div id={divid1}
-                onMouseDown={(e) =>
-                  startResize(e, section[1].thisClassName)
-                }
+              <div
+                id={divid1}
+                onMouseDown={(e) => startResize(e, section[1].thisClassName)}
                 style={{
                   position: "absolute",
                   bottom: "2px",
                   right: "2px",
-                  width: "50px",
-                  height: "50px",
-                  background: currentApplicationData?.CssStyles?.backgroundColor,
-                  borderRadius: "2px",
+                  width: "25px",
+                  height: "25px",
                   cursor: "se-resize",
                 }}
-              ></div>
+              >
+                <img
+                
+                  src={bg1}
+                  alt="resize"
+                  style={{ width: "100%", height: "100%", pointerEvents: "none" }}
+                />
+              </div>
+
+
             </div>
           );
         })}
@@ -352,3 +362,4 @@ export default function ReorderApplicationSections() {
     </>
   );
 }
+
