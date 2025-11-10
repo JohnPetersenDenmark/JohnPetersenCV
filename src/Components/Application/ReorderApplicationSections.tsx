@@ -150,6 +150,22 @@ export default function ReorderApplicationSections() {
     }
     div.style.removeProperty("background-size");
 
+    let hiddenSectionContainerDiv = document.getElementById('keepFromPDF')
+
+     if (hiddenSectionContainerDiv)
+     hiddenSectionContainerDiv.style.display = 'none'
+    
+   /*  if (hiddenSectionContainerDiv)
+    {
+      let myList = hiddenSectionContainerDiv.querySelectorAll('p')
+      for(let i = 0 ; i <myList.length ; i++)
+      {
+        let tmpElement : HTMLParagraphElement = myList[i]
+        tmpElement.style.display = 'none'
+      }
+   
+     
+    } */
 
     // 2️⃣ Convert to PDF using GrabzIt (or your custom converter)
     window.convertHTMLToPDFWithCallback(canvasEl.outerHTML, (pdfBlob: Blob) => {
@@ -164,8 +180,22 @@ export default function ReorderApplicationSections() {
     linear-gradient(to right, rgba(0,0,0,0.3) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
   `;
-
       div.style.backgroundSize = "20px 20px";
+
+      if (hiddenSectionContainerDiv)
+     hiddenSectionContainerDiv.style.display = 'block'
+
+  /*      if (hiddenSectionContainerDiv)
+    {
+      let myList = hiddenSectionContainerDiv.querySelectorAll('p')
+      for(let i = 0 ; i <myList.length ; i++)
+      {
+        let tmpElement : HTMLParagraphElement = myList[i]
+        tmpElement.style.display = 'block'
+      }
+   
+     
+    } */
 
       // 4️⃣ Trigger download
       const link = document.createElement("a");
@@ -178,10 +208,36 @@ export default function ReorderApplicationSections() {
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    if (!canvasRef.current) return;
 
     const data = JSON.parse(e.dataTransfer.getData("text/plain"));
     const { id, offsetX, offsetY } = data;
+
+
+    if (e.currentTarget.hasAttribute('id')) {
+      let destinationDivId = e.currentTarget.getAttribute('id')
+      if (destinationDivId === 'keepFromPDF') {
+        let sectionDiv = document.getElementById(id)?.parentElement?.parentElement?.parentElement
+        if (sectionDiv)
+        {
+          e.currentTarget.appendChild(sectionDiv)
+          return;
+        }
+      }
+    }
+
+  /*   let curTarget = e.currentTarget.hasAttribute('id');
+    if (curTarget) {
+      let divs = curTarget.getElementsByTagName('Div')
+      if (divs) {
+
+      }
+
+    } */
+
+
+    if (!canvasRef.current) return;
+
+    
 
     const canvasRect = canvasRef.current.getBoundingClientRect();
     const newX = e.clientX - canvasRect.left - offsetX;
@@ -302,7 +358,21 @@ export default function ReorderApplicationSections() {
         }}
         style={mainDivStyle}
       >
-
+        <div id='keepFromPDF'
+          onDragOver={handleDragOver}
+          onDrop={(e) => {
+            handleDrop(e);
+          }}
+          style={{
+            position: "absolute",
+            left: 50,
+            top: 50,
+            width: '400px',
+            height: 200,
+            cursor: "grab",
+            backgroundColor: 'Red'
+          }}>
+        </div>
 
         {sections.map((section, index) => {
           const divid = "dummy" + index; // ✅ declare here
@@ -347,7 +417,7 @@ export default function ReorderApplicationSections() {
                 }}
               >
                 <img
-                
+
                   src={bg1}
                   alt="resize"
                   style={{ width: "100%", height: "100%", pointerEvents: "none" }}
