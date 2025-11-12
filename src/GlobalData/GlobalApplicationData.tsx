@@ -54,7 +54,8 @@ let defaultApplicationEmployerdata = new EmployerInfo(
     'Virksomhed',
     { backgroundColor: "#00b8d7", color: "#000000", fontSize: "16px", fontWeight: "normal" },
      {  startXPosition: 0, startYPosition: 0 , width : 300 , height : 100},
-     'content in employer'
+     'content in employer',
+     'main'
 )
 
 export const ApplicantInfoEntryLabels: SectionEntryLabels = {};
@@ -120,7 +121,8 @@ let defaultApplicantinfo = new ApplicantInfo(
     "Ansøger",
     { backgroundColor: "#00b8d7", color: "#000000", fontSize: "16px", fontWeight: "normal" },
       {  startXPosition: 0, startYPosition: 0  , width : 300 , height : 100},
-      'ansøger info'
+      'ansøger info',
+      'main'
 )
 
 
@@ -161,7 +163,8 @@ let defaultapplicationContent = new ApplicantContent(
     'Brødtekst',
     { backgroundColor: "#00b8d7", color: "#000000", fontSize: "16px", fontWeight: "normal" },
      {  startXPosition: 0, startYPosition: 0 , width : 300 , height : 100},
-     ''
+     '',
+     'main'
 
 )
 
@@ -194,7 +197,8 @@ export const defaultApplicationDate = new ApplicationDate(
     'Dato for ansøgning',
     { backgroundColor: "#00b8d7", color: "#000000", fontSize: "16px", fontWeight: "normal" },
       {  startXPosition: 0, startYPosition: 0 , width : 300 , height : 100 }, 
-      ''
+      '',
+      'main'
 )
 
 
@@ -223,7 +227,8 @@ let defaultApplicationJobTitle = new ApplicationJobTitle(
     'Jobtitel',
     { backgroundColor: "#00b8d7", color: "#000000", fontSize: "16px", fontWeight: "normal" },
      {  startXPosition: 0, startYPosition: 0 , width : 300 , height : 100},
-     ''
+     '',
+     'main'
 )
 
 
@@ -252,7 +257,8 @@ let defaultContentHeaderline = new ApplicantContentHeadline(
     { backgroundColor: "#00b8d7", color: "#000000", fontSize: "16px", fontWeight: "normal" },
 
     {  startXPosition: 0, startYPosition: 0 , width : 300 , height : 100},
-    ''
+    '',
+    'main'
 )
 
 let defaultCssStyles :  React.CSSProperties = (
@@ -354,38 +360,38 @@ export function CopyApplicationDataToNew(applicationdataCopyFrom: ApplicationDat
     
     let applicantInfo;
     if (true) {
-        let { applicantname, entries, thisClassName, sectionName, sectionNameLabel, cssStyles, sectionPosition , sectionContent } = applicationdataCopyFrom.ApplicantInfo;
-        applicantInfo = new ApplicantInfo(applicantname, entries.map(ae => ({ ...ae })), thisClassName, sectionName, sectionNameLabel, cssStyles, sectionPosition, sectionContent);
+        let { applicantname, entries, thisClassName, sectionName, sectionNameLabel, cssStyles, sectionPosition , sectionContent , sectionContainerDiv} = applicationdataCopyFrom.ApplicantInfo;
+        applicantInfo = new ApplicantInfo(applicantname, entries.map(ae => ({ ...ae })), thisClassName, sectionName, sectionNameLabel, cssStyles, sectionPosition, sectionContent, sectionContainerDiv );
     }
 
     let employerInfo;
     if (true) {
-        let { thisClassName, sectionName, sectionNameLabel, entries, cssStyles, sectionPosition, sectionContent } = applicationdataCopyFrom.EmployerInfo;
-        employerInfo = new EmployerInfo(thisClassName, sectionName, entries.map(ae => ({ ...ae })), sectionNameLabel, cssStyles, sectionPosition, sectionContent);
+        let { thisClassName, sectionName, sectionNameLabel, entries, cssStyles, sectionPosition, sectionContent, sectionContainerDiv } = applicationdataCopyFrom.EmployerInfo;
+        employerInfo = new EmployerInfo(thisClassName, sectionName, entries.map(ae => ({ ...ae })), sectionNameLabel, cssStyles, sectionPosition, sectionContent, sectionContainerDiv);
     }
 
     let JobTitle;
     if (true) {
-        let { headline, entries, sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition , sectionContent} = applicationdataCopyFrom.ApplicationJobTitle;
-        JobTitle = new ApplicationJobTitle(headline, entries.map(ae => ({ ...ae })), sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition, sectionContent);
+        let { headline, entries, sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition , sectionContent , sectionContainerDiv} = applicationdataCopyFrom.ApplicationJobTitle;
+        JobTitle = new ApplicationJobTitle(headline, entries.map(ae => ({ ...ae })), sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition, sectionContent , sectionContainerDiv);
     }
 
     let date;
     if (true) {
-        let { headline, entries, sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition, sectionContent } = applicationdataCopyFrom.ApplicationDate;
-        date = new ApplicationDate(headline, entries.map(ae => ({ ...ae })), sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition, sectionContent);
+        let { headline, entries, sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition, sectionContent, sectionContainerDiv } = applicationdataCopyFrom.ApplicationDate;
+        date = new ApplicationDate(headline, entries.map(ae => ({ ...ae })), sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition, sectionContent, sectionContainerDiv);
     }
 
     let content;
     if (true) {
-        let { entries, sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition, sectionContent } = applicationdataCopyFrom.ApplicantContent;
-        content = new ApplicantContent(entries.map(ae => ({ ...ae })), sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition, sectionContent);
+        let { entries, sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition, sectionContent, sectionContainerDiv } = applicationdataCopyFrom.ApplicantContent;
+        content = new ApplicantContent(entries.map(ae => ({ ...ae })), sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition, sectionContent , sectionContainerDiv);
     }
 
     let contentHeadline;
     if (true) {
-        let { entries, sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition , sectionContent} = applicationdataCopyFrom.ApplicantContentHeadline;
-        contentHeadline = new ApplicantContentHeadline(entries.map(ae => ({ ...ae })), sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition, sectionContent);
+        let { entries, sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition , sectionContent , sectionContainerDiv} = applicationdataCopyFrom.ApplicantContentHeadline;
+        contentHeadline = new ApplicantContentHeadline(entries.map(ae => ({ ...ae })), sectionName, thisClassName, sectionNameLabel, cssStyles, sectionPosition, sectionContent , sectionContainerDiv);
     }
 
 
