@@ -26,6 +26,8 @@ const ROW_HEIGHT = 50;
 export default function ReorderApplicationSections() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const keepFromPDFRef = useRef<HTMLDivElement>(null);
+
 
   const componentMap: Record<string, React.FC> = {
     EmployerInfo,
@@ -38,13 +40,17 @@ export default function ReorderApplicationSections() {
   const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
   const [isResizing, setIsResizing] = useState(false);
   const [PDFConversion, setPDFConversion] = useState(false);
-  const [draggingId, setDraggingId] = useState<string | null>(null);
+  // const [draggingId, setDraggingId] = useState<string | null>(null);
 
   const [sections, setSections] = useState<any[]>(
     Object.entries(currentApplicationData).filter(
       ([key]) => key !== "ApplicantContentHeadline" && key !== "CssStyles"
     )
   );
+
+  const [dummyYes, setDummyYes] = useState()
+
+  const lastDropRef = useRef<{ time: number; id: string | null }>({ time: 0, id: null });
 
   // Build dynamic components
   for (let g = 0; g < sections.length; g++) {
@@ -60,7 +66,8 @@ export default function ReorderApplicationSections() {
 
   // ---------- Styles ----------
   const mainDivStyle: React.CSSProperties = {
-    position: "relative",
+    position: "absolute",
+    left: '300px',
     width: "794px",
     height: "1123px",
     background: currentApplicationData?.CssStyles?.backgroundColor ?? "Blue",
@@ -78,45 +85,80 @@ export default function ReorderApplicationSections() {
   const handleDragStart = useCallback(
     (e: React.DragEvent<HTMLDivElement>, id: string) => {
       e.stopPropagation();
-      setDraggingId(id);
+      // setDraggingId(id);
 
       const section = sections.find(([_, v]) => v.thisClassName === id)?.[1];
       if (!section || !canvasRef.current) return;
 
-      const canvasRect = canvasRef.current.getBoundingClientRect();
-      const startX = section.sectionPosition.startXPosition;
-      const startY = section.sectionPosition.startYPosition;
-      const offsetX = e.clientX - (canvasRect.left + startX);
-      const offsetY = e.clientY - (canvasRect.top + startY);
+      const rect = e.currentTarget.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left;
+      const offsetY = e.clientY - rect.top;
 
       e.dataTransfer.setData(
         "text/plain",
         JSON.stringify({ id, offsetX, offsetY })
+        //   JSON.stringify({ id, startX, startY })
+
       );
+
+      //  console.log(JSON.stringify({ id, startX, startY }));
+      console.log(JSON.stringify({ id, offsetX, offsetY }));
+
+
     },
-    [sections]
+    []
   );
 
   // ---------- Drop Handler (React-state version) ----------
   const handleDrop = useCallback(
-     (e: React.DragEvent<HTMLDivElement>, destination: "main" | "keepFromPDF") => {
+    (e: React.DragEvent<HTMLDivElement>, destination: "main" | "keepFromPDF") => {
       e.preventDefault();
       if (!canvasRef.current) return;
 
-      let yx = e.currentTarget.getAttribute('id')
-      let x = yx;
+      const now = Date.now();
+
+
       const data = JSON.parse(e.dataTransfer.getData("text/plain"));
       const { id, offsetX, offsetY } = data;
 
-      const canvasRect = canvasRef.current.getBoundingClientRect();
-      const newX = e.clientX - canvasRect.left - offsetX;
-      const newY = e.clientY - canvasRect.top - offsetY;
+      // if (lastDropRef.current.id === id && now - lastDropRef.current.time < 200) {
+
+      let tmpTid = now - (lastDropRef.current.time);
+      if (now - (lastDropRef.current.time) < 10000) {
+        return; // ignore second run
+      }
+
+      lastDropRef.current = { time: now, id };
+
+      let newX = 0;
+      let newY = 0;
+
+      if (destination === 'main') {
+        const canvasRect = canvasRef.current.getBoundingClientRect();
+        newX = e.clientX - canvasRect.left - offsetX;
+         newY = e.clientY - canvasRect.top - offsetY;
+      }
+      else {
+        let keepFromPDFRect = null;
+        if (keepFromPDFRef.current !== null) {
+          keepFromPDFRect = keepFromPDFRef.current.getBoundingClientRect();
+        }
+
+        if (keepFromPDFRect !== null) {
+          newX = e.clientX - keepFromPDFRect.left - offsetX;
+          newY = e.clientY - keepFromPDFRect.top - offsetY;
+        }
+
+      }
+
+
+
 
       // Update local UI state
       setSections((prev) =>
-      prev.map(([key, value]) =>
-        value.thisClassName === id
-          ? [
+        prev.map(([key, value]) =>
+          value.thisClassName === id
+            ? [
               key,
               {
                 ...value,
@@ -128,9 +170,9 @@ export default function ReorderApplicationSections() {
                 sectionContainerDiv: destination, // <- update container
               },
             ]
-          : [key, value]
-      )
-    );
+            : [key, value]
+        )
+      );
 
       // Update global app data
       const tmpCopy = CopyApplicationDataToNew(currentApplicationData);
@@ -146,11 +188,12 @@ export default function ReorderApplicationSections() {
         }
       );
       // @ts-ignore   
-      tmpCopy[sectionKey] = { ...appSection, sectionPosition: updatedPos , sectionContainerDiv: destination};
-        
+      tmpCopy[sectionKey] = { ...appSection, sectionPosition: updatedPos, sectionContainerDiv: destination };
+
       setCurrentApplicationData(tmpCopy);
     },
-     []
+    // [dummyYes, setDummyYes]
+    [currentApplicationData, setCurrentApplicationData]
   );
 
   const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
@@ -181,23 +224,23 @@ export default function ReorderApplicationSections() {
         prev.map(([key, value]) =>
           value.thisClassName === id
             ? [
-                key,
-                {
-                  ...value,
-                  sectionPosition: {
-                    ...value.sectionPosition,
-                    width: newWidth,
-                    height: newHeight,
-                  },
+              key,
+              {
+                ...value,
+                sectionPosition: {
+                  ...value.sectionPosition,
+                  width: newWidth,
+                  height: newHeight,
                 },
-              ]
+              },
+            ]
             : [key, value]
         )
       );
 
       const tmpCopy = CopyApplicationDataToNew(currentApplicationData);
-      const sectionKey = id 
-       // @ts-ignore   
+      const sectionKey = id
+      // @ts-ignore   
       const appSection = tmpCopy[sectionKey];
       const updatedPos = Object.assign(
         new SectionPosition(),
@@ -207,7 +250,7 @@ export default function ReorderApplicationSections() {
           height: newHeight,
         }
       );
-       // @ts-ignore   
+      // @ts-ignore   
       tmpCopy[sectionKey] = { ...appSection, sectionPosition: updatedPos };
       setCurrentApplicationData(tmpCopy);
     };
@@ -272,65 +315,47 @@ export default function ReorderApplicationSections() {
     });
   };
 
+  const mainSections = sections.filter(([_, s]) => s.sectionContainerDiv === "main");
+  const keepFromPDFSections = sections.filter(([_, s]) => s.sectionContainerDiv === "keepFromPDF");
+
+
   // ---------- Render ----------
   return (
     <>
       <button className="download_button" onClick={handleDownloadPDF}>
         Download PDF
       </button>
-
+      {/* <div ref={canvasRef} > */}
+      {/* MAIN container */}
       <div
         id="main"
         ref={canvasRef}
+        onDrop={(e) => handleDrop(e, "main")}
         onDragOver={handleDragOver}
-       onDrop={(e) => handleDrop(e, "main")} // ← here destination = "keepFromPDF"
+        // className="relative flex-1 min-h-[600px] bg-gray-800 border-2 border-gray-600 rounded-xl"
         style={mainDivStyle}
       >
-        <div
-          id="keepFromPDF"
-          onDragOver={handleDragOver}
-          onDrop={(e) => handleDrop(e, "keepFromPDF")} // ← here destination = "keepFromPDF"
-          style={{
-            position: "absolute",
-            left: 50,
-            top: 50,
-            width: "400px",
-            height: 200,
-            cursor: "grab",
-            backgroundColor: "Red",
-          }}
-        ></div>
-
-        {sections.map((section, index) => {
-          const divid = "dummy" + index;
-          const divid1 = "moredummy" + index;
-          return (
-            <div
-              ref={sectionRef}
-              key={section[1].thisClassName}
-              draggable={!isResizing}
-              onDragStart={(e) =>
-                handleDragStart(e, section[1].thisClassName)
-              }
-              style={{
-                position: "absolute",
-                left: section[1].sectionPosition.startXPosition,
-                top:
-                  section[1].sectionPosition.startYPosition +
-                  4 * index * ROW_HEIGHT,
-                width: section[1].sectionPosition.width,
-                height: section[1].sectionPosition.height,
-                cursor: "grab",
-                backgroundColor: section[1]?.cssStyles?.backgroundColor,
-              }}
-            >
-              <div id={divid} style={{ color: "yellow" }}>
-                {section[1].sectionNameLabel}
-              </div>
+        {/* <h3 className="text-white p-2">Main</h3> */}
+        {mainSections.map(([key, section]) => (
+          <div
+            ref={sectionRef}
+            key={section.thisClassName}
+            draggable
+            onDragStart={(e) => handleDragStart(e, section.thisClassName)}
+            className="absolute cursor-grab rounded-lg border border-gray-700"
+            style={{
+              position: "absolute",
+              left: section.sectionPosition.startXPosition,
+              top: section.sectionPosition.startYPosition,
+              width: section.sectionPosition.width,
+              height: section.sectionPosition.height,
+              backgroundColor: section?.cssStyles?.backgroundColor || "#222",
+            }}
+          >
+            <div className="text-yellow-400">{section.sectionNameLabel}
               {section.component}
-
               <div
-                id={divid1}
+                // id={divid1}
                 onMouseDown={(e) =>
                   startResize(e, section[1].thisClassName)
                 }
@@ -341,22 +366,60 @@ export default function ReorderApplicationSections() {
                   width: "25px",
                   height: "25px",
                   cursor: "se-resize",
+                  color: 'Green',
+                  backgroundColor: 'cyan'
                 }}
               >
-                <img
-                  src={bg1}
-                  alt="resize"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    pointerEvents: "none",
-                  }}
-                />
+                her
               </div>
             </div>
-          );
-        })}
+
+          </div>
+        ))}
       </div>
+
+      {/* KEEP FROM PDF container */}
+      <div
+        ref={keepFromPDFRef}
+        id="keepFromPDF"
+        onDrop={(e) => handleDrop(e, "keepFromPDF")}
+        onDragOver={handleDragOver}
+        style={{
+          position: "absolute",
+          left: 50,
+          top: 400,
+          width: "400px",
+          height: 200,
+          cursor: "grab",
+          backgroundColor: "Red",
+        }}
+      // className="relative flex-1 min-h-[600px] bg-gray-700 border-2 border-gray-500 rounded-xl"
+      >
+        <h3 className="text-white p-2">Keep From PDF</h3>
+        {keepFromPDFSections.map(([key, section]) => (
+          <div
+            key={section.thisClassName}
+            draggable
+            onDragStart={(e) => handleDragStart(e, section.thisClassName)}
+            className="absolute cursor-grab rounded-lg border border-gray-700"
+            style={{
+              position: "absolute",
+              left: section.sectionPosition.startXPosition,
+              top: section.sectionPosition.startYPosition,
+              width: section.sectionPosition.width,
+              height: section.sectionPosition.height,
+              backgroundColor: section?.cssStyles?.backgroundColor || "#333",
+            }}
+          >
+            <div className="text-yellow-400">{section.sectionNameLabel}</div>
+            <div>
+              {section.component}
+            </div>
+
+          </div>
+        ))}
+      </div>
+      {/* </div> */}
     </>
   );
 }
