@@ -39,7 +39,7 @@ export default function ReorderApplicationSections() {
 
   const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
   const [isResizing, setIsResizing] = useState(false);
-  const [PDFConversion, setPDFConversion] = useState(false);
+ // const [PDFConversion, setPDFConversion] = useState(true);
   // const [draggingId, setDraggingId] = useState<string | null>(null);
 
   const [sections, setSections] = useState<any[]>(
@@ -50,7 +50,7 @@ export default function ReorderApplicationSections() {
 
 
 
- // const lastDropRef = useRef<{ time: number; id: string | null }>({ time: 0, id: null });
+  // const lastDropRef = useRef<{ time: number; id: string | null }>({ time: 0, id: null });
 
   // Build dynamic components
   for (let g = 0; g < sections.length; g++) {
@@ -61,14 +61,14 @@ export default function ReorderApplicationSections() {
         : tmpSection[1].thisClassName;
     const Component = componentMap[componentName];
     const component = Component ? <Component /> : null;
-    tmpSection.component = component;
+    tmpSection[1].component = component;
   }
 
   // ---------- Styles ----------
   const mainDivStyle: React.CSSProperties = {
     position: "absolute",
     top: '100px',
-    left: '200px',
+    left: '60px',
     width: "794px",
     height: "1123px",
     background: currentApplicationData?.CssStyles?.backgroundColor ?? "Blue",
@@ -116,20 +116,20 @@ export default function ReorderApplicationSections() {
       e.preventDefault();
       if (!canvasRef.current) return;
 
-    //  const now = Date.now();
+      //  const now = Date.now();
 
 
       const data = JSON.parse(e.dataTransfer.getData("text/plain"));
       const { id, offsetX, offsetY } = data;
 
-       // if (lastDropRef.current.id === id && now - lastDropRef.current.time < 200) {
+      // if (lastDropRef.current.id === id && now - lastDropRef.current.time < 200) {
 
-   /*    let tmpTid = now - (lastDropRef.current.time);
-      if (now - (lastDropRef.current.time) < 10000) {
-        return; // ignore second run
-      }
-
-      lastDropRef.current = { time: now, id }; */
+      /*    let tmpTid = now - (lastDropRef.current.time);
+         if (now - (lastDropRef.current.time) < 10000) {
+           return; // ignore second run
+         }
+   
+         lastDropRef.current = { time: now, id }; */
 
       let newX = 0;
       let newY = 0;
@@ -262,8 +262,8 @@ export default function ReorderApplicationSections() {
     window.addEventListener("mouseup", stopResize);
   };
 
-  // ---------- PDF Download ----------
-  const handleDownloadPDF = () => {
+
+   const handleDownloadPDF = () => {
     const canvasEl = canvasRef.current;
     if (!canvasEl || !window.convertHTMLToPDFWithCallback) return;
 
@@ -295,7 +295,7 @@ export default function ReorderApplicationSections() {
       if (hiddenSectionContainerDiv)
         hiddenSectionContainerDiv.style.display = "none";
 
-    window.convertHTMLToPDFWithCallback (div.outerHTML, (pdfBlob: Blob) => {
+     window.convertHTMLToPDFWithCallback (div.outerHTML, (pdfBlob: Blob) => {
         hiddenElements.forEach((el) => {
           el.style.display = "";
         });
@@ -315,67 +315,72 @@ export default function ReorderApplicationSections() {
     
     
   }
-  
-    
 
 
-    const mainSections = sections.filter(([_, s]) => s.sectionContainerDiv === "main");
-    const keepFromPDFSections = sections.filter(([_, s]) => s.sectionContainerDiv === "keepFromPDF");
 
 
-    // ---------- Render ----------
-    return (
-      <>
-        <button className="download_button" onClick={handleDownloadPDF}>
-          Download PDF
-        </button>
-        {/* <div ref={canvasRef} > */}
-        {/* MAIN container */}
-        <div
-          id="main"
-          ref={canvasRef}
-          onDrop={(e) => handleDrop(e, "main")}
-          onDragOver={handleDragOver}
-          // className="relative flex-1 min-h-[600px] bg-gray-800 border-2 border-gray-600 rounded-xl"
-          style={mainDivStyle}
-        >
-          {/* <h3 className="text-white p-2">Main</h3> */}
-          {mainSections.map(([key, section]) => (
-            <div
-              // ref={sectionRef}
-              key={section.thisClassName}
-              draggable
-              onDragStart={(e) => handleDragStart(e, section.thisClassName)}
-              className="absolute cursor-grab rounded-lg border border-gray-700"
-              style={{
-                position: "absolute",
-                left: section.sectionPosition.startXPosition,
-                top: section.sectionPosition.startYPosition,
-                width: section.sectionPosition.width,
-                height: section.sectionPosition.height,
-                backgroundColor: section?.cssStyles?.backgroundColor || "#222",
-              }}
-            >
-              <div className="text-yellow-400">
-                {section.sectionNameLabel}
-                {section.component}
-                <div
-                  id={section.thisClassName + 'Dummy'}
-                  onMouseDown={(e) =>
-                    startResize(e, section.thisClassName)
-                  }
-                  style={{
-                    position: "absolute",
-                    bottom: "2px",
-                    right: "2px",
-                    width: "25px",
-                    height: "25px",
-                    cursor: "se-resize",
-                    color: 'Green',
-                    backgroundColor: 'cyan'
-                  }}
-                >
-                  <img
+  const mainSections = sections.filter(([_, s]) => s.sectionContainerDiv === "main");
+  const keepFromPDFSections = sections.filter(([_, s]) => s.sectionContainerDiv === "keepFromPDF");
+
+
+  // ---------- Render ----------
+  return (
+    <>
+      <button className="download_button" onClick={handleDownloadPDF}>
+        Download PDF
+      </button>
+      {/* <div ref={canvasRef} > */}
+      {/* MAIN container */}
+      <div
+        id="main"
+        ref={canvasRef}
+        onDrop={(e) => handleDrop(e, "main")}
+        onDragOver={handleDragOver}
+        // className="relative flex-1 min-h-[600px] bg-gray-800 border-2 border-gray-600 rounded-xl"
+        style={mainDivStyle}
+      >
+        {/* <h3 className="text-white p-2">Main</h3> */}
+        {mainSections.map(([key, section]) => (
+          <div
+            // ref={sectionRef}
+            key={section.thisClassName}
+            draggable
+            onDragStart={(e) => handleDragStart(e, section.thisClassName)}
+            className="absolute cursor-grab rounded-lg border border-gray-700"
+            style={{
+              position: "absolute",
+              left: section.sectionPosition.startXPosition,
+              top: section.sectionPosition.startYPosition,
+              width: section.sectionPosition.width,
+              height: section.sectionPosition.height,
+              backgroundColor: section?.cssStyles?.backgroundColor || "#222",
+            }}
+          >
+
+ 
+            <div className="text-yellow-400">
+              {/* {section.sectionNameLabel} */}
+              {section.component}
+             
+              <div
+               
+                id={section.thisClassName + 'Dummy'}
+                onMouseDown={(e) =>
+                  startResize(e, section.thisClassName)
+                }
+                style={{
+                  position: "absolute",
+                  bottom: "2px",
+                  right: "2px",
+                  width: "25px",
+                  height: "25px",
+                  cursor: "se-resize",
+                  color: 'Green',
+                  backgroundColor: 'cyan'
+                }}
+              >
+
+                <img
                   src={bg1}
                   alt="resize"
                   style={{
@@ -384,14 +389,19 @@ export default function ReorderApplicationSections() {
                     pointerEvents: "none",
                   }}
                 />
-                </div>
+
               </div>
+           
 
             </div>
-          ))}
-        </div>
 
-        {/* KEEP FROM PDF container */}
+
+          </div>
+        ))}
+      </div>
+
+
+     
         <div
           ref={keepFromPDFRef}
           id="keepFromPDF"
@@ -431,7 +441,8 @@ export default function ReorderApplicationSections() {
             </div>
           ))}
         </div>
-        {/* </div> */}
-      </>
-    );
-  }
+     
+      {/* </div> */}
+    </>
+  );
+}
