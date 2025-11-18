@@ -362,8 +362,7 @@ export default function ReorderCVSections() {
  
             <div className="text-yellow-400">
               {/* {section.sectionNameLabel} */}
-              {section.component}
-             aaa
+              {section.component}   
               <div
                
                 id={section.thisClassName + 'Dummy'}
