@@ -20,6 +20,7 @@ export type SectionEntryInput = {
 
 
 export class Profile {
+    sectionContainerDiv : string
     thisClassName: string
     sectionName: string
     sectionNameLabel: string
@@ -30,7 +31,7 @@ export class Profile {
 
 
     public constructor(sectionName: string, sectionNameLabel: string, entries: ProfileEntry[], 
-        cssStyles: React.CSSProperties, sectionPosition: SectionPosition,  sectionContent : string) {
+        cssStyles: React.CSSProperties, sectionPosition: SectionPosition,  sectionContent : string, sectionContainerDiv : string) {
         this.sectionName = sectionName;
         this.entries = entries;
         this.sectionNameLabel = sectionNameLabel;
@@ -39,6 +40,7 @@ export class Profile {
         this.cssStyles = cssStyles
         this.sectionPosition = sectionPosition
         this.sectionContent = sectionContent
+        this.sectionContainerDiv = sectionContainerDiv 
     }
 }
 
@@ -57,6 +59,7 @@ export class ProfileEntry {
 }
 
 export class Motivation {
+    sectionContainerDiv : string
     thisClassName: string
     sectionName: string
     sectionNameLabel: string
@@ -65,7 +68,8 @@ export class Motivation {
     sectionPosition: SectionPosition
     sectionContent: string
 
-    public constructor(sectionName: string, entries: MotivationEntry[], sectionNameLabel: string, cssStyles: React.CSSProperties, sectionPosition: SectionPosition,  sectionContent: string) {
+    public constructor(sectionName: string, entries: MotivationEntry[], sectionNameLabel: string, cssStyles: React.CSSProperties,
+         sectionPosition: SectionPosition,  sectionContent: string , sectionContainerDiv : string) {
         this.sectionName = sectionName;
         this.entries = entries;
         this.sectionNameLabel = sectionNameLabel
@@ -73,6 +77,7 @@ export class Motivation {
         this.cssStyles = cssStyles
         this.sectionPosition = sectionPosition
 this.sectionContent = sectionContent
+this.sectionContainerDiv = sectionContainerDiv
     }
 }
 
@@ -110,6 +115,7 @@ export class ContactInfoEntry {
 }
 
 export class ContactInfo {
+    sectionContainerDiv : string
     thisClassName: string
     sectionName: string
     sectionNameLabel: string
@@ -118,14 +124,17 @@ export class ContactInfo {
     sectionPosition: SectionPosition
     sectionContent : string
 
-    public constructor(sectionName: string, sectionNameLabel: string, entries: ContactInfoEntry[], cssStyles: React.CSSProperties, sectionPosition: SectionPosition ,  sectionContent : string) {
+    public constructor(sectionName: string, sectionNameLabel: string, entries: ContactInfoEntry[], cssStyles: React.CSSProperties,
+         sectionPosition: SectionPosition ,  sectionContent : string , sectionContainerDiv : string) {
         this.sectionName = sectionName;
         this.entries = entries; 
         this.sectionNameLabel = sectionNameLabel;
         this.thisClassName = 'ContactInfo'
         this.cssStyles = cssStyles
         this.sectionPosition = sectionPosition
-        this.sectionContent = sectionContent }
+        this.sectionContent = sectionContent 
+    this.sectionContainerDiv = sectionContainerDiv
+    }
 }
 
 
@@ -160,6 +169,7 @@ export class WorkingExperienceEntry {
 }
 
 export class WorkingExperience {
+      sectionContainerDiv: string
     thisClassName: string
     sectionName: string
     sectionNameLabel: string
@@ -170,7 +180,7 @@ export class WorkingExperience {
     sectionContent : string
 
     public constructor(sectionName: string, achivementstitle: string, entries: WorkingExperienceEntry[], sectionNameLabel: string, 
-        cssStyles: React.CSSProperties, sectionPosition: SectionPosition,  sectionContent : string) {
+        cssStyles: React.CSSProperties, sectionPosition: SectionPosition,  sectionContent : string,   sectionContainerDiv: string) {
         this.sectionName = sectionName;
         this.achivementstitle = achivementstitle
         this.entries = entries
@@ -179,6 +189,7 @@ export class WorkingExperience {
         this.cssStyles = cssStyles
         this.sectionPosition = sectionPosition
         this.sectionContent = sectionContent
+        this.sectionContainerDiv = sectionContainerDiv
     }
 }
 
@@ -200,6 +211,7 @@ export class SkillEntry {
 }
 
 export class Skills {
+      sectionContainerDiv: string
     thisClassName: string
     sectionName: string
     sectionNameLabel: string
@@ -209,7 +221,7 @@ export class Skills {
     sectionContent : string
 
     public constructor(sectionName: string, entries: SkillEntry[], sectionNameLabel: string, cssStyles: React.CSSProperties, 
-        sectionPosition: SectionPosition,  sectionContent : string) {
+        sectionPosition: SectionPosition,  sectionContent : string,   sectionContainerDiv: string) {
 
         this.sectionName = sectionName;
         this.entries = entries;
@@ -218,10 +230,12 @@ export class Skills {
         this.cssStyles = cssStyles
         this.sectionPosition = sectionPosition
         this.sectionContent  = sectionContent
+        this.sectionContainerDiv = sectionContainerDiv
     }
 }
 
 export class Educations {
+    sectionContainerDiv: string
     thisClassName: string
     sectionName: string
     sectionNameLabel: string
@@ -231,7 +245,7 @@ export class Educations {
     sectionContent : string
 
     public constructor(sectionName: string, entries: EducationEntry[], sectionNameLabel: string, 
-        cssStyles: React.CSSProperties, sectionPosition: SectionPosition,  sectionContent : string) {
+        cssStyles: React.CSSProperties, sectionPosition: SectionPosition,  sectionContent : string, sectionContainerDiv: string) {
 
         this.sectionName = sectionName;
         this.entries = entries;
@@ -240,6 +254,7 @@ export class Educations {
         this.cssStyles = cssStyles
         this.sectionPosition = sectionPosition
         this. sectionContent = sectionContent
+        this.sectionContainerDiv = sectionContainerDiv
     }
 }
 
@@ -281,6 +296,7 @@ export class LanguageEntry {
 }
 
 export class Languages {
+   sectionContainerDiv: string
     thisClassName: string
     sectionName: string
     entries: LanguageEntry[]
@@ -290,7 +306,7 @@ export class Languages {
     sectionContent : string
 
     public constructor(sectionName: string, entries: LanguageEntry[], sectionNameLabel: string, cssStyles: React.CSSProperties, 
-        sectionPosition: SectionPosition,  sectionContent : string) {
+        sectionPosition: SectionPosition,  sectionContent : string, sectionContainerDiv: string) {
 
         this.sectionName = sectionName;
         this.entries = entries;
@@ -299,10 +315,12 @@ export class Languages {
         this.cssStyles = cssStyles
         this.sectionPosition = sectionPosition
         this.sectionContent = sectionContent
+        this.sectionContainerDiv = sectionContainerDiv
     }
 }
 
 export class Sparetime {
+     sectionContainerDiv: string
     thisClassName: string
     sectionName: string
     sectionNameLabel: string
@@ -312,7 +330,7 @@ export class Sparetime {
     sectionContent : string
 
     public constructor(sectionName: string, entries: SparetimeEntry[], sectionNameLabel: string, cssStyles: React.CSSProperties,
-         sectionPosition: SectionPosition,   sectionContent : string) {
+         sectionPosition: SectionPosition,   sectionContent : string, sectionContainerDiv: string) {
         this.sectionName = sectionName;
         this.entries = entries;
         this.sectionNameLabel = sectionNameLabel
@@ -320,6 +338,7 @@ export class Sparetime {
         this.cssStyles = cssStyles
         this.sectionPosition = sectionPosition
         this.sectionContent = sectionContent
+        this.sectionContainerDiv = sectionContainerDiv
     }
 }
 

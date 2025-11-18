@@ -2,17 +2,18 @@ import Motivation from './Motivation';
 import Profile from './Profile';
 import ContactInfo from './ContactInfo';
 import Skills from './Skills';
-import Education from './Education';
+import Educations from './Education';
 import Languages from './Languages';
-import WorkingHistory from './WorkingHistory';
+import WorkingExperience from './WorkingHistory';
 import Sparetime from './Sparetime';
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useCallback, useState } from "react";
+import bg1 from "../../assets/resize.svg";
 
 
 import { CopyCVDataToNew } from '../../GlobalData/GlobalCVData';
 import { SectionPosition } from "../../Classes/ClassesApplicationData";
-// import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
+
 import { useCVData } from '../../GlobalData/GlobalCVDataContext';
 
 declare global {
@@ -21,199 +22,429 @@ declare global {
   }
 }
 
-// --- CONFIG ---
-const COLUMN_WIDTHS = [50, 400, 400, 50];
-const ROW_HEIGHT = 50;
 
 export default function ReorderCVSections() {
 
   const canvasRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const keepFromPDFRef = useRef<HTMLDivElement>(null);
+
+    const [isResizing, setIsResizing] = useState(false);
+ 
 
   const componentMap: Record<string, React.FC> = {
 
     Motivation,
     Profile,
     Skills, 
-    Education,
+    Educations,
     ContactInfo,
     Languages,
-    WorkingHistory,
+    WorkingExperience,
     Sparetime
   };
 
   const { currenrCVData, setCurrentCVData } = useCVData();
   
-
-  const [useSectionHeaders, setUseSectionHeaders] = useState(true)
-
   const [sections, setSections] = useState<any[]>(
-    Object.entries(currenrCVData).filter(([key]) => key !== "ApplicantContentHeadline")
-  );
+      Object.entries(currenrCVData).filter(
+        ([key]) => key !== "ApplicantContentHeadline" && key !== "CssStyles"
+      )
+    );
 
+  // Build dynamic components
   for (let g = 0; g < sections.length; g++) {
-    let componentName = '';
-
     let tmpSection = sections[g];
-
-    if (tmpSection[1].thisClassName === 'ApplicantContent') {
-      componentName = 'ApplicationContent';
-    }
-    else {
-      componentName = tmpSection[1].thisClassName;
-    }
-
+    let componentName =tmpSection[1].thisClassName;
+    
     const Component = componentMap[componentName];
-
-    const component = Component ? <Component /> : null;
-
-    tmpSection.component = component;
+    const component = Component ? <Component /> : 'Component not found';
+    if (Component === null)
+    {
+      let x = 1;
+    }
+    tmpSection[1].component = component;
   }
 
-
-  const [PDFConversion, setPDFConversion] = useState(false);
-
-  const [draggingId, setDraggingId] = useState<string | null>(null);
-
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: string) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    e.dataTransfer.setData("text/plain", JSON.stringify({
-      id,
-      offsetX: e.clientX - rect.left,
-      offsetY: e.clientY - rect.top,
-    }));
+  // ---------- Styles ----------
+  const mainDivStyle: React.CSSProperties = {
+    position: "absolute",
+    top: '100px',
+    left: '60px',
+    width: "794px",
+    height: "1123px",
+    background: currenrCVData?.CssStyles?.backgroundColor ?? "Blue",
+    margin: "20px auto",
+    border: "2px dashed #ccc",
+    borderRadius: "12px",
+    backgroundImage: `
+      linear-gradient(to right, rgba(0,0,0,0.3) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
+    `,
+    backgroundSize: "20px 20px",
   };
 
-  function handleDownloadPDF() {
+  // ---------- Drag Start ----------
+  const handleDragStart = useCallback(
+    (e: React.DragEvent<HTMLDivElement>, id: string) => {
+      e.stopPropagation();
+      // setDraggingId(id);
+
+      const section = sections.find(([_, v]) => v.thisClassName === id)?.[1];
+      if (!section || !canvasRef.current) return;
+
+      const rect = e.currentTarget.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left;
+      const offsetY = e.clientY - rect.top;
+
+      e.dataTransfer.setData(
+        "text/plain",
+        JSON.stringify({ id, offsetX, offsetY })
+        //   JSON.stringify({ id, startX, startY })
+
+      );
+
+      //  console.log(JSON.stringify({ id, startX, startY }));
+      console.log(JSON.stringify({ id, offsetX, offsetY }));
+
+
+    },
+    []
+  );
+
+  // ---------- Drop Handler (React-state version) ----------
+  const handleDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>, destination: "main" | "keepFromPDF") => {
+      e.preventDefault();
+      if (!canvasRef.current) return;
+
+      //  const now = Date.now();
+
+
+      const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+      const { id, offsetX, offsetY } = data;
+
+      // if (lastDropRef.current.id === id && now - lastDropRef.current.time < 200) {
+
+      /*    let tmpTid = now - (lastDropRef.current.time);
+         if (now - (lastDropRef.current.time) < 10000) {
+           return; // ignore second run
+         }
+   
+         lastDropRef.current = { time: now, id }; */
+
+      let newX = 0;
+      let newY = 0;
+
+      if (destination === 'main') {
+        const canvasRect = canvasRef.current.getBoundingClientRect();
+        newX = e.clientX - canvasRect.left - offsetX;
+        newY = e.clientY - canvasRect.top - offsetY;
+      }
+      else {
+        let keepFromPDFRect = null;
+        if (keepFromPDFRef.current !== null) {
+          keepFromPDFRect = keepFromPDFRef.current.getBoundingClientRect();
+        }
+
+        if (keepFromPDFRect !== null) {
+          newX = e.clientX - keepFromPDFRect.left - offsetX;
+          newY = e.clientY - keepFromPDFRect.top - offsetY;
+        }
+
+      }
+      // Update local UI state
+      setSections((prev) =>
+        prev.map(([key, value]) =>
+          value.thisClassName === id
+            ? [
+              key,
+              {
+                ...value,
+                sectionPosition: {
+                  ...value.sectionPosition,
+                  startXPosition: newX,
+                  startYPosition: newY,
+                },
+                sectionContainerDiv: destination, // <- update container
+              },
+            ]
+            : [key, value]
+        )
+      );
+
+      // Update global app data
+      const tmpCopy = CopyCVDataToNew(currenrCVData);
+      const sectionKey = id
+      // @ts-ignore   
+      const appSection = tmpCopy[sectionKey];
+      const updatedPos = Object.assign(
+        new SectionPosition(),
+        appSection.sectionPosition,
+        {
+          startXPosition: newX,
+          startYPosition: newY,
+        }
+      );
+      // @ts-ignore   
+      tmpCopy[sectionKey] = { ...appSection, sectionPosition: updatedPos, sectionContainerDiv: destination };
+
+      setCurrentCVData(tmpCopy);
+    },
+    // [dummyYes, setDummyYes]
+    [currenrCVData, setCurrentCVData]
+  );
+
+  const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  }, []);
+
+  // ---------- Resize ----------
+  const startResize = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    id: string
+  ) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    setIsResizing(true);
+
+    const target = e.currentTarget.parentElement as HTMLDivElement;
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startWidth = target.offsetWidth;
+    const startHeight = target.offsetHeight;
+
+    const doResize = (moveEvent: MouseEvent) => {
+      const newWidth = Math.max(50, startWidth + (moveEvent.clientX - startX));
+      const newHeight = Math.max(40, startHeight + (moveEvent.clientY - startY));
+
+      setSections((prev) =>
+        prev.map(([key, value]) =>
+          value.thisClassName === id
+            ? [
+              key,
+              {
+                ...value,
+                sectionPosition: {
+                  ...value.sectionPosition,
+                  width: newWidth,
+                  height: newHeight,
+                },
+              },
+            ]
+            : [key, value]
+        )
+      );
+
+      const tmpCopy = CopyCVDataToNew(currenrCVData);
+      const sectionKey = id
+      // @ts-ignore   
+      const appSection = tmpCopy[sectionKey];
+      const updatedPos = Object.assign(
+        new SectionPosition(),
+        appSection.sectionPosition,
+        {
+          width: newWidth,
+          height: newHeight,
+        }
+      );
+      // @ts-ignore   
+      tmpCopy[sectionKey] = { ...appSection, sectionPosition: updatedPos };
+      setCurrentCVData(tmpCopy);
+    };
+
+    const stopResize = () => {
+      setIsResizing(false);
+      window.removeEventListener("mousemove", doResize);
+      window.removeEventListener("mouseup", stopResize);
+    };
+
+    window.addEventListener("mousemove", doResize);
+    window.addEventListener("mouseup", stopResize);
+  };
+
+
+   const handleDownloadPDF = () => {
     const canvasEl = canvasRef.current;
     if (!canvasEl || !window.convertHTMLToPDFWithCallback) return;
 
-    // 1️⃣ Hide all section elements before conversion
     const hiddenElements: HTMLElement[] = [];
 
     sections.forEach((section, index) => {
-      const id = section[1].thisClassName + index;
-      const el = canvasEl.querySelector<HTMLElement>("#" + CSS.escape(id));
+      let id = section[1].thisClassName + "Dummy";
+      let el = document.getElementById(id);
       if (el) {
         el.style.display = "none";
-        hiddenElements.push(el); // keep track so we can restore later
+        hiddenElements.push(el);
       }
-    });
+    })
 
-    // 2️⃣ Convert to PDF using GrabzIt (or your custom converter)
-    window.convertHTMLToPDFWithCallback(canvasEl.outerHTML, (pdfBlob: Blob) => {
-      console.log("PDF Blob received:", pdfBlob);
+      /*
+           id = "moredummy" + index;
+           el = document.getElementById(id);
+           if (el) {
+             el.style.display = "none";
+             hiddenElements.push(el);
+           }
+         }); */
 
-      // 3️⃣ Restore visibility
-      hiddenElements.forEach(el => {
-        el.style.display = "";
-      });
+      const div = canvasRef.current;
+      if (!div) return;
 
-      // 4️⃣ Trigger download
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(pdfBlob);
-      link.download = "my_application.pdf";
-      link.click();
-    });
+      div.style.removeProperty("background-size");
+      const hiddenSectionContainerDiv = document.getElementById("keepFromPDF");
+      if (hiddenSectionContainerDiv)
+        hiddenSectionContainerDiv.style.display = "none";
+
+     window.convertHTMLToPDFWithCallback (div.outerHTML, (pdfBlob: Blob) => {
+        hiddenElements.forEach((el) => {
+          el.style.display = "";
+        });
+        div.style.backgroundImage = `
+        linear-gradient(to right, rgba(0,0,0,0.3) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
+      `;
+        div.style.backgroundSize = "20px 20px";
+        if (hiddenSectionContainerDiv)
+          hiddenSectionContainerDiv.style.display = "block";
+
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(pdfBlob);
+        link.download = "my_application.pdf";
+        link.click();
+      }) 
+    
+    
   }
 
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (!canvasRef.current) return;
-
-    const data = JSON.parse(e.dataTransfer.getData("text/plain"));
-    const { id, offsetX, offsetY } = data;
-
-    const canvasRect = canvasRef.current.getBoundingClientRect();
-    const newX = e.clientX - canvasRect.left - offsetX;
-    const newY = e.clientY - canvasRect.top - offsetY;
-
-    setSections(prev =>
-      prev.map(([key, value]) => {
-        if (value.thisClassName !== id) return [key, value];
-        return [key, { ...value, sectionPosition: { startXPosition: newX, startYPosition: newY } }];
-      })
-    );
-
-    let tmpCopy = CopyCVDataToNew(currenrCVData);
-    const sectionKey = id;
-    // @ts-ignore   
-    const appSection = tmpCopy[sectionKey];
-
-    const updatedPos = Object.assign(new SectionPosition(), appSection.sectionPosition, {
-      startXPosition: newX,
-      startYPosition: newY,
-    });
-
-    // @ts-ignore   
-    tmpCopy[sectionKey] = { ...appSection, sectionPosition: updatedPos };
-    setCurrentCVData(tmpCopy)
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault(); // Allow drop
-  };
 
 
+  const mainSections = sections.filter(([_, s]) => s.sectionContainerDiv === "main");
+  const keepFromPDFSections = sections.filter(([_, s]) => s.sectionContainerDiv === "keepFromPDF");
+
+
+  // ---------- Render ----------
   return (
     <>
       <button className="download_button" onClick={handleDownloadPDF}>
         Download PDF
       </button>
-
+      {/* <div ref={canvasRef} > */}
+      {/* MAIN container */}
       <div
+        id="main"
         ref={canvasRef}
+        onDrop={(e) => handleDrop(e, "main")}
         onDragOver={handleDragOver}
-        onDrop={handleDrop}
-        style={{
-          position: "relative",
-          width: "794px",
-          height: "1123px",
-          margin: "20px auto",
-          background: "#f0f0f0",
-          border: "2px dashed #ccc",
-          borderRadius: "12px",
-        }}
+        // className="relative flex-1 min-h-[600px] bg-gray-800 border-2 border-gray-600 rounded-xl"
+        style={mainDivStyle}
       >
-        {sections.map((section, index) => (
+        {/* <h3 className="text-white p-2">Main</h3> */}
+        {mainSections.map(([key, section]) => (
           <div
-            ref={sectionRef}
-            key={section[1].thisClassName}
-            
+            // ref={sectionRef}
+            key={section.thisClassName}
             draggable
-            onDragStart={e => handleDragStart(e, section[1].thisClassName)}
+            onDragStart={(e) => handleDragStart(e, section.thisClassName)}
+            className="absolute cursor-grab rounded-lg border border-gray-700"
             style={{
               position: "absolute",
-              left: section[1].sectionPosition.startXPosition,
-              top: section[1].sectionPosition.startYPosition,
-              background: "#fff",
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-              padding: "10px",
-              cursor: "grab",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+              left: section.sectionPosition.startXPosition,
+              top: section.sectionPosition.startYPosition,
+              width: section.sectionPosition.width,
+              height: section.sectionPosition.height,
+              backgroundColor: section?.cssStyles?.backgroundColor || "#222",
             }}
           >
-            <div
-             id={section[1].thisClassName + index}
-            style={{
 
-              background: "#fff",
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-              padding: "10px",
-              fontWeight: '700',
-              fontSize: '20px',
-              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-            }}>
-              {useSectionHeaders ? section[1].sectionNameLabel : ''}
+ 
+            <div className="text-yellow-400">
+              {/* {section.sectionNameLabel} */}
+              {section.component}
+             aaa
+              <div
+               
+                id={section.thisClassName + 'Dummy'}
+                onMouseDown={(e) =>
+                  startResize(e, section.thisClassName)
+                }
+                style={{
+                  position: "absolute",
+                  bottom: "2px",
+                  right: "2px",
+                  width: "25px",
+                  height: "25px",
+                  cursor: "se-resize",
+                  color: 'Green',
+                  backgroundColor: 'cyan'
+                }}
+              >
+
+                <img
+                  src={bg1}
+                  alt="resize"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    pointerEvents: "none",
+                  }}
+                />
+
+              </div>
+           
+
             </div>
 
-            {section.component}
+
           </div>
         ))}
       </div>
+
+
+     
+        <div
+          ref={keepFromPDFRef}
+          id="keepFromPDF"
+          onDrop={(e) => handleDrop(e, "keepFromPDF")}
+          onDragOver={handleDragOver}
+          style={{
+            position: "absolute",
+            left: 1100,
+            top: 100,
+            width: "794px",
+            height: "1123px",
+            cursor: "grab",
+            backgroundColor: '#f5f0f0',
+          }}
+        // className="relative flex-1 min-h-[600px] bg-gray-700 border-2 border-gray-500 rounded-xl"
+        >
+          <h3 className="text-white p-2">Keep From PDF</h3>
+          {keepFromPDFSections.map(([key, section]) => (
+            <div
+              key={section.thisClassName}
+              draggable
+              onDragStart={(e) => handleDragStart(e, section.thisClassName)}
+              className="absolute cursor-grab rounded-lg border border-gray-700"
+              style={{
+                position: "absolute",
+                left: section.sectionPosition.startXPosition,
+                top: section.sectionPosition.startYPosition,
+                width: section.sectionPosition.width,
+                height: section.sectionPosition.height,
+                backgroundColor: section?.cssStyles?.backgroundColor || "#333",
+              }}
+            >
+              <div className="text-yellow-400">{section.sectionNameLabel}</div>
+              <div>
+                {section.component}
+              </div>
+            </div>
+          ))}
+        </div>
+     
+      {/* </div> */}
     </>
   );
 }
