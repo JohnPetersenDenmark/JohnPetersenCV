@@ -4,37 +4,33 @@ import ApplicationStyling from "../Common/ApplicationStyling";
 
 const ApplicantInfo: React.FC = () => {
 
- const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
+  const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
- if (!currentApplicationData?.ApplicantInfo) {
-    return null; 
+  if (!currentApplicationData?.ApplicantInfo) {
+    return null;
   }
 
   const { thisClassName, entries } = currentApplicationData.ApplicantInfo;
 
   const {
-     sectionDivOuterStyle,
+    sectionDivOuterStyle,
     sectionInnerDivStyle,
     paraGraphSectionStyle,
     paraGraphStyle
   } = ApplicationStyling(currentApplicationData.ApplicantInfo);
 
   return (
-  <>
-  <div style={sectionDivOuterStyle}>
-      <div style={sectionInnerDivStyle}>
-      <p  className="section_title" id={thisClassName} style={paraGraphSectionStyle}>
-        {/* Optional: section title */}
-      </p>
+    <>
+      <div style={sectionDivOuterStyle}>
+        <div style={sectionInnerDivStyle}>
+          <p className="section_title" id={thisClassName} style={paraGraphSectionStyle}>
+            {/* Optional: section title */}
+          </p>
 
           <div
-  dangerouslySetInnerHTML={{ __html: currentApplicationData.ApplicantInfo.sectionContent }}
-/>
-
-     {/*  {entries?.map((applicantInfo, index) => (
-        <p key={index} style={paraGraphStyle}>{applicantInfo.description }</p>
-      ))} */}
-      </div>
+            dangerouslySetInnerHTML={{ __html: currentApplicationData.ApplicantInfo.sectionContent }}
+          />
+        </div>
       </div>
     </>
   );

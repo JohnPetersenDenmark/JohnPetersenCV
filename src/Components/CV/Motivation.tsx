@@ -1,18 +1,33 @@
 import { useCVData } from '../../GlobalData/GlobalCVDataContext';
+import ApplicationStyling from "../Common/ApplicationStyling";
 
 function Motivation() {
-  
-const { currenrCVData, setCurrentCVData } = useCVData();
+
+  const { currenrCVData, setCurrentCVData } = useCVData();
+
+  const { thisClassName, entries } = currenrCVData.Motivation;
+
+  const {
+    sectionDivOuterStyle,
+    sectionInnerDivStyle,
+    paraGraphSectionStyle,
+    paraGraphStyle
+  } = ApplicationStyling(currenrCVData.Motivation);
 
   return (
-    <>     
-     <div style={currenrCVData.Motivation.cssStyles}>     
-      <p className="section_title" id={currenrCVData.Motivation.thisClassName}>
-     
-        {currenrCVData.Motivation.sectionName}
-        </p>
-      <p style={{ lineHeight: '1.5' }}>{currenrCVData.Motivation.entries[0].description}</p>
-</div>    
+
+    <>
+      <div style={sectionDivOuterStyle}>
+        <div style={sectionInnerDivStyle}>
+          <p className="section_title" id={thisClassName} style={paraGraphSectionStyle}>
+            {/* Optional: section title */}
+          </p>
+
+          <div
+           dangerouslySetInnerHTML={{ __html: currenrCVData.Motivation.sectionContent }}
+          />
+        </div>
+      </div>
     </>
   );
 }

@@ -262,7 +262,7 @@ let defaultContentHeaderline = new ApplicantContentHeadline(
 )
 
 let defaultCssStyles :  React.CSSProperties = (
-    {backgroundColor : '#000000'}
+    {backgroundColor : '#ffffff'}
 )
 
 let defaultApplicationData = new ApplicationData(

@@ -1,25 +1,35 @@
-
-
 import { useCVData } from '../../GlobalData/GlobalCVDataContext';
-
+import ApplicationStyling from "../Common/ApplicationStyling";
 
 function Profile() {
 
-const { currenrCVData, setCurrentCVData } = useCVData();
+  const { currenrCVData, setCurrentCVData } = useCVData();
+
+  const { thisClassName, entries } = currenrCVData.Profile;
+
+  const {
+    sectionDivOuterStyle,
+    sectionInnerDivStyle,
+    paraGraphSectionStyle,
+    paraGraphStyle
+  } = ApplicationStyling(currenrCVData.Profile);
 
   return (
-    <>         
-      <p className="section_title" id={currenrCVData.Profile.thisClassName}>
-     
-        {currenrCVData.Profile.sectionName}
-      </p>
-      <p style={{ lineHeight: 1.5 }}>{currenrCVData.Profile.entries[0].description}
 
-      </p>
+    <>
+      <div style={sectionDivOuterStyle}>
+        <div style={sectionInnerDivStyle}>
+          <p className="section_title" id={thisClassName} style={paraGraphSectionStyle}>
+            {/* Optional: section title */}
+          </p>
 
-      <hr className="section_ruler"></hr>
+          <div
+           dangerouslySetInnerHTML={{ __html: currenrCVData.Profile.sectionContent }}
+          />
+        </div>
+      </div>
     </>
-  )
+  );
 }
 
 export default Profile;

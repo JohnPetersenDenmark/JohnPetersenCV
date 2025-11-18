@@ -25,8 +25,10 @@ defaultprofiledataTmp.sectionNameLabel = "Sektion";
 defaultprofiledataTmp.entries = defaultprofileentries
 defaultprofiledataTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
 defaultprofiledataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100}
+defaultprofiledataTmp.sectionContent = 'Profil info'
 
-let defaultprofiledata = new Profile(defaultprofiledataTmp.sectionName, defaultprofiledataTmp.sectionNameLabel, defaultprofiledataTmp.entries, defaultprofiledataTmp.cssStyles, defaultprofiledataTmp.sectionPosition )
+let defaultprofiledata = new Profile(defaultprofiledataTmp.sectionName, defaultprofiledataTmp.sectionNameLabel, 
+    defaultprofiledataTmp.entries, defaultprofiledataTmp.cssStyles, defaultprofiledataTmp.sectionPosition , defaultprofiledataTmp.sectionContent )
 
 
 
@@ -52,7 +54,11 @@ defaultmotivationdataTmp.sectionNameLabel = "Sektion"
 defaultmotivationdataTmp.entries = defaultmotivationentries
 defaultmotivationdataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100}
 defaultmotivationdataTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
-let defaultmotivationdata = new Motivation(defaultmotivationdataTmp.sectionName, defaultmotivationdataTmp.entries, defaultmotivationdataTmp.sectionNameLabel, defaultmotivationdataTmp.cssStyles, defaultmotivationdataTmp.sectionPosition)
+defaultmotivationdataTmp.sectionContent = 'Motivation for dette job'
+let defaultmotivationdata = new Motivation(defaultmotivationdataTmp.sectionName, 
+    defaultmotivationdataTmp.entries, defaultmotivationdataTmp.sectionNameLabel, 
+    defaultmotivationdataTmp.cssStyles, defaultmotivationdataTmp.sectionPosition,
+defaultmotivationdataTmp.sectionContent)
 
 
 
@@ -118,7 +124,9 @@ defaultcontactinfoTmp.sectionNameLabel = "CV for "
 defaultcontactinfoTmp.entries = defaultcontactinfoentries
 defaultcontactinfoTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
 defaultcontactinfoTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100}
-let defaultcontactinfo = new ContactInfo(defaultcontactinfoTmp.sectionName, defaultcontactinfoTmp.sectionNameLabel, defaultcontactinfoTmp.entries, defaultcontactinfoTmp.cssStyles, defaultcontactinfoTmp.sectionPosition)
+defaultcontactinfoTmp.sectionContent = 'Kontakt info'
+let defaultcontactinfo = new ContactInfo(defaultcontactinfoTmp.sectionName, defaultcontactinfoTmp.sectionNameLabel, 
+    defaultcontactinfoTmp.entries, defaultcontactinfoTmp.cssStyles, defaultcontactinfoTmp.sectionPosition, defaultcontactinfoTmp.sectionContent)
 
 
 
@@ -247,6 +255,7 @@ defaultworkingexperienceTmp.entries = defaultworkingExperienceEntries
 defaultworkingexperienceTmp.sectionNameLabel = 'Sektion'
 defaultworkingexperienceTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
 defaultworkingexperienceTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100 }
+defaultworkingexperienceTmp.sectionContent = 'Erfaring'
 
 let defaultworkingexperience = new WorkingExperience(
     defaultworkingexperienceTmp.sectionName,
@@ -254,7 +263,8 @@ let defaultworkingexperience = new WorkingExperience(
     defaultworkingexperienceTmp.entries,
     defaultworkingexperienceTmp.sectionNameLabel,
     defaultworkingexperienceTmp.cssStyles,
-    defaultworkingexperienceTmp.sectionPosition
+    defaultworkingexperienceTmp.sectionPosition,
+    defaultworkingexperienceTmp.sectionContent
 )
 
 
@@ -319,13 +329,15 @@ defaultskillsdataTmp.entries = defaultskillEntries
 defaultskillsdataTmp.sectionNameLabel = "Sektion";
 defaultskillsdataTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
 defaultskillsdataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100 }
+defaultskillsdataTmp.sectionContent = 'Færdigheder'
 
 let defaultskillsdata = new Skills(
     defaultskillsdataTmp.sectionName,
     defaultskillsdataTmp.entries,
     defaultskillsdataTmp.sectionNameLabel,
     defaultskillsdataTmp.cssStyles,
-    defaultskillsdataTmp.sectionPosition
+    defaultskillsdataTmp.sectionPosition,
+    defaultskillsdataTmp.sectionContent
 )
 
 
@@ -370,13 +382,15 @@ defaulteducationdataTmp.entries = defaulteducationentries
 defaulteducationdataTmp.sectionNameLabel = "Sektion"
 defaulteducationdataTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
 defaulteducationdataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100}
+defaulteducationdataTmp.sectionContent = 'Uddannelse'
 
 let defaulteducationdata = new Educations(
     defaulteducationdataTmp.sectionName,
     defaulteducationdataTmp.entries,
     defaulteducationdataTmp.sectionNameLabel,
     defaulteducationdataTmp.cssStyles,
-    defaulteducationdataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100 }
+    defaulteducationdataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100 },
+    defaulteducationdataTmp.sectionContent 
 )
 
 
@@ -423,12 +437,15 @@ defaultlanguagedataTmp.entries = defaultlanguageentries
 defaultlanguagedataTmp.sectionNameLabel = "Sektion"
 defaultlanguagedataTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
 defaultlanguagedataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100}
+defaultlanguagedataTmp.sectionContent = "Sprog"
+
 let defaultlanguagedata = new Languages(
     defaultlanguagedataTmp.sectionName,
     defaultlanguagedataTmp.entries,
     defaultlanguagedataTmp.sectionNameLabel,
     defaultlanguagedataTmp.cssStyles,
-    defaultlanguagedataTmp.sectionPosition
+    defaultlanguagedataTmp.sectionPosition,
+    defaultlanguagedataTmp.sectionContent
 )
 
  
@@ -454,16 +471,20 @@ defaultsparetimedataTmp.entries = defaultsparetimeentries
 defaultsparetimedataTmp.sectionNameLabel = "Sektion"
 defaultsparetimedataTmp.cssStyles = { backgroundColor: "#ffffff", color: "#000000", fontSize: "16px", fontWeight: "normal" }
 defaultsparetimedataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100}
+defaultsparetimedataTmp.sectionContent = "Fritid"
 
 let defaultsparetimedata = new Sparetime(
     defaultsparetimedataTmp.sectionName,
     defaultsparetimedataTmp.entries,
     defaultsparetimedataTmp.sectionNameLabel,
 defaultsparetimedataTmp.cssStyles,
-    defaultsparetimedataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100}
+    defaultsparetimedataTmp.sectionPosition = {  startXPosition: 1, startYPosition: 401 , width : 300 , height : 100},
+    defaultsparetimedataTmp.sectionContent = "Fritid"
 )
 
-
+let defaultCssStyles :  React.CSSProperties = (
+    {backgroundColor : '#ffffff'}
+)
 
 let defaultCVData = new CVData(
     defaultcontactinfo,
@@ -473,7 +494,8 @@ let defaultCVData = new CVData(
     defaultskillsdata,
     defaulteducationdata,
     defaultlanguagedata,
-    defaultsparetimedata
+    defaultsparetimedata,
+    defaultCssStyles
 );
 
 export { defaultcontactinfo }
@@ -492,7 +514,8 @@ let currenrCVData = new CVData(
     defaultskillsdata,
     defaulteducationdata,
     defaultlanguagedata,
-    defaultsparetimedata
+    defaultsparetimedata,
+    defaultCssStyles
 );
 
 export { currenrCVData }
@@ -530,52 +553,53 @@ export { currenrCVData }
 
 export function CopyCVDataToNew(CVdataCopyFrom: CVData): CVData {
 
+    let CssStyles : React.CSSProperties = CVdataCopyFrom.CssStyles;
     let cvContactInfo;
     if (true) {
-        let { sectionName, sectionNameLabel, entries, cssStyles, sectionPosition   } = CVdataCopyFrom.ContactInfo;
-        cvContactInfo = new ContactInfo (sectionName, sectionNameLabel, entries.map(ae => ({ ...ae })) , cssStyles, sectionPosition);
+        let { sectionName, sectionNameLabel, entries, cssStyles, sectionPosition , sectionContent  } = CVdataCopyFrom.ContactInfo;
+        cvContactInfo = new ContactInfo (sectionName, sectionNameLabel, entries.map(ae => ({ ...ae })) , cssStyles, sectionPosition, sectionContent);
     }
     
     let profile;
     if (true) {
-        let { sectionName, sectionNameLabel, entries, cssStyles, sectionPosition   } = CVdataCopyFrom.Profile;
-        profile = new Profile (sectionName, sectionNameLabel, entries.map(ae => ({ ...ae })), cssStyles, sectionPosition );
+        let { sectionName, sectionNameLabel, entries, cssStyles, sectionPosition , sectionContent  } = CVdataCopyFrom.Profile;
+        profile = new Profile (sectionName, sectionNameLabel, entries.map(ae => ({ ...ae })), cssStyles, sectionPosition , sectionContent);
     }
 
     let motivation;
     if (true) {
-        let { sectionName, entries, sectionNameLabel, cssStyles, sectionPosition   } = CVdataCopyFrom.Motivation;
-        motivation = new Motivation (sectionName,  entries.map(ae => ({ ...ae })), sectionNameLabel,cssStyles, sectionPosition );
+        let { sectionName, entries, sectionNameLabel, cssStyles, sectionPosition , sectionContent  } = CVdataCopyFrom.Motivation;
+        motivation = new Motivation (sectionName,  entries.map(ae => ({ ...ae })), sectionNameLabel,cssStyles, sectionPosition , sectionContent);
     }
 
     let workingExperience;
     if (true) {
-        let { sectionName, achivementstitle, entries, sectionNameLabel ,cssStyles, sectionPosition  } = CVdataCopyFrom.WorkingExperience;
-        workingExperience = new WorkingExperience (sectionName, achivementstitle,  entries.map(ae => ({ ...ae })), sectionNameLabel, cssStyles, sectionPosition );
+        let { sectionName, achivementstitle, entries, sectionNameLabel ,cssStyles, sectionPosition, sectionContent  } = CVdataCopyFrom.WorkingExperience;
+        workingExperience = new WorkingExperience (sectionName, achivementstitle,  entries.map(ae => ({ ...ae })), sectionNameLabel, cssStyles, sectionPosition , sectionContent );
     }
 
     let skills;
     if (true) {
-        let { sectionName,  entries, sectionNameLabel, cssStyles, sectionPosition   } = CVdataCopyFrom.Skills;
-        skills = new Skills (sectionName,   entries.map(ae => ({ ...ae })), sectionNameLabel, cssStyles, sectionPosition );
+        let { sectionName,  entries, sectionNameLabel, cssStyles, sectionPosition , sectionContent  } = CVdataCopyFrom.Skills;
+        skills = new Skills (sectionName,   entries.map(ae => ({ ...ae })), sectionNameLabel, cssStyles, sectionPosition , sectionContent );
     }
 
     let educations;
     if (true) {
-        let { sectionName,  entries, sectionNameLabel, cssStyles, sectionPosition   } = CVdataCopyFrom.Educations;
-        educations = new Educations (sectionName,   entries.map(ae => ({ ...ae })), sectionNameLabel,cssStyles, sectionPosition );
+        let { sectionName,  entries, sectionNameLabel, cssStyles, sectionPosition ,sectionContent  } = CVdataCopyFrom.Educations;
+        educations = new Educations (sectionName,   entries.map(ae => ({ ...ae })), sectionNameLabel,cssStyles, sectionPosition , sectionContent);
     }
 
     let languages;
     if (true) {
-        let { sectionName,  entries, sectionNameLabel , cssStyles, sectionPosition  } = CVdataCopyFrom.Languages;
-        languages = new Languages (sectionName,   entries.map(ae => ({ ...ae })), sectionNameLabel,cssStyles, sectionPosition );
+        let { sectionName,  entries, sectionNameLabel , cssStyles, sectionPosition , sectionContent } = CVdataCopyFrom.Languages;
+        languages = new Languages (sectionName,   entries.map(ae => ({ ...ae })), sectionNameLabel,cssStyles, sectionPosition , sectionContent);
     }
 
     let sparetime;
     if (true) {
-        let { sectionName,  entries, sectionNameLabel  , cssStyles, sectionPosition   } = CVdataCopyFrom.Sparetime;
-        sparetime = new Sparetime (sectionName,   entries.map(ae => ({ ...ae })), sectionNameLabel  , cssStyles, sectionPosition  );
+        let { sectionName,  entries, sectionNameLabel  , cssStyles, sectionPosition , sectionContent  } = CVdataCopyFrom.Sparetime;
+        sparetime = new Sparetime (sectionName,   entries.map(ae => ({ ...ae })), sectionNameLabel  , cssStyles, sectionPosition , sectionContent );
     }
 
 
@@ -587,7 +611,8 @@ export function CopyCVDataToNew(CVdataCopyFrom: CVData): CVData {
        skills,       
        educations,
         languages,
-        sparetime
+        sparetime,
+        CssStyles
     )
 
     return (copyOfCurrentCVData);
@@ -605,6 +630,7 @@ export function setNewCurrentCVData(CVdatanew: any) {
         { ...CVdatanew.Educations },
         { ...CVdatanew.Languages },
         { ...CVdatanew.Sparetime },
+        { ...CVdatanew.CssStyles },
     )
     currenrCVData = tmpCVData;
     

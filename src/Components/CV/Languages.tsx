@@ -1,29 +1,39 @@
+
 import { useCVData } from '../../GlobalData/GlobalCVDataContext';
+import ApplicationStyling from "../Common/ApplicationStyling";
 
 
 function Languages() {
 
-    const { currenrCVData, setCurrentCVData } = useCVData();
+const { currenrCVData, setCurrentCVData } = useCVData();
 
-    return (
-        <>         
 
-                <p className="section_title" id={currenrCVData.Languages.thisClassName}>
-             
-                    {currenrCVData.Languages.sectionName}
-                    </p>
 
-                {currenrCVData.Languages.entries.map((languageEntry, index) => (
+  const { thisClassName, entries } = currenrCVData.Languages;
 
-                    <div  key={index} className="language_entries_indent">
-                        <p className='language_entry_title'>{languageEntry.language}</p>
+  const {
+    sectionDivOuterStyle,
+    sectionInnerDivStyle,
+    paraGraphSectionStyle,
+    paraGraphStyle
+  } = ApplicationStyling(currenrCVData.Languages);
 
-                        <p className="language_entry_indent">{languageEntry.level}</p>
-                    </div>
-                ))}
-                <hr className="section_ruler"></hr>
-        </>
-    );
+  return (
+
+    <>
+      <div style={sectionDivOuterStyle}>
+        <div style={sectionInnerDivStyle}>
+          <p className="section_title" id={thisClassName} style={paraGraphSectionStyle}>
+            {/* Optional: section title */}
+          </p>
+
+          <div
+           dangerouslySetInnerHTML={{ __html: currenrCVData.Languages.sectionContent }}
+          />
+        </div>
+      </div>
+    </>
+  );
 }
 
-export default Languages;
+export default Languages; 

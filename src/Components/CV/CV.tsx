@@ -24,25 +24,16 @@ function CV() {
 
   return (
 
-    <div className="cv_content">
-     
-      <div className="cv_header_contact_info">
-        <ContactInfo />
-      </div>
-      <div className="cv_header">
-        <Motivation />
-      </div>
-      <div className="cv_right">
-        <Profile />
-        <WorkingHistory />
-      </div>
-      <div className="cv_left">
-        <Skills />
-        <Education />
-        <Languages />
-        <Sparetime />
-      </div>
-    </div>
+    <>
+    <ContactInfo />
+    <Profile />
+   <Motivation />
+   <Skills />
+   <Education />
+   <Languages />
+   <WorkingHistory />
+   <Sparetime />
+    </>
   );
 }
 

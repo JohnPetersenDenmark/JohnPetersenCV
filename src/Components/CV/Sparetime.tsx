@@ -1,32 +1,39 @@
 
-
-
-import { CVData } from '../../Classes/ClassesCVData';
 import { useCVData } from '../../GlobalData/GlobalCVDataContext';
-import {useState, useContext} from 'react';
+import ApplicationStyling from "../Common/ApplicationStyling";
+
 
 function Sparetime() {
 
 const { currenrCVData, setCurrentCVData } = useCVData();
 
-    return (
-        <>             
-        <div>
-            <p className="section_title" id={currenrCVData.Sparetime.thisClassName}>
-          
-                {currenrCVData.Sparetime.sectionName}
-                </p>
 
-            {currenrCVData.Sparetime.entries.map((SparetimeEntry, index) => (
 
-                <div  key={index}>
-                    <p style={{  lineHeight: '1.2'}} className='sparetime_entry_title'>{SparetimeEntry.interest}</p>                                                  
-                </div>
-            ))}
-            <hr className="section_ruler"></hr>
+  const { thisClassName, entries } = currenrCVData.Sparetime;
+
+  const {
+    sectionDivOuterStyle,
+    sectionInnerDivStyle,
+    paraGraphSectionStyle,
+    paraGraphStyle
+  } = ApplicationStyling(currenrCVData.Sparetime);
+
+  return (
+
+    <>
+      <div style={sectionDivOuterStyle}>
+        <div style={sectionInnerDivStyle}>
+          <p className="section_title" id={thisClassName} style={paraGraphSectionStyle}>
+            {/* Optional: section title */}
+          </p>
+
+          <div
+           dangerouslySetInnerHTML={{ __html: currenrCVData.Sparetime.sectionContent }}
+          />
         </div>
-        </>
-    );
-} 
+      </div>
+    </>
+  );
+}
 
-export default Sparetime;
+export default Sparetime; 

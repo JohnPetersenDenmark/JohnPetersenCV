@@ -1,28 +1,35 @@
 import { useCVData } from '../../GlobalData/GlobalCVDataContext';
+import ApplicationStyling from "../Common/ApplicationStyling";
 
 function Education() {
 
-    const { currenrCVData, setCurrentCVData } = useCVData();
+  const { currenrCVData, setCurrentCVData } = useCVData();
 
-    return (
-        <>                               
-            <p className="section_title" id={currenrCVData.Educations.thisClassName}>
-          
-                {currenrCVData.Educations.sectionName}
-                </p>
+  const { thisClassName, entries } = currenrCVData.Educations;
 
-            {currenrCVData.Educations.entries.map((educationEntry, index) => (
+  const {
+    sectionDivOuterStyle,
+    sectionInnerDivStyle,
+    paraGraphSectionStyle,
+    paraGraphStyle
+  } = ApplicationStyling(currenrCVData.Educations);
 
-                <div key={index} className="education_entries_indent">
-                    <p className='education_entry_title'>{educationEntry.title}</p>
-                    <p className="education_entry_indent">{educationEntry.todate}</p>
-                    <p className="education_entry_indent">{educationEntry.location}</p>                  
-                </div>
-            ))}
-       <hr className="section_ruler"></hr>
+  return (
 
-        </>
-    );
-} 
+    <>
+      <div style={sectionDivOuterStyle}>
+        <div style={sectionInnerDivStyle}>
+          <p className="section_title" id={thisClassName} style={paraGraphSectionStyle}>
+            {/* Optional: section title */}
+          </p>
+
+          <div
+           dangerouslySetInnerHTML={{ __html: currenrCVData.Educations.sectionContent }}
+          />
+        </div>
+      </div>
+    </>
+  );
+}
 
 export default Education;
