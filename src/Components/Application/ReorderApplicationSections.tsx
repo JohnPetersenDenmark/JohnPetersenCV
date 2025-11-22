@@ -7,6 +7,7 @@ import ApplicationContent from "./ApplicationContent";
 import { CopyApplicationDataToNew } from "../../GlobalData/GlobalApplicationData";
 import { SectionPosition } from "../../Classes/ClassesApplicationData";
 import { useApplicationData } from "../../GlobalData/GlobalApplicationDataContext";
+import { applicationAutoArrangeSections } from "./ApplicationAutoArrangeSections";
 import { useCVData } from "../../GlobalData/GlobalCVDataContext";
 
 import bg1 from "../../assets/resize.svg";
@@ -39,7 +40,7 @@ export default function ReorderApplicationSections() {
 
   const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
   const [isResizing, setIsResizing] = useState(false);
- // const [PDFConversion, setPDFConversion] = useState(true);
+  // const [PDFConversion, setPDFConversion] = useState(true);
   // const [draggingId, setDraggingId] = useState<string | null>(null);
 
   const [sections, setSections] = useState<any[]>(
@@ -48,7 +49,7 @@ export default function ReorderApplicationSections() {
     )
   );
 
-
+  const [update, forceUpdate] = useState(0);
 
   // const lastDropRef = useRef<{ time: number; id: string | null }>({ time: 0, id: null });
 
@@ -107,7 +108,7 @@ export default function ReorderApplicationSections() {
 
 
     },
-    []
+    [sections]
   );
 
   // ---------- Drop Handler (React-state version) ----------
@@ -262,8 +263,21 @@ export default function ReorderApplicationSections() {
     window.addEventListener("mouseup", stopResize);
   };
 
+  const handleAutoArrange = () => {
+    const tmpCopy = CopyApplicationDataToNew(currentApplicationData);
+    let newCurrentAppData = applicationAutoArrangeSections(tmpCopy)
+    setCurrentApplicationData(newCurrentAppData)
 
-   const handleDownloadPDF = () => {
+
+    setSections(Object.entries(newCurrentAppData).filter(
+      ([key]) => key !== "ApplicantContentHeadline" && key !== "CssStyles"
+    ))
+
+
+    //forceUpdate(c => c + 1);
+  }
+
+  const handleDownloadPDF = () => {
     const canvasEl = canvasRef.current;
     if (!canvasEl || !window.convertHTMLToPDFWithCallback) return;
 
@@ -278,42 +292,42 @@ export default function ReorderApplicationSections() {
       }
     })
 
-      /*
-           id = "moredummy" + index;
-           el = document.getElementById(id);
-           if (el) {
-             el.style.display = "none";
-             hiddenElements.push(el);
-           }
-         }); */
+    /*
+         id = "moredummy" + index;
+         el = document.getElementById(id);
+         if (el) {
+           el.style.display = "none";
+           hiddenElements.push(el);
+         }
+       }); */
 
-      const div = canvasRef.current;
-      if (!div) return;
+    const div = canvasRef.current;
+    if (!div) return;
 
-      div.style.removeProperty("background-size");
-      const hiddenSectionContainerDiv = document.getElementById("keepFromPDF");
-      if (hiddenSectionContainerDiv)
-        hiddenSectionContainerDiv.style.display = "none";
+    div.style.removeProperty("background-size");
+    const hiddenSectionContainerDiv = document.getElementById("keepFromPDF");
+    if (hiddenSectionContainerDiv)
+      hiddenSectionContainerDiv.style.display = "none";
 
-     window.convertHTMLToPDFWithCallback (div.outerHTML, (pdfBlob: Blob) => {
-        hiddenElements.forEach((el) => {
-          el.style.display = "";
-        });
-        div.style.backgroundImage = `
+    window.convertHTMLToPDFWithCallback(div.outerHTML, (pdfBlob: Blob) => {
+      hiddenElements.forEach((el) => {
+        el.style.display = "";
+      });
+      div.style.backgroundImage = `
         linear-gradient(to right, rgba(0,0,0,0.3) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
       `;
-        div.style.backgroundSize = "20px 20px";
-        if (hiddenSectionContainerDiv)
-          hiddenSectionContainerDiv.style.display = "block";
+      div.style.backgroundSize = "20px 20px";
+      if (hiddenSectionContainerDiv)
+        hiddenSectionContainerDiv.style.display = "block";
 
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(pdfBlob);
-        link.download = "my_application.pdf";
-        link.click();
-      }) 
-    
-    
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(pdfBlob);
+      link.download = "my_application.pdf";
+      link.click();
+    })
+
+
   }
 
 
@@ -329,8 +343,11 @@ export default function ReorderApplicationSections() {
       <button className="download_button" onClick={handleDownloadPDF}>
         Download PDF
       </button>
-      {/* <div ref={canvasRef} > */}
-      {/* MAIN container */}
+
+      <button onClick={handleAutoArrange}>
+        Autoarranger
+      </button>
+
       <div
         id="main"
         ref={canvasRef}
@@ -357,13 +374,13 @@ export default function ReorderApplicationSections() {
             }}
           >
 
- 
+
             <div className="text-yellow-400">
               {/* {section.sectionNameLabel} */}
               {section.component}
-             
+
               <div
-               
+
                 id={section.thisClassName + 'Dummy'}
                 onMouseDown={(e) =>
                   startResize(e, section.thisClassName)
@@ -391,7 +408,7 @@ export default function ReorderApplicationSections() {
                 />
 
               </div>
-           
+
 
             </div>
 
@@ -401,47 +418,47 @@ export default function ReorderApplicationSections() {
       </div>
 
 
-     
-        <div
-          ref={keepFromPDFRef}
-          id="keepFromPDF"
-          onDrop={(e) => handleDrop(e, "keepFromPDF")}
-          onDragOver={handleDragOver}
-          style={{
-            position: "absolute",
-            left: 1100,
-            top: 100,
-            width: "794px",
-            height: "1123px",
-            cursor: "grab",
-            backgroundColor: '#f5f0f0',
-          }}
-        // className="relative flex-1 min-h-[600px] bg-gray-700 border-2 border-gray-500 rounded-xl"
-        >
-          <h3 className="text-white p-2">Keep From PDF</h3>
-          {keepFromPDFSections.map(([key, section]) => (
-            <div
-              key={section.thisClassName}
-              draggable
-              onDragStart={(e) => handleDragStart(e, section.thisClassName)}
-              className="absolute cursor-grab rounded-lg border border-gray-700"
-              style={{
-                position: "absolute",
-                left: section.sectionPosition.startXPosition,
-                top: section.sectionPosition.startYPosition,
-                width: section.sectionPosition.width,
-                height: section.sectionPosition.height,
-                backgroundColor: section?.cssStyles?.backgroundColor || "#333",
-              }}
-            >
-              <div className="text-yellow-400">{section.sectionNameLabel}</div>
-              <div>
-                {section.component}
-              </div>
+
+      <div
+        ref={keepFromPDFRef}
+        id="keepFromPDF"
+        onDrop={(e) => handleDrop(e, "keepFromPDF")}
+        onDragOver={handleDragOver}
+        style={{
+          position: "absolute",
+          left: 1100,
+          top: 100,
+          width: "794px",
+          height: "1123px",
+          cursor: "grab",
+          backgroundColor: '#f5f0f0',
+        }}
+      // className="relative flex-1 min-h-[600px] bg-gray-700 border-2 border-gray-500 rounded-xl"
+      >
+        <h3 className="text-white p-2">Keep From PDF</h3>
+        {keepFromPDFSections.map(([key, section]) => (
+          <div
+            key={section.thisClassName}
+            draggable
+            onDragStart={(e) => handleDragStart(e, section.thisClassName)}
+            className="absolute cursor-grab rounded-lg border border-gray-700"
+            style={{
+              position: "absolute",
+              left: section.sectionPosition.startXPosition,
+              top: section.sectionPosition.startYPosition,
+              width: section.sectionPosition.width,
+              height: section.sectionPosition.height,
+              backgroundColor: section?.cssStyles?.backgroundColor || "#333",
+            }}
+          >
+            <div className="text-yellow-400">{section.sectionNameLabel}</div>
+            <div>
+              {section.component}
             </div>
-          ))}
-        </div>
-     
+          </div>
+        ))}
+      </div>
+
       {/* </div> */}
     </>
   );

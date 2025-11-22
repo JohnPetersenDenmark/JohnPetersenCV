@@ -176,7 +176,7 @@ function EditCVWithCV() {
                     </div>
 
                     <p>
-                        Ansøgningens baggrundsfarve
+                        CV baggrundsfarve
                     </p>
                     <SectionStyleEditor
                         section={{
