@@ -10,7 +10,9 @@ import { useApplicationData } from "../../GlobalData/GlobalApplicationDataContex
 import { applicationAutoArrangeSections } from "./ApplicationAutoArrangeSections";
 import { useCVData } from "../../GlobalData/GlobalCVDataContext";
 
-import bg1 from "../../assets/resize.svg";
+// import bg1 from "../../assets/resize.svg";
+
+import { ReactComponent as Bg1 } from "../../assets/resize.svg";
 
 declare global {
   interface Window {
@@ -82,6 +84,22 @@ export default function ReorderApplicationSections() {
     `,
     backgroundSize: "20px 20px",
   };
+
+function complementaryColor(hexColor : string) {
+  const num = parseInt(hexColor.slice(1), 16);
+  const r = 255 - (num >> 16);
+  const g = 255 - ((num >> 8) & 0xff);
+  const b = 255 - (num & 0xff);
+
+  let newColor =  '#' +  r.toString(16).padStart(2, "0") +
+    g.toString(16).padStart(2, "0") +
+    b.toString(16).padStart(2, "0")
+
+  return (newColor
+   
+  );
+}
+
 
   // ---------- Drag Start ----------
   const handleDragStart = useCallback(
@@ -292,15 +310,16 @@ export default function ReorderApplicationSections() {
       }
     })
 
-    /*
-         id = "moredummy" + index;
-         el = document.getElementById(id);
-         if (el) {
-           el.style.display = "none";
-           hiddenElements.push(el);
-         }
-       }); */
+    sections.forEach((section, index) => {
+      let id = section[1].thisClassName + "MoreDummy";
+      let el = document.getElementById(id);
+      if (el) {
+        el.style.display = "none";
+        hiddenElements.push(el);
+      }
+    })
 
+            
     const div = canvasRef.current;
     if (!div) return;
 
@@ -344,7 +363,7 @@ export default function ReorderApplicationSections() {
         Download PDF
       </button>
 
-      <button onClick={handleAutoArrange}>
+      <button className="download_button" onClick={handleAutoArrange}>
         Autoarranger
       </button>
 
@@ -376,8 +395,22 @@ export default function ReorderApplicationSections() {
 
 
             <div className="text-yellow-400">
-              {/* {section.sectionNameLabel} */}
-              {section.component}
+              <div
+               id={section.thisClassName + 'MoreDummy'}
+                style={{
+                  borderStyle : 'solid',
+                  borderWidth : '5px',
+                  color: "Yellow",
+                }}
+              >
+                {section.sectionNameLabel}
+              </div>
+
+              <div>
+                {section.component}
+              </div>
+
+
 
               <div
 
@@ -393,11 +426,14 @@ export default function ReorderApplicationSections() {
                   height: "25px",
                   cursor: "se-resize",
                   color: 'Green',
-                  backgroundColor: 'cyan'
+                  // backgroundColor: 'transparent'
+                  // backgroundColor: complementaryColor(section.cssStyles.backgroundColor)
                 }}
               >
 
-                <img
+                <Bg1 style={{ color: complementaryColor(section.cssStyles.backgroundColor), height : '20px', width : '20px' }} />
+
+               {/*  <img
                   src={bg1}
                   alt="resize"
                   style={{
@@ -405,14 +441,9 @@ export default function ReorderApplicationSections() {
                     height: "100%",
                     pointerEvents: "none",
                   }}
-                />
-
+                /> */}
               </div>
-
-
             </div>
-
-
           </div>
         ))}
       </div>
