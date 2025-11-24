@@ -4,7 +4,7 @@ import parse from 'html-react-parser';
 
 
 
-function ApplicationContent() {
+function ApplicantContent() {
 
     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
     if (!currentApplicationData?.ApplicantContent) {
@@ -35,4 +35,4 @@ function ApplicationContent() {
     );
 }
 
-export default ApplicationContent; 
+export default ApplicantContent; 

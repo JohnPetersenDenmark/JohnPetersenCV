@@ -2,8 +2,8 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import ApplicantInfo from "./ApplicantInfo";
 import EmployerInfo from "./EmployerInfo";
 import ApplicationJobTitle from "./ApplicationJobTitle";
-import ApplicationDate from "./ApplicationDate";
-import ApplicationContent from "./ApplicationContent";
+import ApplicationDate from "./ApplicationDate"; 
+import ApplicantContent from "./ApplicationContent";
 import { CopyApplicationDataToNew } from "../../GlobalData/GlobalApplicationData";
 import { SectionPosition } from "../../Classes/ClassesApplicationData";
 import { useApplicationData } from "../../GlobalData/GlobalApplicationDataContext";
@@ -36,7 +36,7 @@ export default function ReorderApplicationSections() {
     EmployerInfo,
     ApplicationJobTitle,
     ApplicationDate,
-    ApplicationContent,
+    ApplicantContent,
     ApplicantInfo,
   };
 
@@ -62,9 +62,7 @@ export default function ReorderApplicationSections() {
       tmpSection[1].thisClassName === "ApplicantContent"
         ? "ApplicationContent"
         : tmpSection[1].thisClassName;
-    const Component = componentMap[componentName];
-    const component = Component ? <Component /> : null;
-    tmpSection[1].component = component;
+    const Component = componentMap[componentName];  
   }
 
   // ---------- Styles ----------
@@ -85,20 +83,20 @@ export default function ReorderApplicationSections() {
     backgroundSize: "20px 20px",
   };
 
-function complementaryColor(hexColor : string) {
-  const num = parseInt(hexColor.slice(1), 16);
-  const r = 255 - (num >> 16);
-  const g = 255 - ((num >> 8) & 0xff);
-  const b = 255 - (num & 0xff);
+  function complementaryColor(hexColor: string) {
+    const num = parseInt(hexColor.slice(1), 16);
+    const r = 255 - (num >> 16);
+    const g = 255 - ((num >> 8) & 0xff);
+    const b = 255 - (num & 0xff);
 
-  let newColor =  '#' +  r.toString(16).padStart(2, "0") +
-    g.toString(16).padStart(2, "0") +
-    b.toString(16).padStart(2, "0")
+    let newColor = '#' + r.toString(16).padStart(2, "0") +
+      g.toString(16).padStart(2, "0") +
+      b.toString(16).padStart(2, "0")
 
-  return (newColor
-   
-  );
-}
+    return (newColor
+
+    );
+  }
 
 
   // ---------- Drag Start ----------
@@ -122,7 +120,7 @@ function complementaryColor(hexColor : string) {
       );
 
       //  console.log(JSON.stringify({ id, startX, startY }));
-      console.log(JSON.stringify({ id, offsetX, offsetY }));
+      // console.log(JSON.stringify({ id, offsetX, offsetY }));
 
 
     },
@@ -319,7 +317,7 @@ function complementaryColor(hexColor : string) {
       }
     })
 
-            
+
     const div = canvasRef.current;
     if (!div) return;
 
@@ -377,6 +375,7 @@ function complementaryColor(hexColor : string) {
       >
         {/* <h3 className="text-white p-2">Main</h3> */}
         {mainSections.map(([key, section]) => (
+
           <div
             // ref={sectionRef}
             key={section.thisClassName}
@@ -396,18 +395,24 @@ function complementaryColor(hexColor : string) {
 
             <div className="text-yellow-400">
               <div
-               id={section.thisClassName + 'MoreDummy'}
+                id={section.thisClassName + 'MoreDummy'}
                 style={{
-                  borderStyle : 'solid',
-                  borderWidth : '5px',
-                  color: "Yellow",
+                  borderStyle: 'solid',
+                  borderWidth: '0px',
+                  fontWeight: 700,
+                  color: section.cssStyles.backgroundColor,
+                  backgroundColor: complementaryColor(section.cssStyles.backgroundColor)
                 }}
               >
                 {section.sectionNameLabel}
               </div>
 
               <div>
-                {section.component}
+
+
+                {componentMap[section.thisClassName] &&
+                  React.createElement(componentMap[section.thisClassName])
+                }
               </div>
 
 
@@ -431,9 +436,9 @@ function complementaryColor(hexColor : string) {
                 }}
               >
 
-                <Bg1 style={{ color: complementaryColor(section.cssStyles.backgroundColor), height : '20px', width : '20px' }} />
+                <Bg1 style={{ color: complementaryColor(section.cssStyles.backgroundColor), height: '20px', width: '20px' }} />
 
-               {/*  <img
+                {/*  <img
                   src={bg1}
                   alt="resize"
                   style={{
@@ -484,7 +489,10 @@ function complementaryColor(hexColor : string) {
           >
             <div className="text-yellow-400">{section.sectionNameLabel}</div>
             <div>
-              {section.component}
+              {/* {section.component} */}
+               {componentMap[section.thisClassName] &&
+                  React.createElement(componentMap[section.thisClassName])
+                }
             </div>
           </div>
         ))}
