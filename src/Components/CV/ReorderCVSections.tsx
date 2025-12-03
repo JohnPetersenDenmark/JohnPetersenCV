@@ -9,6 +9,7 @@ import Sparetime from './Sparetime';
 
 import React, { useRef, useCallback, useState } from "react";
 import bg1 from "../../assets/resize.svg";
+import { CVAutoArrangeSections } from "./CVAutoArrangeSections";
 
 
 import { CopyCVDataToNew } from '../../GlobalData/GlobalCVData';
@@ -29,14 +30,14 @@ export default function ReorderCVSections() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const keepFromPDFRef = useRef<HTMLDivElement>(null);
 
-    const [isResizing, setIsResizing] = useState(false);
- 
+  const [isResizing, setIsResizing] = useState(false);
+
 
   const componentMap: Record<string, React.FC> = {
 
     Motivation,
     Profile,
-    Skills, 
+    Skills,
     Educations,
     ContactInfo,
     Languages,
@@ -45,26 +46,26 @@ export default function ReorderCVSections() {
   };
 
   const { currenrCVData, setCurrentCVData } = useCVData();
-  
+
   const [sections, setSections] = useState<any[]>(
-      Object.entries(currenrCVData).filter(
-        ([key]) => key !== "ApplicantContentHeadline" && key !== "CssStyles"
-      )
-    );
+    Object.entries(currenrCVData).filter(
+      ([key]) => key !== "ApplicantContentHeadline" && key !== "CssStyles"
+    )
+  );
 
   // Build dynamic components
-  for (let g = 0; g < sections.length; g++) {
-    let tmpSection = sections[g];
-    let componentName =tmpSection[1].thisClassName;
-    
-    const Component = componentMap[componentName];
-    const component = Component ? <Component /> : 'Component not found';
-    if (Component === null)
-    {
-      let x = 1;
-    }
-    tmpSection[1].component = component;
-  }
+  /*  for (let g = 0; g < sections.length; g++) {
+     let tmpSection = sections[g];
+     let componentName =tmpSection[1].thisClassName;
+     
+     const Component = componentMap[componentName];
+     const component = Component ? <Component /> : 'Component not found';
+     if (Component === null)
+     {
+       let x = 1;
+     }
+     tmpSection[1].component = component;
+   } */
 
   // ---------- Styles ----------
   const mainDivStyle: React.CSSProperties = {
@@ -83,6 +84,8 @@ export default function ReorderCVSections() {
     `,
     backgroundSize: "20px 20px",
   };
+
+
 
   // ---------- Drag Start ----------
   const handleDragStart = useCallback(
@@ -264,8 +267,17 @@ export default function ReorderCVSections() {
     window.addEventListener("mouseup", stopResize);
   };
 
+  const handleAutoArrange = () => {
+    const tmpCopy = CopyCVDataToNew(currenrCVData);
+    let newCurrentCVData = CVAutoArrangeSections(tmpCopy)
+    setCurrentCVData(newCurrentCVData)
 
-   const handleDownloadPDF = () => {
+
+    setSections(Object.entries(newCurrentCVData).filter(
+      ([key]) => key !== "ApplicantContentHeadline" && key !== "CssStyles"
+    ))
+  }
+  const handleDownloadPDF = () => {
     const canvasEl = canvasRef.current;
     if (!canvasEl || !window.convertHTMLToPDFWithCallback) return;
 
@@ -280,42 +292,42 @@ export default function ReorderCVSections() {
       }
     })
 
-      /*
-           id = "moredummy" + index;
-           el = document.getElementById(id);
-           if (el) {
-             el.style.display = "none";
-             hiddenElements.push(el);
-           }
-         }); */
+    /*
+         id = "moredummy" + index;
+         el = document.getElementById(id);
+         if (el) {
+           el.style.display = "none";
+           hiddenElements.push(el);
+         }
+       }); */
 
-      const div = canvasRef.current;
-      if (!div) return;
+    const div = canvasRef.current;
+    if (!div) return;
 
-      div.style.removeProperty("background-size");
-      const hiddenSectionContainerDiv = document.getElementById("keepFromPDF");
-      if (hiddenSectionContainerDiv)
-        hiddenSectionContainerDiv.style.display = "none";
+    div.style.removeProperty("background-size");
+    const hiddenSectionContainerDiv = document.getElementById("keepFromPDF");
+    if (hiddenSectionContainerDiv)
+      hiddenSectionContainerDiv.style.display = "none";
 
-     window.convertHTMLToPDFWithCallback (div.outerHTML, (pdfBlob: Blob) => {
-        hiddenElements.forEach((el) => {
-          el.style.display = "";
-        });
-        div.style.backgroundImage = `
+    window.convertHTMLToPDFWithCallback(div.outerHTML, (pdfBlob: Blob) => {
+      hiddenElements.forEach((el) => {
+        el.style.display = "";
+      });
+      div.style.backgroundImage = `
         linear-gradient(to right, rgba(0,0,0,0.3) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
       `;
-        div.style.backgroundSize = "20px 20px";
-        if (hiddenSectionContainerDiv)
-          hiddenSectionContainerDiv.style.display = "block";
+      div.style.backgroundSize = "20px 20px";
+      if (hiddenSectionContainerDiv)
+        hiddenSectionContainerDiv.style.display = "block";
 
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(pdfBlob);
-        link.download = "my_application.pdf";
-        link.click();
-      }) 
-    
-    
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(pdfBlob);
+      link.download = "my_application.pdf";
+      link.click();
+    })
+
+
   }
 
 
@@ -330,6 +342,10 @@ export default function ReorderCVSections() {
     <>
       <button className="download_button" onClick={handleDownloadPDF}>
         Download PDF
+      </button>
+
+      <button className="download_button" onClick={handleAutoArrange}>
+        Autoarranger
       </button>
       {/* <div ref={canvasRef} > */}
       {/* MAIN container */}
@@ -359,12 +375,14 @@ export default function ReorderCVSections() {
             }}
           >
 
- 
+
             <div className="text-yellow-400">
               {/* {section.sectionNameLabel} */}
-              {section.component}   
+              {componentMap[section.thisClassName] &&
+                React.createElement(componentMap[section.thisClassName])
+              }
               <div
-               
+
                 id={section.thisClassName + 'Dummy'}
                 onMouseDown={(e) =>
                   startResize(e, section.thisClassName)
@@ -392,7 +410,7 @@ export default function ReorderCVSections() {
                 />
 
               </div>
-           
+
 
             </div>
 
@@ -402,47 +420,49 @@ export default function ReorderCVSections() {
       </div>
 
 
-     
-        <div
-          ref={keepFromPDFRef}
-          id="keepFromPDF"
-          onDrop={(e) => handleDrop(e, "keepFromPDF")}
-          onDragOver={handleDragOver}
-          style={{
-            position: "absolute",
-            left: 1100,
-            top: 100,
-            width: "794px",
-            height: "1123px",
-            cursor: "grab",
-            backgroundColor: '#f5f0f0',
-          }}
-        // className="relative flex-1 min-h-[600px] bg-gray-700 border-2 border-gray-500 rounded-xl"
-        >
-          <h3 className="text-white p-2">Keep From PDF</h3>
-          {keepFromPDFSections.map(([key, section]) => (
-            <div
-              key={section.thisClassName}
-              draggable
-              onDragStart={(e) => handleDragStart(e, section.thisClassName)}
-              className="absolute cursor-grab rounded-lg border border-gray-700"
-              style={{
-                position: "absolute",
-                left: section.sectionPosition.startXPosition,
-                top: section.sectionPosition.startYPosition,
-                width: section.sectionPosition.width,
-                height: section.sectionPosition.height,
-                backgroundColor: section?.cssStyles?.backgroundColor || "#333",
-              }}
-            >
-              <div className="text-yellow-400">{section.sectionNameLabel}</div>
-              <div>
-                {section.component}
-              </div>
+
+      <div
+        ref={keepFromPDFRef}
+        id="keepFromPDF"
+        onDrop={(e) => handleDrop(e, "keepFromPDF")}
+        onDragOver={handleDragOver}
+        style={{
+          position: "absolute",
+          left: 1100,
+          top: 100,
+          width: "794px",
+          height: "1123px",
+          cursor: "grab",
+          backgroundColor: '#f5f0f0',
+        }}
+      // className="relative flex-1 min-h-[600px] bg-gray-700 border-2 border-gray-500 rounded-xl"
+      >
+        <h3 className="text-white p-2">Keep From PDF</h3>
+        {keepFromPDFSections.map(([key, section]) => (
+          <div
+            key={section.thisClassName}
+            draggable
+            onDragStart={(e) => handleDragStart(e, section.thisClassName)}
+            className="absolute cursor-grab rounded-lg border border-gray-700"
+            style={{
+              position: "absolute",
+              left: section.sectionPosition.startXPosition,
+              top: section.sectionPosition.startYPosition,
+              width: section.sectionPosition.width,
+              height: section.sectionPosition.height,
+              backgroundColor: section?.cssStyles?.backgroundColor || "#333",
+            }}
+          >
+            <div className="text-yellow-400">{section.sectionNameLabel}</div>
+            <div>
+              {componentMap[section.thisClassName] &&
+                React.createElement(componentMap[section.thisClassName])
+              }
             </div>
-          ))}
-        </div>
-     
+          </div>
+        ))}
+      </div>
+
       {/* </div> */}
     </>
   );

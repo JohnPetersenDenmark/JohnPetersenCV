@@ -56,14 +56,14 @@ export default function ReorderApplicationSections() {
   // const lastDropRef = useRef<{ time: number; id: string | null }>({ time: 0, id: null });
 
   // Build dynamic components
-  for (let g = 0; g < sections.length; g++) {
+ /*  for (let g = 0; g < sections.length; g++) {
     let tmpSection = sections[g];
     let componentName =
       tmpSection[1].thisClassName === "ApplicantContent"
         ? "ApplicationContent"
         : tmpSection[1].thisClassName;
     const Component = componentMap[componentName];  
-  }
+  } */
 
   // ---------- Styles ----------
   const mainDivStyle: React.CSSProperties = {
