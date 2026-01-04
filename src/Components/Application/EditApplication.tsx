@@ -1,10 +1,10 @@
-import {  CopyApplicationDataToNew } from '../../GlobalData/GlobalApplicationData';
+import { CopyApplicationDataToNew } from '../../GlobalData/GlobalApplicationData';
 
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import CustomQuillEditor from '../Common/RichtextEditorQuill';
+
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 
 import SaveApplicationDataToFile from '../Application/SaveApplicationDataToFile'
@@ -15,25 +15,30 @@ import { EmployerInfo, ApplicantInfo, ApplicantContent, ApplicationDate, Applica
 import { ApplicantInfoEntry, ApplicantContentEntry, ApplicationDateEntry, EmployerInfoEntry, ApplicationJobTitleEntry, ApplicantContentHeadlineEntry } from '../../Classes/ClassesApplicationData';
 
 import SectionStyleEditor from '../Common/SectionStyleEditor';
+import RichTextEditor from '../Common/RichTextEditor';
+import TextToHtml from '../Common/TextToHtml';
+import RichTextViewer from '../Common/RichTextViewer';
 
 function EditApplication() {
 
     const selectedSectionRef = useRef<string>();
     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
     const [sectionDetails, setSectionDetails] = useState<string>('');
-  
+
     const [currentSectionData, setCurrentSectionData] = useState({} as ApplicantInfo | EmployerInfo | ApplicantContent | ApplicationDate | ApplicationJobTitle | ApplicantContentHeadline)
     const [selectedSectionClassName, setSelectedSectionClassName] = useState('')
 
+    const [selectedSectionRawData, setelectedSectionRawData] = useState('')
+
     const [fromDraggedEntry, setFromDraggedEntry] = useState({} as ApplicantInfoEntry | ApplicantContentEntry | ApplicationDateEntry | EmployerInfoEntry | ApplicationJobTitleEntry | ApplicantContentHeadlineEntry)
- //   let [action, setAction] = useState('edit')    
+    //   let [action, setAction] = useState('edit')    
     const navigate = useNavigate();
 
 
     useEffect(() => {
         const onBeforeUnload = (event: BeforeUnloadEvent) => {
             // Prevent the user from leaving the page
-            event.preventDefault();           
+            event.preventDefault();
         };
 
         window.addEventListener('beforeunload', onBeforeUnload);
@@ -82,6 +87,7 @@ function EditApplication() {
     };
 
     const handleRichTextEditorChange = (editorHtml: string) => {
+
         const sectionClassName = selectedSectionRef.current;
         if (!sectionClassName) return;
 
@@ -103,7 +109,7 @@ function EditApplication() {
     function goToPDFPage() {
         navigate("/reorderapp");
     }
-   
+
     const handleStyleChange = (id: string, newStyle: React.CSSProperties) => {
 
         let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
@@ -177,50 +183,49 @@ function EditApplication() {
                         }}
                         onStyleChange={handleApplicationStyleChange}
                     />
-                   
-                        <form className='edit_form'>
-                            {selectedSectionClassName ?
-                                <>
-                                    <p>
-                                        Afsnittets baggrundsfarve
-                                    </p>
-                                    <SectionStyleEditor
-                                        section={{
 
-                                            sectionId: selectedSectionClassName,
-                                            cssStyles: currentSectionData.cssStyles,
-                                        }}
-                                        onStyleChange={handleStyleChange}
-                                    /> </> : ''}
-                            <div>
-                                {/*  <p> 
-                                    Richtext editor
+                    <form className='edit_form'>
+                        {selectedSectionClassName ?
+                            <>
+                                <p>
+                                    Afsnittets baggrundsfarve
                                 </p>
-                                 */}
+                                <SectionStyleEditor
+                                    section={{
 
-                                {selectedSectionClassName ?
-                                    <CustomQuillEditor
-                                        className="my-quill-editor"
-                                        // @ts-ignore   
-                                        value={currentApplicationData[selectedSectionClassName].sectionContent}
-                                        sectionClassName={selectedSectionClassName}
-                                        onChange={handleRichTextEditorChange}
-                                    />
-                                    : ''}
-                            </div>
-                            {/*   <div>
+                                        sectionId: selectedSectionClassName,
+                                        cssStyles: currentSectionData.cssStyles,
+                                    }}
+                                    onStyleChange={handleStyleChange}
+                                /> </> : ''}
+
+                        {/*   <div>
                                 <p> from richtext editor </p>
                                 {sectionDetails}
                             </div> */}
 
-                           
-                        </form>                      
+                        {/* <RichTextViewer html={sectionDetails} /> */}
+
+
+
+                    </form>
+
+                    <div style={{ marginTop: "1.5rem" }}>
+                        {selectedSectionClassName ?
+                            <RichTextEditor value={currentSectionData.sectionContent} onChange={handleRichTextEditorChange} readOnly={false} /> : ''}
+                    </div>
+
+
+                    {/* <TextToHtml htmlString={sectionDetails} /> */}
                 </div>
+
                 <div className='edit_content_app'>
                     <Application />
                 </div>
             </div>
-        </div>
+
+        </div> 
+
     )
 }
 

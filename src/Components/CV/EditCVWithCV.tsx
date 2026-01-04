@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CopyCVDataToNew, setNewCurrentCVData, } from '../../GlobalData/GlobalCVData';
 import SectionStyleEditor from '../Common/SectionStyleEditor';
-import CustomQuillEditor from '../Common/RichtextEditorQuill';
 import GetCVFileLocal from './GetCVFileLocal';
 import SaveCVDataToFile from './SaveCVDataToFile';
 
@@ -207,7 +206,7 @@ function EditCVWithCV() {
                                 </p>
                                  */}
 
-                                {selectedSectionClassName ?
+                               {/*  {selectedSectionClassName ?
                                     <CustomQuillEditor
                                         className="my-quill-editor"
                                         // @ts-ignore   
@@ -215,7 +214,7 @@ function EditCVWithCV() {
                                         sectionClassName={selectedSectionClassName}
                                         onChange={handleRichTextEditorChange}
                                     />
-                                    : ''}
+                                    : ''} */}
                             </div>
                             {/*   <div>
                                 <p> from richtext editor </p>

@@ -11,7 +11,7 @@ import { ApplicationDataProvider } from './GlobalData/GlobalApplicationDataConte
 import { CVDataProvider } from './GlobalData/GlobalCVDataContext';
 import ReorderApplicationSections from './Components/Application/ReorderApplicationSections';
 import ReorderCVSections from './Components/CV/ReorderCVSections';
-
+import './index.css'
 
 const _ = require('lodash');
 
