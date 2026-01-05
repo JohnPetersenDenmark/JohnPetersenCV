@@ -72,10 +72,11 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-1 border-b pb-1 mb-2 bg-red-100">
+    <div className="flex flex-wrap items-center gap-1 border-b pb-1 mb-2">
 
       {/* Bold */}
       <IconButton
+      
         active={editor.isActive("bold")}
         onClick={() => editor.chain().focus().toggleBold().run()}
       >
@@ -242,10 +243,17 @@ const IconButton = ({ children, onClick, active, title }: IconButtonProps) => (
     type="button"
     title={title}
     onClick={onClick}
-    className={`p - 1 rounded hover: bg - gray - 200 ${active ? "bg-gray-300" : ""
-      }`}
+   /*   className={`p - 1 rounded hover: bg - gray - 200 ${active ? "bg-primaryBackgroundColor" : ""
+      }`} */
+
+      //  className={"bg-secondaryBackgroundColor hover:bg-addToBasketHoverColor"}
+
+     
   >
-    {children}
+    <div className="bg-secondaryBackgroundColor">
+      {children}
+    </div>
+    
   </button>
 );
 

@@ -5,14 +5,14 @@ import { CopyCVDataToNew, setNewCurrentCVData, } from '../../GlobalData/GlobalCV
 import SectionStyleEditor from '../Common/SectionStyleEditor';
 import GetCVFileLocal from './GetCVFileLocal';
 import SaveCVDataToFile from './SaveCVDataToFile';
+import RichTextEditor from '../Common/RichTextEditor';
 
 import { useCVData } from '../../GlobalData/GlobalCVDataContext';
 
 import { ContactInfo, Sparetime, Skills, WorkingExperience, Languages, Educations, Motivation, Profile } from '../../Classes/ClassesCVData';
 import { ContactInfoEntry, EducationEntry, LanguageEntry, MotivationEntry, ProfileEntry, SkillEntry, SparetimeEntry, WorkingExperienceEntry } from "../../Classes/ClassesCVData";
 
-//import AddCVSectionEntry from './AddCVSectionEntry'
-import { sortSectionEntries } from '../../Utilities/Misc'
+
 
 
 import CV from './CV'
@@ -222,7 +222,11 @@ function EditCVWithCV() {
                             </div> */}
 
                            
-                        </form>                      
+                        </form>      
+                        <div style={{ marginTop: "1.5rem" }}>
+                        {selectedSectionClassName ?
+                            <RichTextEditor value={currentSectionData.sectionContent} onChange={handleRichTextEditorChange} readOnly={false} /> : ''}
+                    </div>                
                 </div>
                 <div className='edit_content_app'>
                     <CV />

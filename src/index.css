@@ -508,7 +508,7 @@ label {
 
 .edit_content {
   display: grid;
-  grid-template-columns:  300px 500px 960px;
+  grid-template-columns:  10px 1000px 800px;
   grid-auto-rows: minmax(150px, auto);
   max-width: 1760px;
   margin: 0px auto;

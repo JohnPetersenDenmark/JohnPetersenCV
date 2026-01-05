@@ -1,6 +1,8 @@
 import CV from '../../Components/CV/CV'
 import Application from '../../Components/Application/Application'
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { theme } from '../../Utilities/myconfig';
 
 
 import { useState } from 'react';
@@ -17,6 +19,21 @@ var _ = require('lodash');
 function Home(props: any) {
 
     const navigate = useNavigate();
+
+
+ useEffect(() => {
+    
+    const root = document.documentElement;
+
+    root.style.setProperty("--primary-background-color", theme.primaryBackGroundColor);
+    root.style.setProperty("--secondary-background-color", theme.secondaryBackgroundColor ?? theme.primaryBackGroundColor);
+    root.style.setProperty("--third-background-color", theme.thirdGreyBackgroundColor ?? theme.thirdGreyBackgroundColor);
+     root.style.setProperty("--addto-basket-color", theme.addToBasketHoverColor ?? theme.addToBasketHoverColor);
+    root.style.setProperty("--primary-text-color", theme.primaryTextColor);
+    root.style.setProperty("--secondary-text-color", theme.secondaryTextColor ?? theme.primaryTextColor);
+    root.style.setProperty("--hover-menuactions-color", theme.hoverMenuActions ?? theme.hoverMenuActions);
+  }, []);
+
     function goToEditApplicationPage() {
 
         navigate("/editapp");
