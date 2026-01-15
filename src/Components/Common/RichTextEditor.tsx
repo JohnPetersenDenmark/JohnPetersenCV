@@ -1,6 +1,6 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 
-import { tiptapExtensions } from "./RichTextEditorExtension";
+import { tiptapExtensions } from "../RichTextEditorExtension";
 
 
 import { useEffect } from "react";
