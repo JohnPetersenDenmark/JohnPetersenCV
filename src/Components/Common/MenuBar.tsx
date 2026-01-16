@@ -1,6 +1,6 @@
 import { Editor, type Content, } from "@tiptap/react";
 import { useState } from "react";
-
+import { baseUrl } from "../../Utilities/myconfig";
 import type { htmlBit } from "./ModalSelectHTMLbits";
 import ModalSelectHTMLbits from "./ModalSelectHTMLbits";
 
@@ -8,13 +8,12 @@ import { UnicodeIconPicker } from "./UnicodeIconPicker";
 import { FileCodeCorner, FileTypeCorner, ALargeSmall } from "lucide-react";
 
 import {
+  PaintBucket,
   Bold,
   Italic,
   List,
   ListOrdered,
-  Type,
   Palette,
-  PaintBucket,
   RotateCcw,
 } from "lucide-react";
 
@@ -57,7 +56,7 @@ const sizes = [
 ];
 
 export const MenuBar = ({ editor }: MenuBarProps) => {
- 
+
 
   const [isOpen, setIsOpen] = useState(false);
   const [isIconPickerOpen, setIconPickerOpen] = useState(false);
@@ -82,7 +81,7 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
 
     editor
       .chain()
-      .updateAttributes('paragraph', { indent: current + 1 })
+      .updateAttributes('paragraph', { indent: current + 10 })
       .focus()
       .run()
   }
@@ -203,11 +202,12 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
       <Divider />
 
       <button onClick={() => increaseIndent(editor)}>
-        <img src="/images/IndentLeft.svg" alt="Logo" height={iconButtonSize} width={iconButtonSize} />
+
+        <img src={`${process.env.PUBLIC_URL}/images/IndentLeft.svg`} alt="Logo" height={iconButtonSize} width={iconButtonSize} />
       </button>
 
       <button onClick={() => decreaseIndent(editor)}>
-        <img src="/images/outdentLeft.svg" alt="Logo" height={iconButtonSize} width={iconButtonSize} />
+        <img src={`${process.env.PUBLIC_URL}/images/outdentLeft.svg`} alt="Logo" height={iconButtonSize} width={iconButtonSize} />
       </button>
 
       <Divider />
@@ -226,7 +226,7 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
         type="button"
         onClick={() => setIconPickerOpen(true)}
       >
-        <img src="/images/Icons.svg" alt="Logo" height={iconButtonSize} width={iconButtonSize} />
+        <img src={`${process.env.PUBLIC_URL}/images/icons.svg`} alt="Logo" height={iconButtonSize} width={iconButtonSize} />
       </button>
 
       {isIconPickerOpen && <UnicodeIconPicker
@@ -289,7 +289,7 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
       <Divider />
 
       <div onClick={toggleFontLineHeightSelectionOpen}>
-        <img src="/images/LineHeight.svg" alt="Logo" height={iconButtonSize} width={iconButtonSize} />
+        <img src={`${process.env.PUBLIC_URL}/images/LineHeight.svg`} alt="Logo" height={iconButtonSize} width={iconButtonSize} />
       </div>
 
       {lineHeightSelectOpen &&
@@ -325,7 +325,7 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
 
       <div onClick={toggleFontSizeSelectionOpen}>
         <img
-          src="/images/FontSize.svg"
+          src={`${process.env.PUBLIC_URL}/images/fontsize.svg`}
           height={iconButtonSize}
           width={iconButtonSize}
           alt="Font-størrelse"
@@ -362,7 +362,7 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
       <Divider />
 
       {/* Text color */}
-      <label className="cursor-pointer">
+      <label className="text-gray-900 cursor-pointer">
         <Palette size={iconButtonSize} />
         <input
           type="color"
@@ -375,23 +375,29 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
 
       <Divider />
 
+
       {/* Background color */}
-      <label className="cursor-pointer">
-        <PaintBucket size={iconButtonSize} />
-        <input
-          type="color"
-          className="hidden"
-          onChange={(e) => {
-            editor
-              .chain()
-              .focus()
-              .setMark("highlight", {
-                color: e.target.value,
-              })
-              .run();
-          }}
-        />
+
+      <label className="text-gray-900 cursor-pointer"
+        htmlFor="highlight-color"      
+      >
+       <PaintBucket size={iconButtonSize} />
       </label>
+
+      {/* <PaintBucket size={20} /> */}
+      <input
+        id="highlight-color"
+        type="color"
+         className="hidden"
+        onChange={(e) => {
+          editor
+            .chain()
+            .focus()
+            .setMark("highlight", { color: e.target.value })
+            .run()
+        }}
+      />
+
 
       <Divider />
 
@@ -399,7 +405,7 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
       <IconButton onClick={resetStyles} title="Reset formatting">
         <RotateCcw size={iconButtonSize} />
       </IconButton>
-    </div>
+    </div >
   );
 };
 
@@ -417,7 +423,7 @@ const IconButton = ({ children, onClick, active, title }: IconButtonProps) => (
     type="button"
     title={title}
     onClick={onClick}
-    className={`p - 1 rounded hover: bg - gray - 200 ${active ? "bg-gray-300" : ""
+    className={`p-1 rounded hover: bg-gray - 200 ${active ? "bg-gray-300" : ""
       }`}
   >
     {children}

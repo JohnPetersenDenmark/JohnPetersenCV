@@ -9,9 +9,12 @@ export const IndentableParagraph = Paragraph.extend({
         renderHTML: attrs => {
           if (!attrs.indent) return {}
           return {
-            'data-indent': attrs.indent,
+           // 'data-indent': attrs.indent,
+            // 'margin-left' : attrs.indent,
+             style: `margin-left: ${attrs.indent}`,
           }
-        },
+        }
+       // parseHTML: element => element.style.lineHeight || null,
       },
     }
   },
