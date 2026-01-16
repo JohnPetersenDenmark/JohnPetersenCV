@@ -1,67 +1,42 @@
 import { Paragraph } from '@tiptap/extension-paragraph'
+import { mergeAttributes } from '@tiptap/core'
 
 const ParagraphWithLineHeightAndIndent = Paragraph.extend({
     addAttributes() {
         return {
             indent: {
                 default: null,
-                renderHTML: attributes => {
-
-                   if (attributes.lineHeight && (!attributes.indent)) {
-                        let lineHeightStyle =
-                        {
-                            style: `line-height: ${attributes.lineHeight}`
-                        }
-                        return lineHeightStyle;
-                    }
-
-                    if (attributes.indent && (!attributes.lineHeight)) {
-                        let indentStyle =
-                        {
-                            style: ` margin-inline: ${attributes.indent}px`
-                        }
-                        return indentStyle
-                    }
-
-                    if (attributes.indent && attributes.lineHeight) {
-                       return {style: `line-height: ${attributes.lineHeight}  margin-inline: ${attributes.indent}px`}
-                    }
-
-                    return {}
-
-                },
-                parseHTML: element => element.style.lineHeight || null,
+                parseHTML: element =>
+                    element.style.marginInline
+                        ? parseInt(element.style.marginInline)
+                        : null,
             },
+
             lineHeight: {
                 default: null,
-                renderHTML: attributes => {
-
-                   if (attributes.lineHeight && (!attributes.indent)) {
-                        let lineHeightStyle =
-                        {
-                            style: `line-height: ${attributes.lineHeight}`
-                        }
-                        return lineHeightStyle;
-                    }
-
-                    if (attributes.indent && (!attributes.lineHeight)) {
-                        let indentStyle =
-                        {
-                            style: ` margin-inline: ${attributes.indent}px`
-                        }
-                        return indentStyle
-                    }
-
-                    if (attributes.indent && attributes.lineHeight) {
-                       return {style: `line-height: ${attributes.lineHeight}  margin-inline: ${attributes.indent}px`}
-                    }
-
-                    return {}
-
-                },
                 parseHTML: element => element.style.lineHeight || null,
-            }
+            },
         }
+    },
+
+    renderHTML({ HTMLAttributes }) {
+        const styles: string[] = []
+
+        if (HTMLAttributes.indent) {
+            styles.push(`margin-inline: ${HTMLAttributes.indent}px`)
+            delete HTMLAttributes.indent
+        }
+
+        if (HTMLAttributes.lineHeight) {
+            styles.push(`line-height: ${HTMLAttributes.lineHeight}`)
+            delete HTMLAttributes.lineHeight
+        }
+
+        if (styles.length) {
+            HTMLAttributes.style = styles.join('; ')
+        }
+
+        return ['p', HTMLAttributes, 0]
     },
 })
 

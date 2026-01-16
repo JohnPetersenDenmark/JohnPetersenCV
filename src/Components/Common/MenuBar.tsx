@@ -6,6 +6,7 @@ import ModalSelectHTMLbits from "./ModalSelectHTMLbits";
 
 import { UnicodeIconPicker } from "./UnicodeIconPicker";
 import { FileCodeCorner, FileTypeCorner, ALargeSmall } from "lucide-react";
+import { CommandProps } from '@tiptap/core'
 
 import {
   PaintBucket,
@@ -77,25 +78,59 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
   const increaseIndent = (editor: any) => {
     if (!editor) return
 
-    const current = editor.getAttributes('paragraph').indent ?? 0
+    /*  const currentIndent = editor.getAttributes('paragraph').indent ?? 0   
+    
+     editor
+       .chain()
+       .updateAttributes('paragraph', { indent: currentIndent + 10} )
+       .focus()
+       .run() */
 
-    editor
-      .chain()
-      .updateAttributes('paragraph', { indent: current + 10 })
-      .focus()
-      .run()
+    editor.chain().focus().command( ({ state, tr }: CommandProps) => {
+        const { from, to } = state.selection
+
+        state.doc.nodesBetween(from, to, (node, pos) => {
+          if (node.type.name === 'paragraph') {
+            const indent = node.attrs.indent ?? 0
+
+            tr.setNodeMarkup(pos, undefined, {
+              ...node.attrs,
+              indent: indent + 10,
+            })
+          }
+        })
+
+        return true
+      }
+    ).run()
+
   }
+
+
 
   const decreaseIndent = (editor: any) => {
     if (!editor) return
 
     const current = editor.getAttributes('paragraph').indent ?? 0
 
-    editor
-      .chain()
-      .updateAttributes('paragraph', { indent: Math.max(0, current - 1) })
-      .focus()
-      .run()
+    editor.chain().focus().command( ({ state, tr }: CommandProps) => {
+        const { from, to } = state.selection
+
+        state.doc.nodesBetween(from, to, (node, pos) => {
+          if (node.type.name === 'paragraph') {
+            const indent = node.attrs.indent ?? 0
+
+            tr.setNodeMarkup(pos, undefined, {
+              ...node.attrs,
+              indent: indent -10,
+            })
+          }
+        })
+
+        return true
+      }
+    ).run()
+
   }
 
   const resetStyles = () => {
@@ -110,8 +145,27 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
     return;
   }
 
-  function setLineHeight(lineHeight: string) {
-    editor.chain().focus().setNode('paragraph', { lineHeight: lineHeight }).run()
+  function setLineHeight(selectedLineHeight: string) {
+   // editor.chain().focus().setNode('paragraph', { lineHeight: lineHeight }).run()
+
+
+     editor.chain().focus().command( ({ state, tr }: CommandProps) => {
+        const { from, to } = state.selection
+
+        state.doc.nodesBetween(from, to, (node, pos) => {
+          if (node.type.name === 'paragraph') {
+            const lineHeight = node.attrs.lineHeight ?? 0
+
+            tr.setNodeMarkup(pos, undefined, {
+              ...node.attrs,
+              lineHeight: selectedLineHeight
+            })
+          }
+        })
+
+        return true
+      }
+    ).run()
   }
 
   function setFontSize(fontSize: string) {
@@ -379,16 +433,16 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
       {/* Background color */}
 
       <label className="text-gray-900 cursor-pointer"
-        htmlFor="highlight-color"      
+        htmlFor="highlight-color"
       >
-       <PaintBucket size={iconButtonSize} />
+        <PaintBucket size={iconButtonSize} />
       </label>
 
       {/* <PaintBucket size={20} /> */}
       <input
         id="highlight-color"
         type="color"
-         className="hidden"
+        className="hidden"
         onChange={(e) => {
           editor
             .chain()

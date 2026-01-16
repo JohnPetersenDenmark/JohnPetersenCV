@@ -1,4 +1,4 @@
-export const baseUrl = "http://192.168.1.52:5000"
+export const baseUrl = "http://192.168.1.58:5000"
 
 export const theme = {
     primaryBackGroundColor: "#00b8d7",
