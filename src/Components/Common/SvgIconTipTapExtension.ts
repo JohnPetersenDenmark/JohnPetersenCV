@@ -6,8 +6,8 @@ export const SvgIconTipTapExtension = Node.create({
   inline: true,
   group: 'inline',
   atom: false,            // NOT atomic → caret can be before/after
-  selectable: true,
- draggable : true,
+ /*  selectable: true,
+ draggable : true , */
 
   addAttributes() {
     return {

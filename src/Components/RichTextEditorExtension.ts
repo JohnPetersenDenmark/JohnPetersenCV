@@ -17,9 +17,11 @@ import { SvgIconTipTapExtension } from "./Common/SvgIconTipTapExtension";
 import ParagraphWithLineHeightAndIndent from "./Common/ParagraphWithLineHeightAndIndent";
 import TaskList from '@tiptap/extension-task-list'
 import TaskItem from '@tiptap/extension-task-item'
+import Subscript from '@tiptap/extension-subscript'
+import Superscript from '@tiptap/extension-superscript'
 
 export const tiptapExtensions = [
-  StarterKit.configure({   
+  StarterKit.configure({
     //  paragraph: false,
   }),
 
@@ -29,13 +31,15 @@ export const tiptapExtensions = [
   TaskItem,
   Checkmark,
   RawHTML,
+  Subscript,
+  Superscript,
   Rating,
   RatingUserSelection,
-   SvgIconTipTapExtension,
-   ParagraphWithLineHeightAndIndent,
+  SvgIconTipTapExtension,
+  ParagraphWithLineHeightAndIndent,
   Color,
   Image,
-  FontSize,  
+  FontSize,
   BulletList,
   OrderedList,
   ListItem,

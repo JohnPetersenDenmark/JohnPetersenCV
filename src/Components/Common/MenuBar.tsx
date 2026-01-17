@@ -24,9 +24,12 @@ type MenuBarProps = {
 };
 
 const fonts = [
+  { label: 'System', value: 'system-ui, sans-serif' },
+  { label: 'Serif', value: 'serif' },
   { label: "Arial", value: "Arial" },
-  { label: "Serif", value: "Georgia" },
-  { label: 'Roboto', value: 'Roboto' }
+  { label: 'Sans', value: 'sans-serif' },
+  { label: 'Roboto', value: 'Roboto' },
+  { label: 'Mono', value: 'monospace' }
 ];
 
 const lineHeightoptions = [
@@ -86,22 +89,22 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
        .focus()
        .run() */
 
-    editor.chain().focus().command( ({ state, tr }: CommandProps) => {
-        const { from, to } = state.selection
+    editor.chain().focus().command(({ state, tr }: CommandProps) => {
+      const { from, to } = state.selection
 
-        state.doc.nodesBetween(from, to, (node, pos) => {
-          if (node.type.name === 'paragraph') {
-            const indent = node.attrs.indent ?? 0
+      state.doc.nodesBetween(from, to, (node, pos) => {
+        if (node.type.name === 'paragraph') {
+          const indent = node.attrs.indent ?? 0
 
-            tr.setNodeMarkup(pos, undefined, {
-              ...node.attrs,
-              indent: indent + 10,
-            })
-          }
-        })
+          tr.setNodeMarkup(pos, undefined, {
+            ...node.attrs,
+            indent: indent + 10,
+          })
+        }
+      })
 
-        return true
-      }
+      return true
+    }
     ).run()
 
   }
@@ -113,22 +116,22 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
 
     const current = editor.getAttributes('paragraph').indent ?? 0
 
-    editor.chain().focus().command( ({ state, tr }: CommandProps) => {
-        const { from, to } = state.selection
+    editor.chain().focus().command(({ state, tr }: CommandProps) => {
+      const { from, to } = state.selection
 
-        state.doc.nodesBetween(from, to, (node, pos) => {
-          if (node.type.name === 'paragraph') {
-            const indent = node.attrs.indent ?? 0
+      state.doc.nodesBetween(from, to, (node, pos) => {
+        if (node.type.name === 'paragraph') {
+          const indent = node.attrs.indent ?? 0
 
-            tr.setNodeMarkup(pos, undefined, {
-              ...node.attrs,
-              indent: indent -10,
-            })
-          }
-        })
+          tr.setNodeMarkup(pos, undefined, {
+            ...node.attrs,
+            indent: indent - 10,
+          })
+        }
+      })
 
-        return true
-      }
+      return true
+    }
     ).run()
 
   }
@@ -146,25 +149,25 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
   }
 
   function setLineHeight(selectedLineHeight: string) {
-   // editor.chain().focus().setNode('paragraph', { lineHeight: lineHeight }).run()
+    // editor.chain().focus().setNode('paragraph', { lineHeight: lineHeight }).run()
 
 
-     editor.chain().focus().command( ({ state, tr }: CommandProps) => {
-        const { from, to } = state.selection
+    editor.chain().focus().command(({ state, tr }: CommandProps) => {
+      const { from, to } = state.selection
 
-        state.doc.nodesBetween(from, to, (node, pos) => {
-          if (node.type.name === 'paragraph') {
-            const lineHeight = node.attrs.lineHeight ?? 0
+      state.doc.nodesBetween(from, to, (node, pos) => {
+        if (node.type.name === 'paragraph') {
+          const lineHeight = node.attrs.lineHeight ?? 0
 
-            tr.setNodeMarkup(pos, undefined, {
-              ...node.attrs,
-              lineHeight: selectedLineHeight
-            })
-          }
-        })
+          tr.setNodeMarkup(pos, undefined, {
+            ...node.attrs,
+            lineHeight: selectedLineHeight
+          })
+        }
+      })
 
-        return true
-      }
+      return true
+    }
     ).run()
   }
 
@@ -260,21 +263,13 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
         <img src={`${process.env.PUBLIC_URL}/images/IndentLeft.svg`} alt="Logo" height={iconButtonSize} width={iconButtonSize} />
       </button>
 
+<Divider />
       <button onClick={() => decreaseIndent(editor)}>
         <img src={`${process.env.PUBLIC_URL}/images/outdentLeft.svg`} alt="Logo" height={iconButtonSize} width={iconButtonSize} />
       </button>
 
       <Divider />
 
-      {/* Ordered list */}
-      <IconButton
-        active={editor.isActive("orderedList")}
-        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-      >
-        <ListOrdered size={iconButtonSize} />
-      </IconButton>
-
-      <Divider />
 
       <button
         type="button"
@@ -305,13 +300,22 @@ export const MenuBar = ({ editor }: MenuBarProps) => {
         <FileTypeCorner size={iconButtonSize} />
       </div>
 
-      {/*  {fontSelectOpen ? <select onChange={(e) => setFont(e.target.value)}>
-        <option value="Arial">Arial</option>
-        <option value="Georgia">Georgia</option>
-        <option value="Roboto">Roboto</option>
-      </select> : ''} */}
+ <Divider />
+      <button
+        onClick={() => editor.chain().focus().toggleSubscript().run()}
+        className={editor.isActive('subscript') ? 'active' : ''}
+      >
+         <img src={`${process.env.PUBLIC_URL}/images/subscript.svg`} alt="Logo" height={iconButtonSize} width={iconButtonSize} />
+      </button>
+ <Divider />
+      <button
+        onClick={() => editor.chain().focus().toggleSuperscript().run()}
+        className={editor.isActive('subscript') ? 'active' : ''}
+      >
+         <img src={`${process.env.PUBLIC_URL}/images/superscript.svg`} alt="Logo" height={iconButtonSize} width={iconButtonSize} />       
+      </button>
 
-
+ <Divider />
       {fontSelectOpen &&
 
         <div
