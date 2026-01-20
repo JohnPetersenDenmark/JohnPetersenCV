@@ -24,7 +24,7 @@ function DownloadDataFiles() {
                         <p>
                             Vælg ansøgning
                         </p>
-                        <GetApplicationFileLocal />
+                        {/* <GetApplicationFileLocal /> */}
 
 
 

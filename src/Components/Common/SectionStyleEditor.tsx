@@ -23,9 +23,10 @@ if (!section.cssStyles || !section.sectionId)
   return (
     <div className="style-editor p-4 border-l border-gray-300 bg-gray-50 w-64">
       {/* <h3 className="font-semibold text-lg mb-3">{section.sectionId}</h3> */}
-      <div className="flex flex-col gap-3 text-sm">
+      {/* <div className="flex flex-col gap-3 text-sm"> */}
+      <div>
         <label>
-          {/* Baggrundsfarve: */}
+       
           <input
             type="color"
             value={section.cssStyles.backgroundColor as string}

@@ -6,6 +6,10 @@ import { useNavigate } from 'react-router-dom';
 
 
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
+//import { ApplicationData } from '../../Classes/ClassesApplicationData';
+
+//import { currentApplicationData ,setCurrentApplicationData } from '../../GlobalData/GlobalApplicationData';
+
 
 import SaveApplicationDataToFile from '../Application/SaveApplicationDataToFile'
 import GetApplicationFileLocal from '../Application/GetApplicationFileLocal'
@@ -16,22 +20,18 @@ import { ApplicantInfoEntry, ApplicantContentEntry, ApplicationDateEntry, Employ
 
 import SectionStyleEditor from '../Common/SectionStyleEditor';
 import RichTextEditor from '../Common/RichTextEditor';
-import TextToHtml from '../Common/TextToHtml';
-import RichTextViewer from '../Common/RichTextViewer';
+
 
 function EditApplication() {
 
     const selectedSectionRef = useRef<string>();
+
+
     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
-    const [sectionDetails, setSectionDetails] = useState<string>('');
 
     const [currentSectionData, setCurrentSectionData] = useState({} as ApplicantInfo | EmployerInfo | ApplicantContent | ApplicationDate | ApplicationJobTitle | ApplicantContentHeadline)
     const [selectedSectionClassName, setSelectedSectionClassName] = useState('')
 
-    const [selectedSectionRawData, setelectedSectionRawData] = useState('')
-
-    const [fromDraggedEntry, setFromDraggedEntry] = useState({} as ApplicantInfoEntry | ApplicantContentEntry | ApplicationDateEntry | EmployerInfoEntry | ApplicationJobTitleEntry | ApplicantContentHeadlineEntry)
-    //   let [action, setAction] = useState('edit')    
     const navigate = useNavigate();
 
 
@@ -68,22 +68,15 @@ function EditApplication() {
         appGrid.style.backgroundColor = backgroundColor
     }
 
+    function onFileChanged(fileJSONcontent: any) {
+        setCurrentApplicationData(fileJSONcontent);
+    }
+
     const handleClick = (event: any) => {
         const sectionName = event.target.id;
 
         selectedSectionRef.current = sectionName;
         setSelectedSectionClassName(sectionName);
-
-        const tmpCopy = CopyApplicationDataToNew(currentApplicationData);
-        // @ts-ignore   
-        const application_section = tmpCopy[sectionName];
-
-        //    setSectionData( application_section.sectionContent)
-
-        //   setCurrentApplicationData(tmpCopy);
-
-        setCurrentSectionData(application_section);
-        setSectionDetails(application_section.sectionContent);
     };
 
     const handleRichTextEditorChange = (editorHtml: string) => {
@@ -95,22 +88,20 @@ function EditApplication() {
         // @ts-ignore   
         let application_section = tmpCopy[sectionClassName];
 
-        if (application_section.sectionContent === editorHtml) return;
+        // if (application_section.sectionContent === editorHtml) return;
 
         application_section.sectionContent = editorHtml;
         // @ts-ignore   
         tmpCopy[sectionClassName] = application_section;
 
-        setSectionDetails(editorHtml);
         setCurrentApplicationData(tmpCopy);
-        // setCurrentSectionData(application_section);
     };
 
     function goToPDFPage() {
         navigate("/reorderapp");
     }
 
-    const handleStyleChange = (id: string, newStyle: React.CSSProperties) => {
+    /* const handleStyleChange = (id: string, newStyle: React.CSSProperties) => {
 
         let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
         let application_section;
@@ -119,6 +110,19 @@ function EditApplication() {
         application_section.cssStyles = newStyle;
         setCurrentApplicationData(tmpCopyApplicationdata);
         setCurrentSectionData(application_section);
+    }; */
+
+    const handleStyleChange = ( newBackgroundColor: string) => {
+
+        let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
+        
+        // @ts-ignore   
+        let application_section = tmpCopyApplicationdata[selectedSectionClassName]
+         application_section.cssStyles.backgroundColor= newBackgroundColor;
+          // @ts-ignore   
+         tmpCopyApplicationdata[selectedSectionClassName] = application_section
+        setCurrentApplicationData(tmpCopyApplicationdata);
+       // setCurrentSectionData(application_section);
     };
 
     const handleApplicationStyleChange = (id: string, newStyle: React.CSSProperties) => {
@@ -140,7 +144,7 @@ function EditApplication() {
                     <div style={{
                         marginBottom: '20px'
                     }}>
-                        <GetApplicationFileLocal />
+                        <GetApplicationFileLocal onChange={onFileChanged} />
                     </div>
                     <div style={{
                         marginBottom: '20px'
@@ -184,39 +188,29 @@ function EditApplication() {
                         onStyleChange={handleApplicationStyleChange}
                     />
 
-                    <form className='edit_form'>
-                        {selectedSectionClassName ?
-                            <>
-                                <p>
-                                    Afsnittets baggrundsfarve
-                                </p>
-                                <SectionStyleEditor
-                                    section={{
-
-                                        sectionId: selectedSectionClassName,
-                                        cssStyles: currentSectionData.cssStyles,
-                                    }}
-                                    onStyleChange={handleStyleChange}
-                                /> </> : ''}
-
-                        {/*   <div>
-                                <p> from richtext editor </p>
-                                {sectionDetails}
-                            </div> */}
-
-                        {/* <RichTextViewer html={sectionDetails} /> */}
+                    {/* <form className='edit_form'> */}
 
 
+                    <p>
+                        Afsnittets baggrundsfarve
+                    </p>
 
-                    </form>
+                     { selectedSectionClassName && 
+                    <input
+                        type="color"
+                       // @ts-ignore  
+                        value={currentApplicationData[selectedSectionClassName].cssStyles.backgroundColor}
+                     onChange={(e) => handleStyleChange( e.target.value)}
+                    />
+                    }
+
+                    {/* </form> */}
 
                     <div style={{ marginTop: "1.5rem" }}>
                         {selectedSectionClassName ?
-                            <RichTextEditor value={currentSectionData.sectionContent} onChange={handleRichTextEditorChange} readOnly={false} /> : ''}
+                            // @ts-ignore   
+                            <RichTextEditor value={currentApplicationData[selectedSectionClassName].sectionContent} onChange={handleRichTextEditorChange} readOnly={false} /> : ''}
                     </div>
-
-
-                    {/* <TextToHtml htmlString={sectionDetails} /> */}
                 </div>
 
                 <div className='edit_content_app'>
@@ -224,7 +218,7 @@ function EditApplication() {
                 </div>
             </div>
 
-        </div> 
+        </div>
 
     )
 }

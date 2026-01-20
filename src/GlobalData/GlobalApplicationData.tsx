@@ -163,7 +163,7 @@ let defaultapplicationContent = new ApplicantContent(
     'Brødtekst',
     { backgroundColor: "#00b8d7", color: "#000000", fontSize: "16px", fontWeight: "normal" },
      {  startXPosition: 0, startYPosition: 0 , width : 300 , height : 100},
-     '',
+     'Default content',
      'main'
 
 )
@@ -329,6 +329,7 @@ export function setCurrentApplicationData(applicationdatanew: any) {
     // currentApplicationData = tmpApplicationData;
 
     currentApplicationData = applicationdatanew;
+    let x = 1;
 }
 
 export function setNewCurrentApplicationData(applicationdatanew: any) {

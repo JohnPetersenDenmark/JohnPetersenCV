@@ -1,11 +1,18 @@
 
 import { useState } from 'react';
-import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
+//import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
+// import { setCurrentApplicationData } from '../../GlobalData/GlobalApplicationData';
 
-function GetApplicationFileLocal(props: any) {
+interface PropsGetLocalFile {
+  onChange: (html: any) => void; 
+}
+// const  GetApplicationFileLocal : React.FC<PropsGetLocalFile> = ({onChange}) {
 
+  const GetApplicationFileLocal: React.FC<PropsGetLocalFile> = ({ onChange, }) => {
+  
+  
   const [fileContent, setFileContent] = useState("");
-  const { setCurrentApplicationData } = useApplicationData();
+ // const { setCurrentApplicationData } = useApplicationData();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -18,7 +25,7 @@ function GetApplicationFileLocal(props: any) {
         try {
           const jsonData = JSON.parse(text); // 👈 Parse the JSON
           setFileContent(jsonData);
-          setCurrentApplicationData(jsonData);
+          onChange(jsonData);
 
         } catch (error) {
           console.error('Invalid JSON file:', error);
