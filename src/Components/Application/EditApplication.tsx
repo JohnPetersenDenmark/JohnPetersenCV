@@ -128,7 +128,7 @@ function EditApplication() {
     const handleApplicationStyleChange = (id: string, newStyle: React.CSSProperties) => {
         let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
         tmpCopyApplicationdata["CssStyles"] = newStyle
-        setCurrentApplicationData(tmpCopyApplicationdata);
+        setCurrentApplicationData(tmpCopyApplicationdata); 
     };
 
     if (currentApplicationData === null) {
