@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { ApplicationData } from '../Classes/ClassesApplicationData';
 
+
 import {
   currentApplicationData as globalAppData,
   setCurrentApplicationData as setGlobalAppData,

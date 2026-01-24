@@ -1,18 +1,15 @@
 
 import { useState } from 'react';
-//import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
-// import { setCurrentApplicationData } from '../../GlobalData/GlobalApplicationData';
+import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
+import { useNavigationFlow } from '../Common/NavigationFlowContext';
+import { useNavigate } from 'react-router-dom';
 
-interface PropsGetLocalFile {
-  onChange: (html: any) => void; 
-}
-// const  GetApplicationFileLocal : React.FC<PropsGetLocalFile> = ({onChange}) {
+const GetApplicationFileLocal: React.FC = () => {
 
-  const GetApplicationFileLocal: React.FC<PropsGetLocalFile> = ({ onChange, }) => {
-  
-  
   const [fileContent, setFileContent] = useState("");
- // const { setCurrentApplicationData } = useApplicationData();
+   const { setCurrentApplicationData } = useApplicationData();
+   const navigate = useNavigate();
+   const { setFlowResult } = useNavigationFlow();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -24,8 +21,10 @@ interface PropsGetLocalFile {
       if (typeof text === 'string') {
         try {
           const jsonData = JSON.parse(text); // 👈 Parse the JSON
+          setCurrentApplicationData(jsonData);
           setFileContent(jsonData);
-          onChange(jsonData);
+          handleSuccess();
+        navigate("/");
 
         } catch (error) {
           console.error('Invalid JSON file:', error);
@@ -34,6 +33,10 @@ interface PropsGetLocalFile {
       }
     };
     reader.readAsText(file);
+  };
+
+const handleSuccess = () => {
+    setFlowResult('success');
   };
 
 

@@ -25,6 +25,7 @@ import RichTextEditor from '../Common/RichTextEditor';
 function EditApplication() {
 
     const selectedSectionRef = useRef<string>();
+    const navigate = useNavigate();
 
 
     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
@@ -32,7 +33,7 @@ function EditApplication() {
     const [currentSectionData, setCurrentSectionData] = useState({} as ApplicantInfo | EmployerInfo | ApplicantContent | ApplicationDate | ApplicationJobTitle | ApplicantContentHeadline)
     const [selectedSectionClassName, setSelectedSectionClassName] = useState('')
 
-    const navigate = useNavigate();
+   
 
 
     useEffect(() => {
@@ -144,7 +145,7 @@ function EditApplication() {
                     <div style={{
                         marginBottom: '20px'
                     }}>
-                        <GetApplicationFileLocal onChange={onFileChanged} />
+                        {/* <GetApplicationFileLocal onChange={onFileChanged} /> */}
                     </div>
                     <div style={{
                         marginBottom: '20px'
