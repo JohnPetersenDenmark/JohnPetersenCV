@@ -70,11 +70,11 @@ export default function ReorderApplicationSections() {
     position: "absolute",
     top: '100px',
     left: '60px',
-    width: "794px",
+    width: "850px",
     height: "1123px",
    // height: "1200px",
     background: currentApplicationData?.CssStyles?.backgroundColor ?? "Blue",
-    margin: "20px auto",
+   // margin: "20px auto",
     border: "2px dashed #ccc",
     borderRadius: "12px",
     backgroundImage: `

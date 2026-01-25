@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
-import { useNavigationFlow } from '../Common/NavigationFlowContext';
+//import { useNavigationFlow } from '../Common/NavigationFlowContext';
 import { useNavigate } from 'react-router-dom';
 
 const GetApplicationFileLocal: React.FC = () => {
@@ -9,7 +9,7 @@ const GetApplicationFileLocal: React.FC = () => {
   const [fileContent, setFileContent] = useState("");
    const { setCurrentApplicationData } = useApplicationData();
    const navigate = useNavigate();
-   const { setFlowResult } = useNavigationFlow();
+  // const { setFlowResult } = useNavigationFlow();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -23,8 +23,8 @@ const GetApplicationFileLocal: React.FC = () => {
           const jsonData = JSON.parse(text); // 👈 Parse the JSON
           setCurrentApplicationData(jsonData);
           setFileContent(jsonData);
-          handleSuccess();
-        navigate("/");
+          // handleSuccess();
+       // navigate("/");
 
         } catch (error) {
           console.error('Invalid JSON file:', error);
@@ -35,9 +35,9 @@ const GetApplicationFileLocal: React.FC = () => {
     reader.readAsText(file);
   };
 
-const handleSuccess = () => {
+/* const handleSuccess = () => {
     setFlowResult('success');
-  };
+  }; */
 
 
   return (

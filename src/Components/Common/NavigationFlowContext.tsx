@@ -3,10 +3,13 @@ import { createContext, useContext, useState } from 'react';
 
 type FlowResult = 'success' | 'cancel' | null;
 export type AppFlow =
-    | 'NONE'
+    | 'NONE' 
     | 'IMPORT_APPLICATION'
     | 'EDIT_APPLICATION'
-    | 'REORDER_APPLICATION';
+    | 'REORDER_APPLICATION'
+    | 'SAVE_APPLICATION'
+    | 'APPLICATION_TOPDF'
+    | 'APPLICATION_BACK'
 
 interface NavigationFlowContextType {
     flow: AppFlow;

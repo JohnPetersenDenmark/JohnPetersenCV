@@ -6,6 +6,7 @@ import { CVDataProvider } from './GlobalData/GlobalCVDataContext';
 import ReorderApplicationSections from './Components/Application/ReorderApplicationSections';
 import GetApplicationFileLocal from './Components/Application/GetApplicationFileLocal';
 import { NavigationFlowProvider } from './Components/Common/NavigationFlowContext';
+import SaveApplicationDataToFile from './Components/Application/SaveApplicationDataToFile';
 import MainLayout from './Components/Common/MainLayout';
 import './index.css'
 
@@ -24,6 +25,7 @@ function App() {
               <Route path="getapplication" element={<GetApplicationFileLocal />} />
               <Route path="editapp" element={<EditApplication />} />
               <Route path="reorderapp" element={<ReorderApplicationSections />} />
+              <Route path="saveapp" element={<SaveApplicationDataToFile />} />
             </Route>
           </Routes>
         </CVDataProvider>

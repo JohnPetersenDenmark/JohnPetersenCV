@@ -13,77 +13,77 @@
 
 
   <script>
-      function convertUrlToPdf(url_to_convert, OnFinishCallBack) {
-     //let something =   GrabzIt("YzUxNzM2ODI1OWQ4NGViYWI2OTE4NWUxYTc4YWY2MjQ").ConvertURL(url_to_convert,
-    //    { "format": "pdf", "download": 1 , "onfinish" : OnFinishCallBack, "background" : 1, "bwidth" : 960 , "mtop" :5, "mbottom" : 5, "mleft" : 5, "mright" : 5}  ).Create();  
-       // let something =   GrabzIt("YzUxNzM2ODI1OWQ4NGViYWI2OTE4NWUxYTc4YWY2MjQ").ConvertURL(url_to_convert,
+    function convertUrlToPdf(url_to_convert, OnFinishCallBack) {
+      //let something =   GrabzIt("YzUxNzM2ODI1OWQ4NGViYWI2OTE4NWUxYTc4YWY2MjQ").ConvertURL(url_to_convert,
+      //    { "format": "pdf", "download": 1 , "onfinish" : OnFinishCallBack, "background" : 1, "bwidth" : 960 , "mtop" :5, "mbottom" : 5, "mleft" : 5, "mright" : 5}  ).Create();  
+      // let something =   GrabzIt("YzUxNzM2ODI1OWQ4NGViYWI2OTE4NWUxYTc4YWY2MjQ").ConvertURL(url_to_convert,
       //  { "format": "pdf", "onfinish" : OnFinishCallBack}  ).AddTo("pdfid");   
 
       GrabzIt("YzUxNzM2ODI1OWQ4NGViYWI2OTE4NWUxYTc4YWY2MjQ").ConvertURL(url_to_convert,
-{"format": "docx"}).Create();
+        { "format": "docx" }).Create();
     }
 
   </script>
 
-<script>
-  /**
-   * Converts HTML to PDF using GrabzIt and returns the PDF data via callback.
-   * @param {string} htmlContent - The HTML string to convert.
-   * @param {function} callback - Function that receives the PDF Blob.
-   */
-  function convertHTMLToPDFWithCallback(htmlContent, callback) {
-    if (!window.GrabzIt) {
-      alert("GrabzIt SDK not loaded yet!");
-      return;
+  <script>
+    /**
+     * Converts HTML to PDF using GrabzIt and returns the PDF data via callback.
+     * @param {string} htmlContent - The HTML string to convert.
+     * @param {function} callback - Function that receives the PDF Blob.
+     */
+    function convertHTMLToPDFWithCallback(htmlContent, callback) {
+      if (!window.GrabzIt) {
+        alert("GrabzIt SDK not loaded yet!");
+        return;
+      }
+
+      if (!htmlContent) {
+        alert("No HTML content provided!");
+        return;
+      }
+
+      // Convert Data URI to Blob
+      function dataURItoBlob(dataURI) {
+        const byteString = atob(dataURI.split(",")[1]);
+        const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
+        return new Blob([ab], { type: mimeString });
+      }
+
+      const grabzIt = new GrabzIt("YzUxNzM2ODI1OWQ4NGViYWI2OTE4NWUxYTc4YWY2MjQ");
+
+      grabzIt
+        .ConvertHTML(htmlContent, {
+          format: "pdf",
+          download: 0, // 0 = get Data URI
+          background: 1,
+           bwidth: 960,
+         /* mtop: 5,
+          mbottom: 5,
+          mleft: 5,
+          mright: 5 */
+        })
+        .DataURI(function (pdfData) {
+          const blob = dataURItoBlob(pdfData);
+          if (callback) callback(blob); // send Blob back to React
+        });
+    }
+  </script>
+
+
+  <script>
+    function convertUrlToPDFGetData(url_to_convert, returnPdfData) {
+      // let something =   GrabzIt("YzUxNzM2ODI1OWQ4NGViYWI2OTE4NWUxYTc4YWY2MjQ").ConvertURL(url_to_convert,
+      // { "format": "pdf", "download": 1 , "onfinish" : OnFinishCallBack, "background" : 1, "bwidth" : 960 , "mtop" :5, "mbottom" : 5, "mleft" : 5, "mright" : 5}  ).Create();  
+      //  let something =   GrabzIt("YzUxNzM2ODI1OWQ4NGViYWI2OTE4NWUxYTc4YWY2MjQ").ConvertURL(url_to_convert,
+      //  { "format": "png", "onfinish" : OnFinishCallBack}  ).AddTo("pdfid");  
+      GrabzIt("YzUxNzM2ODI1OWQ4NGViYWI2OTE4NWUxYTc4YWY2MjQ").ConvertURL(url_to_convert, { "format": "pdf", "background": 1, "bwidth": 960, "mtop": 5, "mbottom": 5, "mleft": 5, "mright": 5 }).DataURI(returnPdfData);
+
     }
 
-    if (!htmlContent) {
-      alert("No HTML content provided!");
-      return;
-    }
-
-    // Convert Data URI to Blob
-    function dataURItoBlob(dataURI) {
-      const byteString = atob(dataURI.split(",")[1]);
-      const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
-      const ab = new ArrayBuffer(byteString.length);
-      const ia = new Uint8Array(ab);
-      for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
-      return new Blob([ab], { type: mimeString });
-    }
-
-    const grabzIt = new GrabzIt("YzUxNzM2ODI1OWQ4NGViYWI2OTE4NWUxYTc4YWY2MjQ");
-
-    grabzIt
-      .ConvertHTML(htmlContent, {
-        format: "pdf",
-        download: 0, // 0 = get Data URI
-        background: 1,
-        bwidth: 960,
-        mtop: 5,
-        mbottom: 5,
-        mleft: 5,
-        mright: 5
-      })
-      .DataURI(function(pdfData) {
-        const blob = dataURItoBlob(pdfData);
-        if (callback) callback(blob); // send Blob back to React
-      });
-  }
-</script>
-
-
-<script>
-  function convertUrlToPDFGetData(url_to_convert, returnPdfData) {
- // let something =   GrabzIt("YzUxNzM2ODI1OWQ4NGViYWI2OTE4NWUxYTc4YWY2MjQ").ConvertURL(url_to_convert,
-    // { "format": "pdf", "download": 1 , "onfinish" : OnFinishCallBack, "background" : 1, "bwidth" : 960 , "mtop" :5, "mbottom" : 5, "mleft" : 5, "mright" : 5}  ).Create();  
-  //  let something =   GrabzIt("YzUxNzM2ODI1OWQ4NGViYWI2OTE4NWUxYTc4YWY2MjQ").ConvertURL(url_to_convert,
-  //  { "format": "png", "onfinish" : OnFinishCallBack}  ).AddTo("pdfid");  
-  GrabzIt("YzUxNzM2ODI1OWQ4NGViYWI2OTE4NWUxYTc4YWY2MjQ").ConvertURL(url_to_convert , { "format": "pdf",  "background" : 1, "bwidth" : 960, "mtop" :5, "mbottom" : 5, "mleft" : 5, "mright" : 5}).DataURI(returnPdfData);
-  
-}
-
-</script>
+  </script>
 
   <!--
       manifest.json provides metadata used when your web app is installed on a

@@ -98,9 +98,9 @@ function EditApplication() {
         setCurrentApplicationData(tmpCopy);
     };
 
-    function goToPDFPage() {
+/*     function goToPDFPage() {
         navigate("/reorderapp");
-    }
+    } */
 
     /* const handleStyleChange = (id: string, newStyle: React.CSSProperties) => {
 
@@ -150,12 +150,12 @@ function EditApplication() {
                     <div style={{
                         marginBottom: '20px'
                     }}>
-                        <SaveApplicationDataToFile />
+                        {/* <SaveApplicationDataToFile /> */}
                     </div>
                     <div style={{
                         marginBottom: '20px'
                     }}>
-                        <button
+                        {/* <button
                             style={{
                                 backgroundColor: "#00b8d7",  // Indigo blue
                                 color: "white",
@@ -174,7 +174,7 @@ function EditApplication() {
                             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#00b8d7")}
                         >
                             Convert ansøgning to PDF
-                        </button>
+                        </button> */}
                     </div>
 
                     <p>

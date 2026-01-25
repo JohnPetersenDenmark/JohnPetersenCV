@@ -8,7 +8,8 @@ export interface MenuItem {
   action: string
   icon: string
   level : number
-  parentId : number
+  parentFlowId : string
+  flowId : string
 }
 
 

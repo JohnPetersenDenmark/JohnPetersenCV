@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 import MenuCardApplication, { MenuItem } from './MenuCardApplication';
 import MenuCardCV from './MenuCardCV';
 import { theme } from '../../Utilities/myconfig';
-import { useNavigationFlow } from './NavigationFlowContext';
 
 const MainLayout: React.FC = () => {
-    const navigate = useNavigate();
-    const { flow, setFlow, flowResult, setFlowResult } = useNavigationFlow();
-
-    const base_url = process.env.REACT_APP_BASE_URL as string;
+    const navigate = useNavigate();   
+    
+     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
     const DefaultMenuItems: MenuItem[] = [
-        { id: 1, title: "Ny ansøgning", action: "/editapp", icon: "✉️", level: 1, parentId: 1 },
-        { id: 2, title: "Hent ansøgning", action: "/getapplication", icon: "✉️", level: 1, parentId: 2 }
+        { id: 1, title: "Ny ansøgning", action: "/editapp", icon: "✉️", level: 1, parentFlowId: 'NONE', flowId: 'EDIT_APPLICATION' },
+        { id: 2, title: "Hent ansøgning", action: "/getapplication", icon: "✉️", level: 1, parentFlowId: 'NONE', flowId: 'IMPORT_APPLICATION' }
     ];
 
     const allSubMenuItems: MenuItem[] = [
-        { id: 100, title: "Arranger", action: "reorderapp", icon: "✉️", level: 2, parentId: 1 },
-        { id: 200, title: "Gem ansøgning", action: "", icon: "✉️", level: 2, parentId: 1 },
-        { id: 300, title: "To PDF", action: "", icon: "✉️", level: 2, parentId: 1 },
-        { id: 400, title: "Tilbage", action: "/", icon: "✉️", level: 2, parentId: 1 },
-        { id: 500, title: "Tilbage", action: "/", icon: "✉️", level: 2, parentId: 2 }
+        { id: 100, title: "Arranger", action: "/reorderapp", icon: "✉️", level: 2, parentFlowId: 'EDIT_APPLICATION', flowId: 'REORDER_APPLICATION' },
+        { id: 200, title: "Gem ansøgning", action: "/saveapp", icon: "✉️", level: 2, parentFlowId: 'EDIT_APPLICATION', flowId: 'SAVE_APPLICATION' },
+        // { id: 300, title: "To PDF", action: "", icon: "✉️", level: 2, parentFlowId: 'EDIT_APPLICATION', flowId: 'APPLICATION_TOPDF' },
+        { id: 400, title: "Tilbage", action: "/", icon: "✉️", level: 2, parentFlowId: 'EDIT_APPLICATION', flowId: 'APPLICATION_BACK' },
+        { id: 420, title: "Tilbage", action: "/", icon: "✉️", level: 2, parentFlowId: 'REORDER_APPLICATION', flowId: 'APPLICATION_BACK' },
+        { id: 430, title: "Tilbage", action: "/", icon: "✉️", level: 2, parentFlowId: 'APPLICATION_TOPDF', flowId: 'APPLICATION_BACK' },
+        { id: 430, title: "Tilbage", action: "/", icon: "✉️", level: 2, parentFlowId: 'SAVE_APPLICATION', flowId: 'APPLICATION_BACK' },
+         { id: 430, title: "Tilbage", action: "/", icon: "✉️", level: 2, parentFlowId: 'IMPORT_APPLICATION', flowId: 'APPLICATION_BACK' },
     ];
 
     const [menuPoints, setMenuPoints] = useState<MenuItem[]>(DefaultMenuItems);
@@ -39,64 +41,85 @@ const MainLayout: React.FC = () => {
         root.style.setProperty("--hover-menuactions-color", theme.hoverMenuActions ?? theme.hoverMenuActions);
     }, []);
 
-    // React to child component flow results
-    useEffect(() => {
-        if (!flowResult) return;
-
-        switch (flow) {
-            case 'IMPORT_APPLICATION':
-                if (flowResult === 'success') navigate(`${base_url}editapp`);
-                else navigate(base_url);
-                break;
-            case 'EDIT_APPLICATION':
-                navigate(`${base_url}editapp`);
-                break;
-            case 'REORDER_APPLICATION':
-                navigate(`${base_url}reorderapp`);  
-                break;
-        }
-
-        // Reset flow after handling
-        setFlowResult(null);
-        setFlow('NONE');
-    }, [flowResult]);
-
     // Handle menu item clicks
     const handleSelectedMenuPoint = (menuItem: MenuItem) => {
-        setSelectedMenuPoint(menuItem);
 
-        // BACK / RESET
+        // BACK 
         if (menuItem.action === "/") {
-            setMenuPoints(DefaultMenuItems);
-            navigate(-1);
-            return;
+            if (selectedMenuPoint) {
+                if (selectedMenuPoint.parentFlowId === 'NONE') {
+                    if (currentApplicationData && selectedMenuPoint.flowId === 'IMPORT_APPLICATION')
+                    {
+                        let tmp = DefaultMenuItems.filter(m => m.flowId === 'EDIT_APPLICATION')
+                        menuItem = tmp[0]
+                    }
+                    else{
+                    setSelectedMenuPoint(null);
+                    let tmpMenuPoints = DefaultMenuItems
+                    setMenuPoints(tmpMenuPoints);
+                    navigate("/")
+                    return;
+                    }
+                }
+                else {
+                    let tmp = allSubMenuItems.filter(m => m.flowId === selectedMenuPoint.parentFlowId)
+                    if (tmp.length === 0) {
+                        tmp = DefaultMenuItems.filter(m => m.flowId === selectedMenuPoint.parentFlowId)
+                        if (tmp.length > 0) {
+                            menuItem = tmp[0]
+                        }
+                        else {
+                            return
+                        }
+                    }
+                }
+
+
+            }
+            else {
+                return
+            }
         }
+
+        let tmpMenuPoints = [];
 
         // FLOW-BASED NAVIGATION
-        switch (menuItem.action) {
-            case "/getapplication":
-                setFlow('IMPORT_APPLICATION');
-                setMenuPoints(allSubMenuItems.filter(m => m.parentId === menuItem.id && m.level === 2));
+        switch (menuItem.flowId) {
+            case "IMPORT_APPLICATION":
+                // setFlow('IMPORT_APPLICATION');
+                tmpMenuPoints = allSubMenuItems.filter(m => m.parentFlowId === 'IMPORT_APPLICATION')
+                setMenuPoints(tmpMenuPoints);
                 navigate('/getapplication');
                 break;
-            case "/editapp":
-                setFlow('EDIT_APPLICATION');
-                setMenuPoints(allSubMenuItems.filter(m => m.parentId === menuItem.id && m.level === 2));
+            case "EDIT_APPLICATION":
+                //   setFlow('EDIT_APPLICATION');
+                tmpMenuPoints = allSubMenuItems.filter(m => m.parentFlowId === 'EDIT_APPLICATION')
+                setMenuPoints(tmpMenuPoints);
                 navigate('/editapp');
                 break;
-            case "/reorderapp":
-                setFlow('REORDER_APPLICATION');
+            case "REORDER_APPLICATION":
+                // setFlow('REORDER_APPLICATION');
+                tmpMenuPoints = allSubMenuItems.filter(m => m.parentFlowId === menuItem.flowId)
+                setMenuPoints(tmpMenuPoints);
                 navigate('/reorderapp');
                 break;
+            case "SAVE_APPLICATION":
+                // setFlow('REORDER_APPLICATION');
+                tmpMenuPoints = allSubMenuItems.filter(m => m.parentFlowId === menuItem.flowId)
+                setMenuPoints(tmpMenuPoints);
+                navigate('/saveapp');
+                break;
             default:
-                navigate(menuItem.action);
+                // navigate(menuItem.action);
                 break;
         }
+
+        setSelectedMenuPoint(menuItem);
     };
 
     return (
         <>
-            {flow !== 'NONE' ? (
+            {selectedMenuPoint ? (
                 <>
                     <div className='m-24 fixed left-0'>
                         <MenuCardApplication
