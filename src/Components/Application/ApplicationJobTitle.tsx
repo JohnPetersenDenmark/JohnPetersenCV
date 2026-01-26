@@ -21,9 +21,9 @@ function ApplicationJobTitle() {
         <>
             <div style={sectionDivOuterStyle}>
                 <div style={sectionInnerDivStyle}>
-                    <p className="section_title" id={currentApplicationData.ApplicationJobTitle.thisClassName} style={paraGraphSectionStyle}>
+                    {/* <p className="section_title" id={currentApplicationData.ApplicationJobTitle.thisClassName} style={paraGraphSectionStyle}>
                         {currentApplicationData.ApplicationJobTitle.sectionName}
-                    </p>
+                    </p> */}
 
                     {/*   {currentApplicationData.ApplicationJobTitle.entries.map((entry) => (
 
