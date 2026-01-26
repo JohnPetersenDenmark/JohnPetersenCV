@@ -21,17 +21,10 @@ function ApplicationJobTitle() {
         <>
             <div style={sectionDivOuterStyle}>
                 <div style={sectionInnerDivStyle}>
-                    {/* <p className="section_title" id={currentApplicationData.ApplicationJobTitle.thisClassName} style={paraGraphSectionStyle}>
-                        {currentApplicationData.ApplicationJobTitle.sectionName}
-                    </p> */}
-
-                    {/*   {currentApplicationData.ApplicationJobTitle.entries.map((entry) => (
-
-
-                        <p style={paraGraphStyle}> {entry.jobtitle} </p>
-
-                    ))} */}
-
+                    <p className="section_title" id={currentApplicationData.ApplicationJobTitle.thisClassName} style={paraGraphSectionStyle}>
+                        {/* {currentApplicationData.ApplicationJobTitle.sectionName} */}
+                    </p>
+                   
                     <div  dangerouslySetInnerHTML={{ __html: currentApplicationData?.ApplicationJobTitle?.sectionContent ?? "" }}
                     />
                 </div>

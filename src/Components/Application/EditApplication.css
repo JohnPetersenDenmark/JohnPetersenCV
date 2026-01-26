@@ -1,0 +1,72 @@
+
+.popup-overlay {
+position: fixed; 
+top : 500px;
+padding : 20px;
+width : 980px;
+/* inset: 0; */
+/* display: flex; */
+/* align-items: flex-start; */
+/* justify-content: flex-start; */
+/* padding: 2rem; */
+/* background: rgba(0, 0, 0, 0.45); */
+background-color: rgb(214, 214, 223);
+}
+
+
+.popup-close {   
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.color-picker-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.color-picker-control {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  padding: 0.5rem 0.75rem;
+  background: #f7f7f7;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.color-input {
+  width: 100px;
+  height: 32px;
+  border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* remove default browser styles */
+.color-input::-webkit-color-swatch {
+  border-radius: 4px;
+  border: none;
+}
+
+.color-input::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.color-value {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #333;
+}

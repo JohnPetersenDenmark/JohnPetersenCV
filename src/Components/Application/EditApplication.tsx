@@ -1,40 +1,23 @@
 import { CopyApplicationDataToNew } from '../../GlobalData/GlobalApplicationData';
-
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
-//import { ApplicationData } from '../../Classes/ClassesApplicationData';
-
-//import { currentApplicationData ,setCurrentApplicationData } from '../../GlobalData/GlobalApplicationData';
-
-
-import SaveApplicationDataToFile from '../Application/SaveApplicationDataToFile'
-import GetApplicationFileLocal from '../Application/GetApplicationFileLocal'
-
 import Application from './Application'
 import { EmployerInfo, ApplicantInfo, ApplicantContent, ApplicationDate, ApplicationJobTitle, ApplicantContentHeadline } from '../../Classes/ClassesApplicationData';
-import { ApplicantInfoEntry, ApplicantContentEntry, ApplicationDateEntry, EmployerInfoEntry, ApplicationJobTitleEntry, ApplicantContentHeadlineEntry } from '../../Classes/ClassesApplicationData';
-
 import SectionStyleEditor from '../Common/SectionStyleEditor';
 import RichTextEditor from '../Common/RichTextEditor';
+import "./EditApplication.css";
 
 
 function EditApplication() {
 
     const selectedSectionRef = useRef<string>();
-    const navigate = useNavigate();
-
-
     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
     const [currentSectionData, setCurrentSectionData] = useState({} as ApplicantInfo | EmployerInfo | ApplicantContent | ApplicationDate | ApplicationJobTitle | ApplicantContentHeadline)
     const [selectedSectionClassName, setSelectedSectionClassName] = useState('')
-
-   
-
+    const [isPopupEditorOpen, setIsPopupEditorOpen] = useState(false);
 
     useEffect(() => {
         const onBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -69,15 +52,15 @@ function EditApplication() {
         appGrid.style.backgroundColor = backgroundColor
     }
 
-    function onFileChanged(fileJSONcontent: any) {
-        setCurrentApplicationData(fileJSONcontent);
-    }
-
     const handleClick = (event: any) => {
+
+
         const sectionName = event.target.id;
 
         selectedSectionRef.current = sectionName;
         setSelectedSectionClassName(sectionName);
+        setIsPopupEditorOpen(true);
+
     };
 
     const handleRichTextEditorChange = (editorHtml: string) => {
@@ -89,8 +72,6 @@ function EditApplication() {
         // @ts-ignore   
         let application_section = tmpCopy[sectionClassName];
 
-        // if (application_section.sectionContent === editorHtml) return;
-
         application_section.sectionContent = editorHtml;
         // @ts-ignore   
         tmpCopy[sectionClassName] = application_section;
@@ -98,38 +79,22 @@ function EditApplication() {
         setCurrentApplicationData(tmpCopy);
     };
 
-/*     function goToPDFPage() {
-        navigate("/reorderapp");
-    } */
-
-    /* const handleStyleChange = (id: string, newStyle: React.CSSProperties) => {
+    const handleStyleChange = (newBackgroundColor: string) => {
 
         let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
-        let application_section;
-        // @ts-ignore   
-        application_section = tmpCopyApplicationdata[currentSectionData.thisClassName]
-        application_section.cssStyles = newStyle;
-        setCurrentApplicationData(tmpCopyApplicationdata);
-        setCurrentSectionData(application_section);
-    }; */
 
-    const handleStyleChange = ( newBackgroundColor: string) => {
-
-        let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
-        
         // @ts-ignore   
         let application_section = tmpCopyApplicationdata[selectedSectionClassName]
-         application_section.cssStyles.backgroundColor= newBackgroundColor;
-          // @ts-ignore   
-         tmpCopyApplicationdata[selectedSectionClassName] = application_section
+        application_section.cssStyles.backgroundColor = newBackgroundColor;
+        // @ts-ignore   
+        tmpCopyApplicationdata[selectedSectionClassName] = application_section
         setCurrentApplicationData(tmpCopyApplicationdata);
-       // setCurrentSectionData(application_section);
     };
 
-    const handleApplicationStyleChange = (id: string, newStyle: React.CSSProperties) => {
+    const handleApplicationStyleChange = (id: string, selectedColor: string) => {
         let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
-        tmpCopyApplicationdata["CssStyles"] = newStyle
-        setCurrentApplicationData(tmpCopyApplicationdata); 
+        tmpCopyApplicationdata.CssStyles.backgroundColor = selectedColor;
+        setCurrentApplicationData(tmpCopyApplicationdata);
     };
 
     if (currentApplicationData === null) {
@@ -138,88 +103,120 @@ function EditApplication() {
 
     return (
 
-        <div>
-            <div className='edit_content'>
+        // <div>
+        <div className='edit_content'>
 
-                <div className='edit_content_content'>
-                    <div style={{
-                        marginBottom: '20px'
-                    }}>
-                        {/* <GetApplicationFileLocal onChange={onFileChanged} /> */}
-                    </div>
-                    <div style={{
-                        marginBottom: '20px'
-                    }}>
-                        {/* <SaveApplicationDataToFile /> */}
-                    </div>
-                    <div style={{
-                        marginBottom: '20px'
-                    }}>
-                        {/* <button
-                            style={{
-                                backgroundColor: "#00b8d7",  // Indigo blue
-                                color: "white",
-                                border: "3px solid",
-                                padding: "10px 20px",
-                                borderRadius: "8px",
-                                cursor: "pointer",
-                                fontSize: "16px",
-                                fontWeight: 500,
-                                boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-                                transition: "all 0.2s ease",
+            <div className='edit_content_content'>
+                {/* <p>
+                    Ansøgningens baggrundsfarve
+                </p>
+                <SectionStyleEditor
+                    section={{
 
-                            }}
-                            onClick={(e) => goToPDFPage()}
-                            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "Black")}
-                            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#00b8d7")}
-                        >
-                            Convert ansøgning to PDF
-                        </button> */}
-                    </div>
+                        sectionId: 'aaaa',
+                        cssStyles: currentApplicationData.CssStyles,
+                    }}
+                    onStyleChange={handleApplicationStyleChange}
+                /> */}
 
-                    <p>
+                <div className="color-picker">
+                    <label className="color-picker-label">
                         Ansøgningens baggrundsfarve
-                    </p>
-                    <SectionStyleEditor
-                        section={{
-
-                            sectionId: 'aaaa',
-                            cssStyles: currentApplicationData.CssStyles,
-                        }}
-                        onStyleChange={handleApplicationStyleChange}
-                    />
-
-                    {/* <form className='edit_form'> */}
+                    </label>
 
 
-                    <p>
-                        Afsnittets baggrundsfarve
-                    </p>
+                    <div className="color-picker-control">
+                        <input
+                            type="color"
+                            value={currentApplicationData.CssStyles.backgroundColor}
+                            onChange={(e) =>
+                                handleApplicationStyleChange("backgroundColor", e.target.value)
+                            }
+                            className="color-input"
+                        />
 
-                     { selectedSectionClassName && 
-                    <input
-                        type="color"
-                       // @ts-ignore  
-                        value={currentApplicationData[selectedSectionClassName].cssStyles.backgroundColor}
-                     onChange={(e) => handleStyleChange( e.target.value)}
-                    />
-                    }
 
-                    {/* </form> */}
-
-                    <div style={{ marginTop: "1.5rem" }}>
-                        {selectedSectionClassName ?
-                            // @ts-ignore   
-                            <RichTextEditor value={currentApplicationData[selectedSectionClassName].sectionContent} onChange={handleRichTextEditorChange} readOnly={false} /> : ''}
+                        <span className="color-value">
+                            {currentApplicationData.CssStyles.backgroundColor}
+                        </span>
                     </div>
                 </div>
 
-                <div className='edit_content_app'>
-                    <Application />
-                </div>
-            </div>
+                <Application />
 
+                {isPopupEditorOpen && (
+                    <div className="popup-overlay">
+                        {/* <div className="container"> */}
+                        {/* <div className="popup-editor"> */}
+                        <button
+                            className="popup-close"
+                            onClick={() => setIsPopupEditorOpen(false)}
+                        >
+                            ✕
+                        </button>
+
+                        <p>Afsnittets baggrundsfarve</p>
+
+                        {selectedSectionClassName && (
+                            <div className="color-picker-control">
+                            <input
+                                type="color"
+                                value={
+                                    // @ts-ignore
+                                    currentApplicationData[selectedSectionClassName].cssStyles.backgroundColor
+                                }
+                                onChange={(e) => handleStyleChange(e.target.value)}
+                                className="color-input"
+                            />
+                             <span className="color-value">
+                                {  // @ts-ignore
+                            currentApplicationData[selectedSectionClassName].cssStyles.backgroundColor}
+                        </span>
+                            </div>
+                        )}
+
+                        <div style={{ marginTop: "1.5rem" }}>
+                            {selectedSectionClassName && (
+                                <RichTextEditor
+                                    // @ts-ignore
+                                    value={currentApplicationData[selectedSectionClassName].sectionContent}
+                                    onChange={handleRichTextEditorChange}
+                                    readOnly={false}
+                                />
+                            )}
+                        </div>
+                        {/* </div> */}
+                        {/* </div> */}
+                    </div>
+                )}
+
+
+                {/*  {isPopupEditorOpen ?
+                        <>
+                            <p>
+                                Afsnittets baggrundsfarve
+                            </p>
+
+                            {selectedSectionClassName &&
+                                <input
+                                    type="color"
+                                    // @ts-ignore  
+                                    value={currentApplicationData[selectedSectionClassName].cssStyles.backgroundColor}
+                                    onChange={(e) => handleStyleChange(e.target.value)}
+                                />
+                            }
+
+                            <div style={{ marginTop: "1.5rem" }}>
+                                {selectedSectionClassName ?
+                                    // @ts-ignore   
+                                    <RichTextEditor value={currentApplicationData[selectedSectionClassName].sectionContent} onChange={handleRichTextEditorChange} readOnly={false} /> : ''}
+                            </div>
+                        </>
+                        : ''} */}
+
+            </div>
         </div>
+        // </div>
 
     )
 }
