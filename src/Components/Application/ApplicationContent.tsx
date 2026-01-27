@@ -3,8 +3,8 @@ import ApplicationStyling from '../Common/ApplicationStyling';
 import parse from 'html-react-parser';
 
 
-
-function ApplicantContent() {
+export const ApplicantContent: React.FC = () => {
+//export function ApplicantContent() {
 
     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
     if (!currentApplicationData?.ApplicantContent) {
@@ -35,4 +35,3 @@ function ApplicantContent() {
     );
 }
 
-export default ApplicantContent; 

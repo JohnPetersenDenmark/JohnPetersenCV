@@ -4,7 +4,7 @@ import { ApplicantContent, ApplicantContentEntry, ApplicationData, ApplicationDa
 
 
 import { SectionEntryLabels, inputFieldDescription, SectionEntryInput } from '../Classes/ClassesCVData';
-import ApplicationContent from '../Components/Application/ApplicationContent';
+
 
 
 export const EmployerEntryLabels: SectionEntryLabels = {};

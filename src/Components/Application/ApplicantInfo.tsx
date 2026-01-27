@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 import ApplicationStyling from "../Common/ApplicationStyling";
 
-const ApplicantInfo: React.FC = () => {
+export const ApplicantInfo: React.FC = () => {
 
   const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
@@ -36,4 +36,4 @@ const ApplicantInfo: React.FC = () => {
   );
 };
 
-export default ApplicantInfo;
+

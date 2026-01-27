@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import ApplicantInfo from "./ApplicantInfo";
+import {ApplicantInfo} from "./ApplicantInfo";
 import EmployerInfo from "./EmployerInfo";
-import ApplicationJobTitle from "./ApplicationJobTitle";
-import ApplicationDate from "./ApplicationDate"; 
-import ApplicantContent from "./ApplicationContent";
+import {ApplicationJobTitle} from "./ApplicationJobTitle";
+import {ApplicationDate} from "./ApplicationDate"; 
+import {ApplicantContent} from "./ApplicationContent";
 import { CopyApplicationDataToNew } from "../../GlobalData/GlobalApplicationData";
 import { SectionPosition } from "../../Classes/ClassesApplicationData";
 import { useApplicationData } from "../../GlobalData/GlobalApplicationDataContext";

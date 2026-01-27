@@ -2,7 +2,7 @@
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 import ApplicationStyling from '../Common/ApplicationStyling';
 
-function ApplicationJobTitle() {
+export function ApplicationJobTitle() {
 
     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
@@ -33,4 +33,3 @@ function ApplicationJobTitle() {
     );
 }
 
-export default ApplicationJobTitle; 

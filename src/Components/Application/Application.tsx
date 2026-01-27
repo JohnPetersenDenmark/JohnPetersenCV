@@ -1,9 +1,9 @@
 
-import ApplicantInfo from './ApplicantInfo';
+import {ApplicantInfo} from './ApplicantInfo';
 import Customerinfo from './EmployerInfo';
-import ApplicationDate from './ApplicationDate';
-import ApplicationJobTitle from './ApplicationJobTitle';
-import ApplicationContent from './ApplicationContent';
+import {ApplicationDate} from './ApplicationDate';
+import {ApplicationJobTitle} from './ApplicationJobTitle';
+import {ApplicantContent as ApplicationContent} from './ApplicationContent';
 import Applicationheadline from './Applicationheadline';
 
 

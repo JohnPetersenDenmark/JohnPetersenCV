@@ -8,6 +8,12 @@ import { EmployerInfo, ApplicantInfo, ApplicantContent, ApplicationDate, Applica
 import SectionStyleEditor from '../Common/SectionStyleEditor';
 import RichTextEditor from '../Common/RichTextEditor';
 import "./EditApplication.css";
+import Customerinfo from './EmployerInfo';
+import { ApplicantInfo as Applicant } from './ApplicantInfo';
+import { ApplicationDate as ApplicationDatum } from './ApplicationDate';
+import { ApplicationJobTitle as JobTitle } from './ApplicationJobTitle';
+import { ApplicantContent as ApplicationContent } from './ApplicationContent';
+
 
 
 function EditApplication() {
@@ -29,20 +35,20 @@ function EditApplication() {
 
     }, []);
 
-    useEffect(() => {
-
-        const elements = Array.from(document.getElementsByClassName("section_title"));
-        elements.forEach((element) => {
-            let sectionClassName = element.id
-
-            // @ts-ignore   
-            let sectionValue = currentApplicationData[sectionClassName].sectionName
-            element.innerHTML = sectionValue
-            element.addEventListener('click', handleClick);
-            element.classList.add("title_clickable");
-        })
-
-    }, []);
+    /*  useEffect(() => {
+ 
+         const elements = Array.from(document.getElementsByClassName("section_title"));
+         elements.forEach((element) => {
+             let sectionClassName = element.id
+ 
+             // @ts-ignore   
+             let sectionValue = currentApplicationData[sectionClassName].sectionName
+             element.innerHTML = sectionValue
+             element.addEventListener('click', handleClick);
+             element.classList.add("title_clickable");
+         })
+ 
+     }, []); */
 
     const appGrid = document.querySelector<HTMLDivElement>(".edit_content_app");
 
@@ -52,13 +58,17 @@ function EditApplication() {
         appGrid.style.backgroundColor = backgroundColor
     }
 
-    const handleClick = (event: any) => {
+    const handleSectionClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        const selectedDiv: HTMLDivElement = event.currentTarget
 
+        let sectionParagraph = selectedDiv.getElementsByTagName('p')
 
-        const sectionName = event.target.id;
+        let sectionName = sectionParagraph[0].getAttribute('id')
+        if (sectionName) {
+            selectedSectionRef.current = sectionName;
+            setSelectedSectionClassName(sectionName);
+        }
 
-        selectedSectionRef.current = sectionName;
-        setSelectedSectionClassName(sectionName);
         setIsPopupEditorOpen(true);
 
     };
@@ -103,27 +113,13 @@ function EditApplication() {
 
     return (
 
-        // <div>
         <div className='edit_content'>
 
             <div className='edit_content_content'>
-                {/* <p>
-                    Ansøgningens baggrundsfarve
-                </p>
-                <SectionStyleEditor
-                    section={{
-
-                        sectionId: 'aaaa',
-                        cssStyles: currentApplicationData.CssStyles,
-                    }}
-                    onStyleChange={handleApplicationStyleChange}
-                /> */}
-
                 <div className="color-picker">
                     <label className="color-picker-label">
                         Ansøgningens baggrundsfarve
                     </label>
-
 
                     <div className="color-picker-control">
                         <input
@@ -134,20 +130,34 @@ function EditApplication() {
                             }
                             className="color-input"
                         />
-
-
                         <span className="color-value">
                             {currentApplicationData.CssStyles.backgroundColor}
                         </span>
                     </div>
                 </div>
 
-                <Application />
+                <div style={{ backgroundColor: currentApplicationData.CssStyles.backgroundColor }}>
+
+                    <div className="border-8 border-gray-300 p-10 rounded-lg m-0"
+                        onClick={e => handleSectionClick(e)}
+                    >
+                        <Applicant />
+                    </div>
+
+                    <div className="border-8 border-gray-300 p-10 rounded-lg m-0 "
+                        onClick={e => handleSectionClick(e)}
+                    >
+                        <Customerinfo />
+                    </div>
+
+                    {/*  <JobTitle />
+                    <ApplicationDatum />
+                    <ApplicationContent /> */}
+                </div>
+
 
                 {isPopupEditorOpen && (
                     <div className="popup-overlay">
-                        {/* <div className="container"> */}
-                        {/* <div className="popup-editor"> */}
                         <button
                             className="popup-close"
                             onClick={() => setIsPopupEditorOpen(false)}
@@ -159,19 +169,19 @@ function EditApplication() {
 
                         {selectedSectionClassName && (
                             <div className="color-picker-control">
-                            <input
-                                type="color"
-                                value={
-                                    // @ts-ignore
-                                    currentApplicationData[selectedSectionClassName].cssStyles.backgroundColor
-                                }
-                                onChange={(e) => handleStyleChange(e.target.value)}
-                                className="color-input"
-                            />
-                             <span className="color-value">
-                                {  // @ts-ignore
-                            currentApplicationData[selectedSectionClassName].cssStyles.backgroundColor}
-                        </span>
+                                <input
+                                    type="color"
+                                    value={
+                                        // @ts-ignore
+                                        currentApplicationData[selectedSectionClassName].cssStyles.backgroundColor
+                                    }
+                                    onChange={(e) => handleStyleChange(e.target.value)}
+                                    className="color-input"
+                                />
+                                <span className="color-value">
+                                    {  // @ts-ignore
+                                        currentApplicationData[selectedSectionClassName].cssStyles.backgroundColor}
+                                </span>
                             </div>
                         )}
 
@@ -185,39 +195,10 @@ function EditApplication() {
                                 />
                             )}
                         </div>
-                        {/* </div> */}
-                        {/* </div> */}
                     </div>
                 )}
-
-
-                {/*  {isPopupEditorOpen ?
-                        <>
-                            <p>
-                                Afsnittets baggrundsfarve
-                            </p>
-
-                            {selectedSectionClassName &&
-                                <input
-                                    type="color"
-                                    // @ts-ignore  
-                                    value={currentApplicationData[selectedSectionClassName].cssStyles.backgroundColor}
-                                    onChange={(e) => handleStyleChange(e.target.value)}
-                                />
-                            }
-
-                            <div style={{ marginTop: "1.5rem" }}>
-                                {selectedSectionClassName ?
-                                    // @ts-ignore   
-                                    <RichTextEditor value={currentApplicationData[selectedSectionClassName].sectionContent} onChange={handleRichTextEditorChange} readOnly={false} /> : ''}
-                            </div>
-                        </>
-                        : ''} */}
-
             </div>
         </div>
-        // </div>
-
     )
 }
 

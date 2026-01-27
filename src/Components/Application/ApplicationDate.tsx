@@ -2,7 +2,7 @@ import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContex
 import ApplicationStyling from '../Common/ApplicationStyling';
 
 
-function ApplicationDate() {
+export function ApplicationDate() {
 
     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
 
@@ -39,4 +39,3 @@ function ApplicationDate() {
     );
 }
 
-export default ApplicationDate; 
