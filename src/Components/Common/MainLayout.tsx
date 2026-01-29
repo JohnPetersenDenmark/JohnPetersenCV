@@ -58,6 +58,9 @@ const MainLayout: React.FC = () => {
         root.style.setProperty("--primary-text-color", theme.primaryTextColor);
         root.style.setProperty("--secondary-text-color", theme.secondaryTextColor ?? theme.primaryTextColor);
         root.style.setProperty("--hover-menuactions-color", theme.hoverMenuActions ?? theme.hoverMenuActions);
+         root.style.setProperty("--black-color", theme.blackColor);
+          root.style.setProperty("--white-color", theme.whiteColor);
+
     }, []);
 
     // -------------------
@@ -140,7 +143,7 @@ return (
         <>
             {selectedMenuPoint ? (
                 <>
-                    <div className='m-24 fixed left-0'>
+                    <div className='m-24 mt-0 fixed left-0 top-[50px] bg-thirdBackgroundColor'>
                         <MenuCardApplication
                             onChange={handleSelectedMenuPoint}
                             menuItems={menuPoints}

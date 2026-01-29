@@ -42,11 +42,11 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   if (!editor) return null;
 
   return (
-    <div className="border rounded p-2 bg-white">
+    <div className="border rounded p-2 bg-primaryBackgroundColor text-blackColor">
       {/* 👇 THIS is how you use MenuBar */}
       {!readOnly && <MenuBar editor={editor} />}
 
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} className="tiptap-editor"/>
     </div>
   );
 };

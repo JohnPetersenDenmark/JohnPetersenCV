@@ -1,6 +1,6 @@
 @page {
-size: A4;
-margin: 0;
+  size: A4;
+  margin: 0;
 }
 
 @tailwind base;
@@ -13,11 +13,14 @@ margin: 0;
 -------------------------------- */
 
 .ProseMirror ul {
-  list-style-type: disc; 
+  list-style-type: disc;
   padding-left: 1.5rem;
   margin: 0.5rem 0;
 }
 
+.tiptap-editor .ProseMirror {
+  min-height: 200px;  
+}
 .ProseMirror ol {
   list-style-type: decimal;
   padding-left: 1.5rem;
@@ -28,7 +31,7 @@ margin: 0;
   margin: 0.25rem 0;
 }
 
-.ProseMirror li > p {
+.ProseMirror li>p {
   margin: 0;
 }
 
@@ -44,7 +47,7 @@ margin: 0;
   padding-left: 1.5rem;
 }
 
-.prose li > p {
+.prose li>p {
   margin: 0;
 }
 
@@ -62,15 +65,20 @@ span[data-svgicon] svg {
 } */
 
 span[data-svgicon] {
-  display: inline-flex;       /* removes baseline math */
-  align-items: center;        /* vertical centering */
-  line-height: 1;             /* kill inherited line height */
-  vertical-align: middle;     /* safety net */
+  display: inline-flex;
+  /* removes baseline math */
+  align-items: center;
+  /* vertical centering */
+  line-height: 1;
+  /* kill inherited line height */
+  vertical-align: middle;
+  /* safety net */
 }
 
 /* The SVG itself */
 span[data-svgicon] svg {
-  display: block;             /* remove inline whitespace */
+  display: block;
+  /* remove inline whitespace */
 
 }
 
@@ -145,9 +153,12 @@ a:active {
 }
 
 .app_content {
+  position: absolute;
+  top: 50px;
+  left: 500px;
   display: grid;
   grid-template-columns: 960px 200px;
-  grid-auto-rows: minmax(150px, auto);
+  /* grid-auto-rows: minmax(150px, auto); */
   max-width: 1160px;
   margin: 0px auto;
 
@@ -375,7 +386,7 @@ a:active {
   grid-auto-rows: minmax(50px, auto);
   max-width: 960px;
   margin: 0 auto;
- /*  color : red;
+  /*  color : red;
   background-color: White; 
   
   border-top: 30px solid;
@@ -416,7 +427,7 @@ a:active {
   grid-row: 3;
   grid-column: 3/span 1;
   background: #00b8d7;
-    text-align: right;
+  text-align: right;
 
   /* border-top: 1px solid black;
    border-right: 1px solid black; */
@@ -430,10 +441,10 @@ a:active {
   grid-column: 2/span 2;
   background: #fff;
   border-left: 1px solid black;
-   border-top: 1px solid black;
+  border-top: 1px solid black;
   border-bottom: 1px solid black;
   border-right: 1px solid black;
-   text-align: left;
+  text-align: left;
 }
 
 .itemX {
@@ -530,6 +541,7 @@ label {
 .edit_input_container {
   border-top: 1px solid;
 }
+
 .inputandlabeldiv {
   width: 100%;
 }
@@ -543,14 +555,14 @@ label {
   width: 100%;
 }
 
-.edit_input_headline_container  .labeldiv label {
+.edit_input_headline_container .labeldiv label {
 
   color: green;
- font-size: 20px;
+  font-size: 20px;
 }
 
 .inputfield {
-  width: 100%; 
+  width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
@@ -560,7 +572,7 @@ label {
 .edit_input_headline_container .inputdiv .inputfield {
 
 
- font-size: 20px;
+  font-size: 20px;
 }
 
 
@@ -601,7 +613,7 @@ label {
 
 .edit_content {
   display: grid;
-  grid-template-columns:  10px 1000px 800px;
+  grid-template-columns: 10px 1000px 800px;
   grid-auto-rows: minmax(150px, auto);
   max-width: 1760px;
   margin: 0px auto;
@@ -616,7 +628,7 @@ label {
   border-width: 0px 1px 0px 0px;
   grid-row: 1;
   grid-column: 2;
-  background: #00b8d7;
+  @apply bg-thirdBackgroundColor text-white;
 }
 
 .edit_content_cv {
@@ -624,6 +636,7 @@ label {
   grid-column: 3;
   background: #00b8d7;
 }
+
 .edit_content_app {
   grid-row: 1;
   grid-column: 3;
@@ -634,13 +647,13 @@ label {
   grid-row: 1;
   grid-column: 1;
   background: #00b8d7;
-  color : #fff;
+  color: #fff;
   border: 1px solid #c9c9c9;
   border-radius: 7px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
   padding: 20px;
 
- 
+
 }
 
 .edit_form {
@@ -686,16 +699,16 @@ label {
 }
 
 .card textarea {
-  
-    width: 100%;
-    height: 150px;
-    padding: 12px 20px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f8f8f8;
-    font-size: 14px;
-    resize: none;  
+
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 14px;
+  resize: none;
 }
 
 .card button {
@@ -712,12 +725,12 @@ label {
   border-radius: 4px;
   width: 90%
 }
+
 .card input {
   font-size: 14px;
-  padding-block: 10px ;
+  padding-block: 10px;
   padding-left: 5px;
   width: 90%
-  
 }
 
 .header-card-row {
@@ -749,16 +762,16 @@ label {
 }
 
 .header-card textarea {
-  
-    width: 100%;
-    height: 150px;
-    padding: 12px 20px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f8f8f8;
-    font-size: 14px;
-    resize: none;  
+
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 14px;
+  resize: none;
 }
 
 .card-row button {
@@ -795,7 +808,7 @@ label {
 
 .header-card input {
   font-size: 20px;
-  padding-block: 10px ;
+  padding-block: 10px;
   padding-left: 5px;
   width: 90%;
 
@@ -806,11 +819,10 @@ label {
   border: none;
   color: white;
   padding: 1px 1px;
- width : 20%;
+  width: 20%;
   text-decoration: none;
   display: inline-block;
   font-size: 12px;
   margin: 4px 2px;
   border-radius: 4px;
 }
-

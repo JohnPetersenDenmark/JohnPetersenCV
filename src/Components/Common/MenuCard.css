@@ -31,17 +31,18 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+  /* THEME */
+  color: var(--primary-text-color);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 .menucard-front {
-  background: #ffffff;
-  color: black;
+  background: var(--secondary-background-color);
 }
 
 .menucard-back {
-  background: grey;
-  color: black;
+  background: var(--third-background-color);
   transform: rotateY(180deg);
   display: flex;
   align-items: center;
@@ -62,10 +63,19 @@
   cursor: pointer;
   padding: 12px 16px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
+
+  /* THEME */
+  background: var(--secondary-background-color);
+  color: var(--primary-text-color);
+  border: 1px solid var(--hover-menuactions-color);
+
   transform: translateY(20px);
   opacity: 0;
-  transition: transform 0.4s ease, opacity 0.4s ease, background 0.2s;
+  transition:
+    transform 0.4s ease,
+    opacity 0.4s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .menucard.flipped .menucard-row {
@@ -74,11 +84,13 @@
 }
 
 .menucard-row:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--hover-menuactions-color);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* ICONS */
 .icon {
   font-size: 32px;
+  color: var(--primary-text-color);
 }

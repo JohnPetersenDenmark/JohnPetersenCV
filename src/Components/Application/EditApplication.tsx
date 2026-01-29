@@ -1,18 +1,16 @@
 import { CopyApplicationDataToNew } from '../../GlobalData/GlobalApplicationData';
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
-import Application from './Application'
 import { EmployerInfo, ApplicantInfo, ApplicantContent, ApplicationDate, ApplicationJobTitle, ApplicantContentHeadline } from '../../Classes/ClassesApplicationData';
-import SectionStyleEditor from '../Common/SectionStyleEditor';
 import RichTextEditor from '../Common/RichTextEditor';
 import "./EditApplication.css";
-import Customerinfo from './EmployerInfo';
+import { Pointer } from 'lucide-react';
+/* import Customerinfo from './EmployerInfo';
 import { ApplicantInfo as Applicant } from './ApplicantInfo';
 import { ApplicationDate as ApplicationDatum } from './ApplicationDate';
 import { ApplicationJobTitle as JobTitle } from './ApplicationJobTitle';
-import { ApplicantContent as ApplicationContent } from './ApplicationContent';
+import { ApplicantContent as ApplicationContent } from './ApplicationContent'; */
 
 
 
@@ -20,10 +18,12 @@ function EditApplication() {
 
     const selectedSectionRef = useRef<string>();
     const { currentApplicationData, setCurrentApplicationData } = useApplicationData();
+    const [sections, setSections] = useState<any[]>([])
 
     const [currentSectionData, setCurrentSectionData] = useState({} as ApplicantInfo | EmployerInfo | ApplicantContent | ApplicationDate | ApplicationJobTitle | ApplicantContentHeadline)
     const [selectedSectionClassName, setSelectedSectionClassName] = useState('')
     const [isPopupEditorOpen, setIsPopupEditorOpen] = useState(false);
+    const [showCopyBackgroundColor, setShowCopyBackgroundColor] = useState(false);
 
     useEffect(() => {
         const onBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -35,20 +35,14 @@ function EditApplication() {
 
     }, []);
 
-    /*  useEffect(() => {
- 
-         const elements = Array.from(document.getElementsByClassName("section_title"));
-         elements.forEach((element) => {
-             let sectionClassName = element.id
- 
-             // @ts-ignore   
-             let sectionValue = currentApplicationData[sectionClassName].sectionName
-             element.innerHTML = sectionValue
-             element.addEventListener('click', handleClick);
-             element.classList.add("title_clickable");
-         })
- 
-     }, []); */
+    useEffect(() => {
+        setSections(
+            Object.entries(currentApplicationData).filter(
+                ([key]) => key !== "ApplicantContentHeadline" && key !== "CssStyles"
+            )
+        );
+    }, [currentApplicationData]);
+
 
     const appGrid = document.querySelector<HTMLDivElement>(".edit_content_app");
 
@@ -58,12 +52,8 @@ function EditApplication() {
         appGrid.style.backgroundColor = backgroundColor
     }
 
-    const handleSectionClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        const selectedDiv: HTMLDivElement = event.currentTarget
 
-        let sectionParagraph = selectedDiv.getElementsByTagName('p')
-
-        let sectionName = sectionParagraph[0].getAttribute('id')
+    const handleSectionClick = (sectionName: string) => {
         if (sectionName) {
             selectedSectionRef.current = sectionName;
             setSelectedSectionClassName(sectionName);
@@ -105,7 +95,29 @@ function EditApplication() {
         let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
         tmpCopyApplicationdata.CssStyles.backgroundColor = selectedColor;
         setCurrentApplicationData(tmpCopyApplicationdata);
+        setShowCopyBackgroundColor(true);
     };
+
+    const handleApplicationStyleChangeInput = (id: string, selectedColor: string) => {
+
+        if (selectedColor.length != 7) {
+            return;
+        }
+
+        let colorNumberValue = selectedColor.replace("#", "")
+        if (!isHex(colorNumberValue)) {
+            return;
+        }
+        let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
+        tmpCopyApplicationdata.CssStyles.backgroundColor = selectedColor;
+        setCurrentApplicationData(tmpCopyApplicationdata);
+        setShowCopyBackgroundColor(true);
+    };
+
+    function isHex(str: string): boolean {
+        let y = /^[0-9a-fA-F]+$/.test(str)
+        return (y)
+    }
 
     if (currentApplicationData === null) {
         return (<></>);
@@ -136,23 +148,60 @@ function EditApplication() {
                     </div>
                 </div>
 
-                <div style={{ backgroundColor: currentApplicationData.CssStyles.backgroundColor }}>
+                <div>
+                    <input
+                        className="text-black"
+                        type="text"
+                        value={currentApplicationData.CssStyles.backgroundColor}
+                        onChange={(e) =>
+                            handleApplicationStyleChangeInput("backgroundColor", e.target.value)
+                        }
+                    />
 
-                    <div className="border-8 border-gray-300 p-10 rounded-lg m-0"
-                        onClick={e => handleSectionClick(e)}
-                    >
-                        <Applicant />
-                    </div>
+                </div>
 
-                    <div className="border-8 border-gray-300 p-10 rounded-lg m-0 "
-                        onClick={e => handleSectionClick(e)}
-                    >
-                        <Customerinfo />
-                    </div>
+                {/* {showCopyBackgroundColor && <div> */}
+                <div>
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={showCopyBackgroundColor}
+                            onChange={(e) => setShowCopyBackgroundColor(e.target.checked)}
+                        />
+                        Accept terms
+                    </label>
+                </div>
+                {/* } */}
 
-                    {/*  <JobTitle />
-                    <ApplicationDatum />
-                    <ApplicationContent /> */}
+                <div
+                    style={{ backgroundColor: currentApplicationData.CssStyles.backgroundColor }}
+                    className=""
+                >
+
+                    {sections.map(([key, section]) => (
+                        <div className="border-2 border-black pl-5 pr-5 pt-0 pb-0 rounded-lg mb-10 mt-10 text-secondaryTextColor"
+                            style={{
+                                cursor: 'Pointer',
+                                backgroundColor:  // @ts-ignore 
+                                    currentApplicationData[section.thisClassName].cssStyles.backgroundColor
+                            }}
+                            onClick={e => handleSectionClick(section.thisClassName)}
+                        >
+                            {section.thisClassName}
+
+                            <div
+                                className="border-2 border-black pl-10 pr-10 pt-0 pb-0 rounded-lg mb-10  text-secondaryTextColor"
+                                style={{
+                                    whiteSpace: "normal",
+                                    overflowWrap: "break-word",
+                                    wordBreak: "break-word",
+                                }}
+                                dangerouslySetInnerHTML={{
+                                    __html: section.sectionContent,
+                                }}
+                            />
+                        </div>
+                    ))}
                 </div>
 
 

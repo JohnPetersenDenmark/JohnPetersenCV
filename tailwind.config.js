@@ -16,6 +16,8 @@ export default {
         hoverMenuActionsColor: "var(--hover-menuactions-color)",
         addToBasketHoverColor: "var(--addto-basket-color)",
 
+        blackColor : "var(--black-color)",
+         whiteColor : "var(--white-color)"
 
       },
     },
