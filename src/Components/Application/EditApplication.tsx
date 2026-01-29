@@ -95,7 +95,7 @@ function EditApplication() {
         let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
         tmpCopyApplicationdata.CssStyles.backgroundColor = selectedColor;
         setCurrentApplicationData(tmpCopyApplicationdata);
-        setShowCopyBackgroundColor(true);
+        //  setShowCopyBackgroundColor(true);
     };
 
     const handleApplicationStyleChangeInput = (id: string, selectedColor: string) => {
@@ -111,12 +111,31 @@ function EditApplication() {
         let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
         tmpCopyApplicationdata.CssStyles.backgroundColor = selectedColor;
         setCurrentApplicationData(tmpCopyApplicationdata);
-        setShowCopyBackgroundColor(true);
+        //  setShowCopyBackgroundColor(true);
     };
 
     function isHex(str: string): boolean {
         let y = /^[0-9a-fA-F]+$/.test(str)
         return (y)
+    }
+
+    function handleCopyBackgroundColor(selected: any) {
+        if (selected === false) {
+            return
+        }
+
+        let ApplicationBackgroundColor = currentApplicationData.CssStyles.backgroundColor
+
+        let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
+        //tmpCopyApplicationdata.CssStyles.backgroundColor = selectedColor;
+
+        for (let x = 0; x < sections.length; x++) {
+
+            // @ts-ignore
+            tmpCopyApplicationdata[sections[x][1].thisClassName].cssStyles.backgroundColor = ApplicationBackgroundColor
+        }
+
+        setCurrentApplicationData(tmpCopyApplicationdata)
     }
 
     if (currentApplicationData === null) {
@@ -166,7 +185,7 @@ function EditApplication() {
                         <input
                             type="checkbox"
                             checked={showCopyBackgroundColor}
-                            onChange={(e) => setShowCopyBackgroundColor(e.target.checked)}
+                            onChange={(e) => handleCopyBackgroundColor(e.target.checked)}
                         />
                         Accept terms
                     </label>

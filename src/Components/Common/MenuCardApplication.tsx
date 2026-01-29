@@ -6,7 +6,7 @@ export interface MenuItem {
   id: number,
   title: string,
   action: string
-  icon: string
+  iconPath: string
   level : number
   parentFlowId : string
   flowId : string
@@ -36,7 +36,7 @@ const MenuCardApplication: React.FC<MenuCardApplicationProps> = ({ menuItems, on
         {/* FRONT */}
         <div className="menucard-face menucard-front">
           <h2>Ansøgning</h2>
-          <img src={`${process.env.PUBLIC_URL}/images/fontsize.svg`} alt="Icon" />
+          <img src={`${process.env.PUBLIC_URL}/images/application.svg`} alt="Icon" />
         </div>
 
         {/* BACK */}
@@ -45,15 +45,22 @@ const MenuCardApplication: React.FC<MenuCardApplicationProps> = ({ menuItems, on
             {menuItems.map((menuItem, index) => (
               <div
                 key={menuItem.id}
-                className="menucard-row"
+                className="menucard-row m-3"
                 style={{ transitionDelay: `${index * 100}ms` }} // staggered animation
                 onClick={(e) => {
                   e.stopPropagation();
                   handleMenuPointSelected(menuItem);
                 }}
               >
-                <span className="icon">{menuItem.icon}</span>
-                <span className="title">{menuItem.title}</span>
+
+                <div>
+                  {menuItem.title}
+                 <img 
+                 style={{ width: "80px", height: 'auto' }}
+                 src={menuItem.iconPath} />
+                 
+                </div>
+ 
               </div>
             ))}
           </div>

@@ -22,20 +22,21 @@ const routeToFlow: Record<string, string> = {
     "/saveapp": "SAVE_APPLICATION",
 };
 
+let baseUrl = process.env.PUBLIC_URL;
 // -------------------
 // Single Menu Config
 // -------------------
 const menuConfig: MenuItem[] = [
     // Top-level items
-    { id: 1, title: "Ny ansøgning", action: "/editapp", icon: "✉️", level: 1, parentFlowId: 'NONE', flowId: 'EDIT_APPLICATION' },
-    { id: 2, title: "Hent ansøgning", action: "/getapplication", icon: "✉️", level: 1, parentFlowId: 'NONE', flowId: 'IMPORT_APPLICATION' },
+    { id: 1, title: "Ny ansøgning", action: "/editapp", iconPath: baseUrl + "/images/newapplication.svg", level: 1, parentFlowId: 'NONE', flowId: 'EDIT_APPLICATION' },
+    { id: 2, title: "Hent ansøgning", action: "/getapplication", iconPath: baseUrl + "/images/getapplication.svg", level: 1, parentFlowId: 'NONE', flowId: 'IMPORT_APPLICATION' },
 
     // Submenu items
-    { id: 100, title: "Arranger", action: "/reorderapp", icon: "✉️", level: 2, parentFlowId: 'EDIT_APPLICATION', flowId: 'REORDER_APPLICATION' },
-    { id: 200, title: "Gem ansøgning", action: "/saveapp", icon: "✉️", level: 2, parentFlowId: 'EDIT_APPLICATION', flowId: 'SAVE_APPLICATION' },
+    { id: 100, title: "Arranger", action: "/reorderapp", iconPath: baseUrl + "/images/arrange.svg", level: 2, parentFlowId: 'EDIT_APPLICATION', flowId: 'REORDER_APPLICATION' },
+    { id: 200, title: "Gem ansøgning", action: "/saveapp", iconPath: baseUrl + "/images/save.svg", level: 2, parentFlowId: 'EDIT_APPLICATION', flowId: 'SAVE_APPLICATION' },
 
     // Back button
-    { id: 400, title: "Tilbage", action: "BACK", icon: "✉️", level: 2, parentFlowId: "", flowId: "APPLICATION_BACK" }
+    { id: 400, title: "Tilbage", action: "BACK", iconPath: baseUrl + "/images/back.svg", level: 2, parentFlowId: "", flowId: "APPLICATION_BACK" }
 ];
 
 const MainLayout: React.FC = () => {
