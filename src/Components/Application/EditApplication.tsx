@@ -100,14 +100,14 @@ function EditApplication() {
 
     const handleApplicationStyleChangeInput = (id: string, selectedColor: string) => {
 
-        if (selectedColor.length != 7) {
+       /*  if (selectedColor.length != 7) {
             return;
-        }
+        } */
 
-        let colorNumberValue = selectedColor.replace("#", "")
+       /*  let colorNumberValue = selectedColor.replace("#", "")
         if (!isHex(colorNumberValue)) {
             return;
-        }
+        } */
         let tmpCopyApplicationdata = CopyApplicationDataToNew(currentApplicationData);
         tmpCopyApplicationdata.CssStyles.backgroundColor = selectedColor;
         setCurrentApplicationData(tmpCopyApplicationdata);
@@ -147,50 +147,58 @@ function EditApplication() {
         <div className='edit_content'>
 
             <div className='edit_content_content'>
-                <div className="color-picker">
-                    <label className="color-picker-label">
-                        Ansøgningens baggrundsfarve
-                    </label>
+                <div className="flex gap-10 items-center">
+                    <div >
 
-                    <div className="color-picker-control">
-                        <input
-                            type="color"
-                            value={currentApplicationData.CssStyles.backgroundColor}
-                            onChange={(e) =>
-                                handleApplicationStyleChange("backgroundColor", e.target.value)
-                            }
-                            className="color-input"
-                        />
-                        <span className="color-value">
-                            {currentApplicationData.CssStyles.backgroundColor}
-                        </span>
+                        <div className="text-black text-base">
+                            Vælg ansøgningens baggrundsfarve
+                        </div>
+                        <div className="mt-5">
+                            <input
+                                className="w-[300px] h-24"
+                                type="color"
+                                value={currentApplicationData.CssStyles.backgroundColor}
+                                onChange={(e) =>
+                                    handleApplicationStyleChange("backgroundColor", e.target.value)
+                                }
+
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className="text-black text-base">
+                            Angiv ansøgningens baggrundsfarve
+                        </div>
+                        <div className="text-black w-[300px]  mt-5 ">
+                            <input
+                                className="h-24 border-4  border-gray-300 "
+                                type="text"
+                                value={currentApplicationData.CssStyles.backgroundColor}
+                                onChange={(e) =>
+                                    handleApplicationStyleChangeInput("backgroundColor", e.target.value)
+                                }
+                            />
+                        </div>
+                    </div>
+
+                    <div className="text-black">
+                          <div className="text-black text-base">
+                            Kopier baggrundsfarve til alle afsnint
+                        </div>
+                        <div>
+                            <input
+                                className="w-[20px] h-24 "
+                                type="checkbox"
+                                checked={showCopyBackgroundColor}
+                                onChange={(e) => handleCopyBackgroundColor(e.target.checked)}
+                            />
+
+                        </div>
                     </div>
                 </div>
 
-                <div>
-                    <input
-                        className="text-black"
-                        type="text"
-                        value={currentApplicationData.CssStyles.backgroundColor}
-                        onChange={(e) =>
-                            handleApplicationStyleChangeInput("backgroundColor", e.target.value)
-                        }
-                    />
 
-                </div>
-
-                {/* {showCopyBackgroundColor && <div> */}
-                <div>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={showCopyBackgroundColor}
-                            onChange={(e) => handleCopyBackgroundColor(e.target.checked)}
-                        />
-                        Accept terms
-                    </label>
-                </div>
-                {/* } */}
 
                 <div
                     style={{ backgroundColor: currentApplicationData.CssStyles.backgroundColor }}

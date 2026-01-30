@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useContext, useState, useCallback } from "react";
 import {ApplicantInfo} from "./ApplicantInfo";
 import EmployerInfo from "./EmployerInfo";
 import {ApplicationJobTitle} from "./ApplicationJobTitle";
@@ -8,6 +8,7 @@ import { CopyApplicationDataToNew } from "../../GlobalData/GlobalApplicationData
 import { SectionPosition } from "../../Classes/ClassesApplicationData";
 import { useApplicationData } from "../../GlobalData/GlobalApplicationDataContext";
 import { applicationAutoArrangeSections } from "./ApplicationAutoArrangeSections";
+import { PageActionContext } from "../Common/PageActionContext";
 import { useCVData } from "../../GlobalData/GlobalCVDataContext";
 
 // import bg1 from "../../assets/resize.svg";
@@ -52,6 +53,20 @@ export default function ReorderApplicationSections() {
   );
 
   const [update, forceUpdate] = useState(0);
+
+  const context = useContext(PageActionContext);
+const { action, setAction } = context ?? { action: null, setAction: () => {} };
+
+   useEffect(() => {
+    if (action === "ToPDF") {
+      handleDownloadPDF();     
+      setAction(null); // reset
+    }
+      if (action === "AutoArrange") {
+        handleAutoArrange();
+        setAction(null); // reset
+      }
+  }, [action]);
 
   // const lastDropRef = useRef<{ time: number; id: string | null }>({ time: 0, id: null });
 
@@ -358,9 +373,9 @@ export default function ReorderApplicationSections() {
   // ---------- Render ----------
   return (
     <>
-      <button className="download_button" onClick={handleDownloadPDF}>
+      {/* <button className="download_button" onClick={handleDownloadPDF}>
         Download PDF
-      </button>
+      </button> */}
 
       <button className="download_button" onClick={handleAutoArrange}>
         Autoarranger

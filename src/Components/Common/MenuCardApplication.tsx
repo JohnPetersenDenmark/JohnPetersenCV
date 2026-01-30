@@ -10,6 +10,7 @@ export interface MenuItem {
   level : number
   parentFlowId : string
   flowId : string
+  functionToRun : string
 }
 
 
