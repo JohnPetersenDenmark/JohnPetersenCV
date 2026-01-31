@@ -1,5 +1,7 @@
 
-import { useState } from 'react';
+
+import { useState, useRef, useEffect, useContext, } from 'react';
+import { PageActionContext } from "../Common/PageActionContext";
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
 //import { useNavigationFlow } from '../Common/NavigationFlowContext';
 import { useNavigate } from 'react-router-dom';
@@ -7,13 +9,35 @@ import { useNavigate } from 'react-router-dom';
 const GetApplicationFileLocal: React.FC = () => {
 
   const [fileContent, setFileContent] = useState("");
-   const { setCurrentApplicationData } = useApplicationData();
-   const navigate = useNavigate();
+  const { setCurrentApplicationData } = useApplicationData();
+  const navigate = useNavigate();
   // const { setFlowResult } = useNavigationFlow();
+
+  const context = useContext(PageActionContext);
+  const { action, setAction } = context ?? { action: null, setAction: () => { } };
+const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (action === "GetApplicationFromFile") {
+       fileInputRef.current?.click();
+      setAction(null); // reset
+      return
+    }
+
+  }, [action]);
+
+  /*  useEffect(() => {
+    // Open file picker immediately on mount
+    fileInputRef.current?.click();
+  }, []); */
+
+ /*  function DoSomething() {
+    let x = 1;
+  } */
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file) return(<></>);
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -23,8 +47,9 @@ const GetApplicationFileLocal: React.FC = () => {
           const jsonData = JSON.parse(text); // 👈 Parse the JSON
           setCurrentApplicationData(jsonData);
           setFileContent(jsonData);
+          navigate("/editapp")
           // handleSuccess();
-       // navigate("/");
+          // navigate("/");
 
         } catch (error) {
           console.error('Invalid JSON file:', error);
@@ -35,15 +60,32 @@ const GetApplicationFileLocal: React.FC = () => {
     reader.readAsText(file);
   };
 
-/* const handleSuccess = () => {
-    setFlowResult('success');
-  }; */
+  /* const handleSuccess = () => {
+      setFlowResult('success');
+    }; */
 
+    if ( !fileInputRef)
+      return(<></>);
 
   return (
     <>
 
-      <label
+
+    <div>
+      <h1>Import ansøgning</h1>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        style={{ display: "none" }}
+        onChange={handleFileChange}
+      />
+    </div>
+  
+
+
+
+     {/*  <label
         htmlFor="fileUpload"
         style={{
           backgroundColor: "#00b8d7",
@@ -70,7 +112,7 @@ const GetApplicationFileLocal: React.FC = () => {
           style={{ display: "none" }} // hide the native file input
         />
       </label>
-
+ */}
     </>
   )
 }

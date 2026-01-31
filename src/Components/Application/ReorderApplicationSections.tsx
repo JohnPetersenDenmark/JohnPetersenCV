@@ -68,18 +68,6 @@ const { action, setAction } = context ?? { action: null, setAction: () => {} };
       }
   }, [action]);
 
-  // const lastDropRef = useRef<{ time: number; id: string | null }>({ time: 0, id: null });
-
-  // Build dynamic components
- /*  for (let g = 0; g < sections.length; g++) {
-    let tmpSection = sections[g];
-    let componentName =
-      tmpSection[1].thisClassName === "ApplicantContent"
-        ? "ApplicationContent"
-        : tmpSection[1].thisClassName;
-    const Component = componentMap[componentName];  
-  } */
-
   // ---------- Styles ----------
   const mainDivStyle: React.CSSProperties = {
     position: "absolute",
@@ -130,14 +118,8 @@ const { action, setAction } = context ?? { action: null, setAction: () => {} };
 
       e.dataTransfer.setData(
         "text/plain",
-        JSON.stringify({ id, offsetX, offsetY })
-        //   JSON.stringify({ id, startX, startY })
-
+        JSON.stringify({ id, offsetX, offsetY })      
       );
-
-      //  console.log(JSON.stringify({ id, startX, startY }));
-      // console.log(JSON.stringify({ id, offsetX, offsetY }));
-
 
     },
     [sections]
@@ -148,21 +130,10 @@ const { action, setAction } = context ?? { action: null, setAction: () => {} };
     (e: React.DragEvent<HTMLDivElement>, destination: "main" | "keepFromPDF") => {
       e.preventDefault();
       if (!canvasRef.current) return;
-
-      //  const now = Date.now();
-
+   
 
       const data = JSON.parse(e.dataTransfer.getData("text/plain"));
       const { id, offsetX, offsetY } = data;
-
-      // if (lastDropRef.current.id === id && now - lastDropRef.current.time < 200) {
-
-      /*    let tmpTid = now - (lastDropRef.current.time);
-         if (now - (lastDropRef.current.time) < 10000) {
-           return; // ignore second run
-         }
-   
-         lastDropRef.current = { time: now, id }; */
 
       let newX = 0;
       let newY = 0;
@@ -372,15 +343,7 @@ const { action, setAction } = context ?? { action: null, setAction: () => {} };
 
   // ---------- Render ----------
   return (
-    <>
-      {/* <button className="download_button" onClick={handleDownloadPDF}>
-        Download PDF
-      </button> */}
-
-      <button className="download_button" onClick={handleAutoArrange}>
-        Autoarranger
-      </button>
-
+    <>     
       <div
         id="main"
         ref={canvasRef}

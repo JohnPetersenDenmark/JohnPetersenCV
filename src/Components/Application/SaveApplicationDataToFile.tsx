@@ -1,10 +1,22 @@
 import { useApplicationData } from '../../GlobalData/GlobalApplicationDataContext';
-import { useState } from 'react';
+import { useState,  useEffect, useContext, } from 'react';
+import { PageActionContext } from "../Common/PageActionContext";
 
 function SaveApplicationDataToFile() {
   const { currentApplicationData } = useApplicationData();
   const [fileName, setFileName] = useState("application.txt");
 
+  const context = useContext(PageActionContext);
+const { action, setAction } = context ?? { action: null, setAction: () => {} };
+
+   useEffect(() => {
+    if (action === "SaveToFile") {
+      download_application_as_text()  
+      setAction(null); // reset
+    }
+     
+  }, [action]);
+  
   if (!currentApplicationData) return null;
 
   function download_application_as_text() {
@@ -26,8 +38,8 @@ function SaveApplicationDataToFile() {
 
   return (
     <>
-      <div className="ml-5 mr-5">
-        <label>File name:</label>
+      <div className="bg-blue ml-5 mr-5"> 
+        <p >File name:</p>
         <input
           type="text"
           value={fileName}
@@ -36,9 +48,9 @@ function SaveApplicationDataToFile() {
         />
       </div>
 
-      <button onClick={download_application_as_text}>
+     {/*  <button onClick={download_application_as_text}>
         Gem ansøgning
-      </button>
+      </button> */}
     </>
   );
 }

@@ -11,11 +11,13 @@ import { PageActionContext } from './PageActionContext';
 // -------------------
 const flowToRoute: Record<string, string> = {
     IMPORT_APPLICATION: "/getapplication",
+    IMPORT_APPLICATION_FROM_FILE: "/getapplication",
     EDIT_APPLICATION: "/editapp",
     REORDER_APPLICATION: "/reorderapp",
     AUTO_ARRANGE : "/reorderapp",
      CREATE_PDF : "/reorderapp",
     SAVE_APPLICATION: "/saveapp",
+    SAVE_TOFILE: "/saveapp",
 };
 
 const routeToFlow: Record<string, string> = {
@@ -39,9 +41,11 @@ const menuConfig: MenuItem[] = [
     { id: 200, title: "Gem ansøgning", action: "/saveapp", iconPath: baseUrl + "/images/save.svg", level: 2, parentFlowId: 'EDIT_APPLICATION', flowId: 'SAVE_APPLICATION', functionToRun: "" },
     { id: 300, title: "Skab PDF", action: "/reorderapp", iconPath: baseUrl + "/images/pdfdocument.svg", level: 2, parentFlowId: 'REORDER_APPLICATION', flowId: 'CREATE_PDF', functionToRun: "ToPDF" },
     { id: 400, title: "Autoarranger", action: "/reorderapp", iconPath: baseUrl + "/images/autoarrange.svg", level: 2, parentFlowId: 'REORDER_APPLICATION', flowId: 'AUTO_ARRANGE', functionToRun: "AutoArrange" },
+    { id: 500, title: "Gem ansøgning", action: "/saveapp", iconPath: baseUrl + "/images/save.svg", level: 2, parentFlowId: 'SAVE_APPLICATION', flowId: 'SAVE_TOFILE', functionToRun: "SaveToFile" },
+    { id: 600, title: "Hent ansøgning", action: "/getapplication", iconPath: baseUrl + "/images/getapplication.svg", level: 1, parentFlowId: 'IMPORT_APPLICATION', flowId: 'IMPORT_APPLICATION_FROM_FILE', functionToRun: "GetApplicationFromFile" },
 
     // Back button
-    { id: 500, title: "Tilbage", action: "BACK", iconPath: baseUrl + "/images/back.svg", level: 2, parentFlowId: "", flowId: "APPLICATION_BACK", functionToRun: "" }
+    { id: 700, title: "Tilbage", action: "BACK", iconPath: baseUrl + "/images/back.svg", level: 2, parentFlowId: "", flowId: "APPLICATION_BACK", functionToRun: "SaveToFile" }
 ];
 
 const MainLayout: React.FC = () => {
